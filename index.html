@@ -956,47 +956,52 @@
             border-color: var(--text);
         }
 
+        /* ===== Work 그리드: 균일한 정규 CSS Grid ===== */
         .masonry-grid {
-            column-count: 4;
-            column-gap: 24px;
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 32px 24px;
             margin-bottom: 40px;
+            align-items: start;
         }
 
         .masonry-item {
-            break-inside: avoid;
-            margin-bottom: 24px;
+            box-sizing: border-box;
             cursor: pointer;
-            transition: all 0.3s ease;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
             position: relative;
+            border-radius: 8px;
         }
 
         .masonry-item:hover {
-            transform: translateY(-8px);
+            transform: translateY(-6px);
         }
 
-        /* ===== Admin 모드 스타일 강화 ===== */
+        /* ===== Admin 모드 표시 (레이아웃에 영향 없는 outline 사용) ===== */
         .masonry-item.admin-mode {
-            background: rgba(255, 255, 255, 0.03);
-            border: 2px dashed #ff6b35;
+            outline: 2px dashed #ff6b35;
+            outline-offset: 6px;
             border-radius: 8px;
-            box-shadow: 0 2px 8px rgba(255, 107, 53, 0.1);
-            padding: 8px;
         }
 
-        /* 드래그 중인 카드 */
+        /* jiggle 중에는 hover 이동 효과 비활성화 (흔들림과 충돌 방지) */
+        .masonry-item.jiggle:hover {
+            transform: none;
+        }
+
+        /* 드래그 중인 카드: jiggle 애니메이션을 멈추고 드래그 상태만 표시 */
         .masonry-item.dragging {
-            opacity: 0.6;
-            border: 2px dashed #ff6b35;
-            transform: scale(1.02);
-            box-shadow: 0 8px 24px rgba(255, 107, 53, 0.3);
+            animation: none !important;
+            opacity: 0.5;
+            outline: 2px dashed #ff6b35;
+            outline-offset: 6px;
         }
 
         /* 드래그 대상 카드 (drop zone 하이라이트) */
-        .masonry-item.drag-over {
-            transform: scale(0.98);
-            background: rgba(255, 107, 53, 0.15) !important;
-            border: 2px solid #ff6b35 !important;
-            box-shadow: inset 0 0 0 2px #ff6b35, 0 0 16px rgba(255, 107, 53, 0.4);
+        .masonry-item.drag-over .masonry-item-image {
+            outline: 2px solid #ff6b35;
+            outline-offset: -2px;
+            box-shadow: 0 0 20px rgba(255, 107, 53, 0.45);
         }
 
         /* Admin 모드에서 커서 변경 */
@@ -1007,29 +1012,35 @@
         .masonry-item[draggable="true"]:active {
             cursor: grabbing;
         }
+
+        /* ===== 16:9 썸네일 컨테이너 (고정 비율, 절대 무너지지 않음) ===== */
+        .masonry-item-image {
             width: 100%;
-            height: auto;
+            aspect-ratio: 16 / 9;
             display: block;
             background: rgba(255, 255, 255, 0.05);
             position: relative;
             border-radius: 6px;
             overflow: hidden;
-            aspect-ratio: auto;
+            isolation: isolate;
         }
 
         .masonry-item-image img,
         .masonry-item-image svg {
+            position: absolute;
+            top: 0;
+            left: 0;
             width: 100%;
             height: 100%;
             object-fit: cover;
             display: block;
-            transition: all 0.3s ease;
+            transition: transform 0.45s ease, filter 0.45s ease;
         }
 
         .masonry-item:hover .masonry-item-image img,
         .masonry-item:hover .masonry-item-image svg {
-            brightness: 0.75;
-            transform: scale(1.02);
+            transform: scale(1.05);
+            filter: brightness(0.75);
         }
 
         .masonry-item-overlay {
@@ -1038,7 +1049,7 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(0, 0, 0, 0.4);
+            background: linear-gradient(180deg, rgba(0,0,0,0.05) 0%, rgba(0,0,0,0.45) 100%);
             display: flex;
             align-items: center;
             justify-content: center;
@@ -1062,28 +1073,29 @@
             color: white;
             font-size: 24px;
             transition: all 0.3s ease;
+            transform: scale(0.9);
         }
 
         .masonry-item:hover .play-button {
-            transform: scale(1.1);
+            transform: scale(1);
             background: rgba(255, 107, 53, 1);
         }
 
-        /* 포트폴리오 카드 버튼 스타일 */
+        /* 포트폴리오 카드 버튼 스타일 (썸네일 컨테이너 기준 absolute) */
         .portfolio-delete-btn,
         .portfolio-edit-btn {
             position: absolute;
-            width: 44px;
-            height: 44px;
+            width: 40px;
+            height: 40px;
             border: none;
             border-radius: 50%;
             cursor: pointer;
-            font-size: 20px;
+            font-size: 18px;
             display: flex;
             align-items: center;
             justify-content: center;
             transition: all 0.2s ease;
-            z-index: 100;
+            z-index: 20;
             font-weight: 600;
             box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
         }
@@ -1696,7 +1708,8 @@
         /* 반응형 */
         @media (max-width: 1200px) {
             .masonry-grid {
-                column-count: 3;
+                grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+                gap: 28px 20px;
             }
         }
 
@@ -1714,12 +1727,8 @@
             }
 
             .masonry-grid {
-                column-count: 2;
-                column-gap: 12px;
-            }
-
-            .masonry-item {
-                margin-bottom: 12px;
+                grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+                gap: 24px 16px;
             }
 
             h1 {
@@ -1768,7 +1777,8 @@
 
         @media (max-width: 480px) {
             .masonry-grid {
-                column-count: 1;
+                grid-template-columns: 1fr;
+                gap: 20px;
             }
 
             h1 {
@@ -2066,77 +2076,6 @@
             }
         }
 
-        /* 마소닉 아이템 호버 효과 */
-        .masonry-item {
-            break-inside: avoid;
-            margin-bottom: 20px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            position: relative;
-        }
-
-        .masonry-item:hover {
-            transform: scale(1.03);
-        }
-
-        .masonry-item-image {
-            width: 100%;
-            height: 100%;
-            display: block;
-            background: rgba(255, 255, 255, 0.05);
-            position: relative;
-            border-radius: 4px;
-            overflow: hidden;
-        }
-
-        .masonry-item-image img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            display: block;
-            transition: all 0.3s ease;
-        }
-
-        .masonry-item:hover .masonry-item-image img {
-            brightness: 0.7;
-        }
-
-        .masonry-item-overlay {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.4);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            opacity: 0;
-            transition: opacity 0.3s ease;
-            border-radius: 4px;
-        }
-
-        .masonry-item:hover .masonry-item-overlay {
-            opacity: 1;
-        }
-
-        .play-button {
-            width: 60px;
-            height: 60px;
-            background: rgba(255, 107, 53, 0.9);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 28px;
-            color: #ffffff;
-            transition: all 0.3s ease;
-        }
-
-        .masonry-item:hover .play-button {
-            transform: scale(1.15);
-            background: rgba(255, 107, 53, 1);
-        }
     </style>
 </head>
 <body>
@@ -3309,20 +3248,19 @@
                 
                 const imageUrl = `https://img.youtube.com/vi/${item.youtubeId}/maxresdefault.jpg`;
                 
-                // Admin 모드일 때만 보이는 삭제 버튼 HTML
+                // Admin 모드일 때만 보이는 삭제 버튼 HTML (썸네일 컨테이너 기준 우측 상단 고정)
                 const deleteButtonHTML = isAdminMode ? `
-                    <button class="portfolio-delete-btn" data-index="${index}" title="삭제">✕</button>
+                    <button class="portfolio-delete-btn" data-index="${index}" title="삭제" draggable="false">✕</button>
                 ` : '';
                 
-                // Admin 모드일 때만 보이는 수정 버튼 HTML
+                // Admin 모드일 때만 보이는 수정 버튼 HTML (썸네일 컨테이너 기준 우측 하단 고정)
                 const editButtonHTML = isAdminMode ? `
-                    <button class="portfolio-edit-btn" data-index="${index}" title="수정">✏️</button>
+                    <button class="portfolio-edit-btn" data-index="${index}" title="수정" draggable="false">✏️</button>
                 ` : '';
                 
-                // HTML 생성
+                // HTML 생성 - 버튼은 16:9 썸네일 컨테이너 내부에 위치시켜
+                // 제목 텍스트 길이와 무관하게 항상 썸네일 우측 상단/하단에 고정되도록 함
                 const html = `
-                    ${deleteButtonHTML}
-                    ${editButtonHTML}
                     <div class="masonry-item-image" data-index="${index}">
                         <img 
                             src="${imageUrl}" 
@@ -3334,6 +3272,8 @@
                         <div class="masonry-item-overlay">
                             <div class="play-button">▶</div>
                         </div>
+                        ${deleteButtonHTML}
+                        ${editButtonHTML}
                     </div>
                     <div class="portfolio-info">
                         <div class="portfolio-title">${item.title}</div>
@@ -3388,6 +3328,11 @@
                 // Admin 모드일 때만 드래그 이벤트 추가
                 if (isAdminMode) {
                     masonryItem.addEventListener('dragstart', (e) => {
+                        // 삭제/수정 버튼에서 시작된 드래그는 카드 드래그로 취급하지 않음
+                        if (e.target.closest('.portfolio-delete-btn, .portfolio-edit-btn')) {
+                            e.preventDefault();
+                            return;
+                        }
                         e.dataTransfer.effectAllowed = 'move';
                         e.dataTransfer.setData('text/html', e.currentTarget.innerHTML);
                         masonryItem.classList.add('dragging');
