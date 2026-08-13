@@ -1,9 +1,9 @@
-<<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="ko">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>민지현 | 영상편집자 · 유튜브 컬러리스트</title>
+    <title>EGG Studio | 영상편집자 · PD 민지현</title>
     
     <!-- ===== SEO 메타 태그 ===== -->
     <meta name="description" content="영상 편집, 색보정, 그래픽 디자인 전문 영상편집자. 유튜브 영상 제작, 브랜딩 영상, 숏폼 제작">
@@ -12,7 +12,7 @@
     
     <!-- ===== Open Graph (SNS 공유) ===== -->
     <meta property="og:type" content="website">
-    <meta property="og:title" content="민지현 | 영상편집자">
+    <meta property="og:title" content="EGG Studio | 영상편집자 · PD 민지현">
     <meta property="og:description" content="프로페셔널한 영상 편집과 색보정 작업을 제공합니다. 유튜브, 숏폼, 브랜딩 영상 제작 포트폴리오.">
     <meta property="og:url" content="https://purplemint2627-cloud.github.io/JihyunMin-Youtube-video-portfolio/">
     <meta property="og:image" content="https://img.youtube.com/vi/dQw4w9WgXcQ/maxresdefault.jpg">
@@ -20,14 +20,14 @@
     <meta property="og:image:height" content="630">
     
     <!-- ===== Kakao Talk (톡 공유) ===== -->
-    <meta property="og:site_name" content="SCENE.FILL STUDIO">
+    <meta property="og:site_name" content="EGG Studio">
     <meta property="twitter:card" content="summary_large_image">
-    <meta property="twitter:title" content="민지현 | 영상편집자">
+    <meta property="twitter:title" content="EGG Studio | 영상편집자 · PD 민지현">
     <meta property="twitter:description" content="프로페셔널한 영상 편집 포트폴리오">
     <meta property="twitter:image" content="https://img.youtube.com/vi/dQw4w9WgXcQ/maxresdefault.jpg">
     <!-- ======================== -->
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Black+Han+Sans&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.css">
     <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/index.min.js"></script>
     <script type="text/javascript">
         // ========================================
@@ -57,11 +57,14 @@
         }
  
         :root {
-            --dark: #121212;
-            --dark-secondary: #1c1c1c;
-            --text: #ffffff;
-            --text-muted: #808080;
-            --accent: #E73F1E;
+            /* ===== EGG Studio · 오프화이트/라이트 테마 ===== */
+            --dark: #F5F5F3;            /* 페이지 배경 (미세한 미색이 도는 오프화이트) */
+            --dark-secondary: #FFFFFF;  /* 카드/모달 배경 (화이트) */
+            --text: #111111;            /* 본문/타이틀 텍스트 (선명한 블랙) */
+            --text-muted: #666666;      /* 보조 텍스트 (차분한 다크 그레이) */
+            --text-faint: #888888;      /* 더 옅은 보조 텍스트 */
+            --line: #DADAD6;            /* 헤어라인 구분선 */
+            --accent: #111111;          /* 포인트 컬러 (모노크롬 블랙) */
         }
  
         html {
@@ -71,7 +74,7 @@
         body {
             background: var(--dark);
             color: var(--text);
-            font-family: 'Inter', sans-serif;
+            font-family: 'Pretendard', 'Inter', sans-serif;
             -webkit-font-smoothing: antialiased;
             line-height: 1.6;
         }
@@ -94,6 +97,10 @@
             color: inherit;
         }
  
+        h1, h2, h3, h4 {
+            font-family: 'Pretendard', 'Inter', sans-serif;
+        }
+
         h1 {
             font-size: 72px;
             font-weight: 800;
@@ -134,59 +141,146 @@
             letter-spacing: 0.5px;
         }
  
-        /* 랜딩 페이지 */
+        /* 랜딩 페이지 (Hero) — 매시브 타이포그래피 */
         .landing-page {
-            height: 100vh;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            background: var(--dark);
+            position: relative;
+            overflow: hidden;
+            padding: 130px 32px 32px;
+        }
+ 
+        .landing-content {
+            flex: 1;
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            background: var(--dark);
-            position: relative;
-            overflow: hidden;
-        }
- 
- 
-        .landing-content {
             text-align: center;
-            z-index: 2;
+            width: 100%;
         }
  
         .landing-title {
-            font-family: 'Black Han Sans', sans-serif;
-            font-size: 96px;
-            font-weight: 400;
-            letter-spacing: -0.5px;
-            margin-bottom: 12px;
-            line-height: 1;
+            font-family: 'Inter', 'Helvetica Neue', 'Pretendard', sans-serif;
+            font-size: clamp(68px, 15.5vw, 260px);
+            font-weight: 900;
+            letter-spacing: -0.04em;
+            line-height: 0.82;
+            text-transform: uppercase;
+            color: var(--text);
+            width: 100%;
             animation: fadeInDown 1s ease-out;
         }
  
+        /* 서브 슬로건 — 어떤 스튜디오인지 한눈에 알 수 있는 소개 문구 */
         .landing-subtitle {
-            font-size: 24px;
-            font-weight: 400;
-            letter-spacing: 1px;
+            margin-top: 28px;
+            font-size: clamp(14px, 1.6vw, 18px);
+            font-weight: 500;
+            line-height: 1.8;
             color: var(--text-muted);
-            margin-bottom: 24px;
+            max-width: 620px;
             animation: fadeInUp 1s ease-out 0.2s both;
         }
- 
-        .landing-desc {
-            font-size: 18px;
-            font-weight: 300;
-            line-height: 1.8;
+
+        .landing-subtitle-lead {
+            display: inline-block;
+            margin-bottom: 6px;
+            font-weight: 700;
             color: var(--text);
-            max-width: 600px;
-            margin-bottom: 48px;
+        }
+ 
+        /* 하단 CTA 버튼 2개 — 얇은 블랙 보더 / 솔리드 블랙 사각형 타일 */
+        .landing-cta-row {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+            margin-top: 40px;
+            margin-bottom: 40px;
+            z-index: 2;
             animation: fadeInUp 1s ease-out 0.4s both;
         }
  
-        .landing-cta {
+        .landing-cta-btn {
+            padding: 17px 30px;
+            font-family: 'Pretendard', 'Inter', sans-serif;
+            font-size: 13px;
+            font-weight: 700;
+            letter-spacing: 0.3px;
+            text-transform: uppercase;
+            cursor: pointer;
+            border-radius: 2px;
+            transition: background 0.25s ease, color 0.25s ease, border-color 0.25s ease;
+            white-space: nowrap;
+        }
+ 
+        .landing-cta-btn.solid {
+            background: var(--text);
+            color: var(--dark);
+            border: 1px solid var(--text);
+        }
+ 
+        .landing-cta-btn.solid:hover {
+            background: transparent;
+            color: var(--text);
+        }
+ 
+        .landing-cta-btn.outline {
+            background: transparent;
+            color: var(--text);
+            border: 1px solid var(--text);
+        }
+ 
+        .landing-cta-btn.outline:hover {
+            background: var(--text);
+            color: var(--dark);
+        }
+ 
+        /* 하단 정보 바 — 연도 / 연락처 */
+        .landing-footer-row {
             display: flex;
-            gap: 16px;
-            justify-content: center;
+            justify-content: space-between;
+            align-items: flex-end;
             flex-wrap: wrap;
-            animation: fadeInUp 1s ease-out 0.6s both;
+            gap: 20px 32px;
+            border-top: 1px solid var(--line);
+            padding-top: 22px;
+            z-index: 2;
+            animation: fadeInUp 1s ease-out 0.5s both;
+        }
+ 
+        .landing-year {
+            font-size: 13px;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+            color: var(--text);
+            white-space: nowrap;
+        }
+ 
+        .landing-contact-link {
+            font-size: 13px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            color: var(--text);
+            border-bottom: 1px solid var(--text);
+            padding-bottom: 2px;
+            white-space: nowrap;
+            transition: opacity 0.25s ease;
+        }
+ 
+        .landing-contact-link:hover {
+            opacity: 0.55;
+        }
+ 
+        @media (max-width: 640px) {
+            .landing-footer-row {
+                flex-direction: column;
+                align-items: flex-start;
+            }
         }
  
         .cta-button {
@@ -204,14 +298,14 @@
  
         .cta-button:hover {
             background: var(--text);
-            color: #000000;
+            color: var(--dark);
             transform: translateY(-3px);
         }
  
         .cta-button.primary {
             background: var(--accent);
             border-color: var(--accent);
-            color: #000000;
+            color: var(--dark);
         }
  
         .cta-button.primary:hover {
@@ -303,45 +397,49 @@
             animation: jiggle 0.4s ease-in-out infinite;
         }
  
-        /* 네비게이션 */
+        /* 네비게이션 — 경계선 없이 배경과 이음새 없이 이어지는 형태 */
         nav {
             position: fixed;
             top: 0;
             width: 100%;
-            background: rgba(0, 0, 0, 0.95);
-            backdrop-filter: blur(10px);
+            background: var(--dark);
             z-index: 100;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
         }
  
         .nav-container {
             max-width: 1400px;
             margin: 0 auto;
-            padding: 24px 40px;
+            padding: 28px 40px;
             display: flex;
             justify-content: space-between;
             align-items: center;
+            gap: 40px;
         }
  
         .nav-brand {
-            font-family: 'Black Han Sans', sans-serif;
-            font-size: 14px;
-            font-weight: 400;
-            letter-spacing: -0.2px;
+            font-family: 'Pretendard', 'Inter', sans-serif;
+            font-size: 22px;
+            font-weight: 900;
+            letter-spacing: -0.5px;
+            text-transform: uppercase;
+            color: var(--text);
         }
  
         .nav-links {
             display: flex;
-            gap: 48px;
+            gap: 44px;
             align-items: center;
+            flex-wrap: wrap;
         }
  
         .nav-links a {
-            font-size: 12px;
+            font-family: 'Pretendard', 'Inter', sans-serif;
+            font-size: clamp(20px, 1.7vw, 1.8rem);
             color: var(--text-muted);
-            transition: color 0.3s ease;
-            text-transform: lowercase;
-            font-weight: 400;
+            transition: color 0.25s ease, opacity 0.25s ease;
+            text-transform: uppercase;
+            font-weight: 900;
+            letter-spacing: -0.3px;
             cursor: pointer;
         }
  
@@ -374,29 +472,99 @@
             background: var(--dark);
         }
  
-        /* 마소닉 그리드 */
-        .category-filter {
-            padding: 10px 20px;
-            background: transparent;
-            border: 1px solid #444;
-            color: #aaa;
-            border-radius: 4px;
-            cursor: pointer;
+        /* ===== Work 헤더 (타이틀 + 인터랙티브 텍스트 필터) ===== */
+        .work-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            flex-wrap: wrap;
+            gap: 28px 56px;
+            margin-bottom: 40px;
+        }
+
+        .work-header .section-title {
+            margin-bottom: 0;
+        }
+
+        /* 인터랙티브 텍스트 필터 (Service / Key Word 세로 리스트) */
+        .filter-menu {
+            display: flex;
+            gap: 56px;
+            flex-wrap: wrap;
+        }
+
+        .filter-group {
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+        }
+
+        .filter-group-label {
+            font-size: 14px;
+            font-weight: 800;
+            letter-spacing: -0.1px;
+            color: #000000;
+        }
+
+        .filter-tag-list {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .filter-tag-text {
             font-size: 13px;
+            font-weight: 500;
+            color: #999999;
+            cursor: pointer;
+            transition: color 0.2s ease;
+            white-space: nowrap;
+        }
+
+        .filter-tag-text:hover {
+            color: #555555;
+        }
+
+        .filter-tag-text.active {
+            color: #000000;
+            font-weight: 800;
+        }
+
+        /* 선택된 필터 태그 칩 */
+        .active-filter-chip-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-bottom: 28px;
+        }
+
+        .filter-chip {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: #EAEAEA;
+            color: #111111;
+            padding: 6px 12px;
+            border-radius: 4px;
+            font-size: 12px;
             font-weight: 600;
-            transition: all 0.3s ease;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
+            animation: fadeIn 0.2s ease;
         }
- 
-        .category-filter:hover {
-            border-color: var(--accent);
-            color: var(--accent);
+
+        .filter-chip button {
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-size: 14px;
+            line-height: 1;
+            color: #777777;
+            padding: 0;
+            display: flex;
+            align-items: center;
+            transition: color 0.2s ease;
         }
- 
-        .category-filter.active {
-            background: var(--accent);
-            border-color: var(--accent);
+
+        .filter-chip button:hover {
             color: #000000;
         }
  
@@ -421,7 +589,7 @@
  
         .history-button:hover {
             background: var(--accent);
-            color: #000000;
+            color: var(--dark);
             transform: translateY(-2px);
         }
  
@@ -441,7 +609,7 @@
             width: 20px;
             height: 20px;
             border-radius: 50%;
-            background: rgba(231, 63, 30, 0.2);
+            background: rgba(17, 17, 17, 0.2);
             color: var(--accent);
             font-size: 12px;
             font-weight: bold;
@@ -450,7 +618,7 @@
         }
  
         .history-tooltip-icon:hover {
-            background: rgba(231, 63, 30, 0.4);
+            background: rgba(17, 17, 17, 0.4);
             transform: scale(1.1);
         }
  
@@ -461,7 +629,7 @@
             transform: translateX(-50%) translateY(-8px);
             background: var(--dark-secondary);
             border: 1px solid var(--accent);
-            color: #aaa;
+            color: #666666;
             padding: 10px 14px;
             border-radius: 6px;
             font-size: 12px;
@@ -495,14 +663,14 @@
  
         /* 히스토리 모달 안내 문구 스타일 */
         .history-modal-notice {
-            background: rgba(231, 63, 30, 0.1);
+            background: rgba(17, 17, 17, 0.1);
             border-left: 3px solid var(--accent);
             padding: 12px 15px;
             margin-bottom: 20px;
             border-radius: 4px;
             font-size: 13px;
             line-height: 1.6;
-            color: #aaa;
+            color: #666666;
         }
  
  
@@ -522,7 +690,7 @@
  
         .history-modal-content {
             background: var(--dark-secondary);
-            border: 1px solid #333;
+            border: 1px solid #DADAD6;
             border-radius: 8px;
             padding: 30px;
             max-width: 600px;
@@ -537,7 +705,7 @@
             justify-content: space-between;
             align-items: center;
             margin-bottom: 20px;
-            border-bottom: 1px solid #333;
+            border-bottom: 1px solid #DADAD6;
             padding-bottom: 15px;
         }
  
@@ -570,8 +738,8 @@
         }
  
         .history-card {
-            background: #0a0a0a;
-            border: 1px solid #333;
+            background: #F5F5F3;
+            border: 1px solid #DADAD6;
             border-radius: 6px;
             padding: 15px;
             transition: all 0.3s ease;
@@ -579,7 +747,7 @@
  
         .history-card:hover {
             border-color: var(--accent);
-            background: rgba(231, 63, 30, 0.05);
+            background: rgba(17, 17, 17, 0.05);
         }
  
  
@@ -590,7 +758,7 @@
             align-items: center;
             margin-bottom: 12px;
             padding-bottom: 8px;
-            border-bottom: 1px solid #333;
+            border-bottom: 1px solid #DADAD6;
         }
  
  
@@ -604,7 +772,7 @@
             font-size: 13px;
             font-weight: 600;
             color: var(--text);
-            background: rgba(231, 63, 30, 0.2);
+            background: rgba(17, 17, 17, 0.2);
             padding: 4px 8px;
             border-radius: 3px;
         }
@@ -631,7 +799,7 @@
         .history-card-description {
             margin-top: 12px;
             padding-top: 12px;
-            border-top: 1px solid #333;
+            border-top: 1px solid #DADAD6;
             font-size: 12px;
             color: var(--text-muted);
             line-height: 1.5;
@@ -651,7 +819,7 @@
             display: flex;
             gap: 10px;
             padding-top: 20px;
-            border-top: 1px solid #333;
+            border-top: 1px solid #DADAD6;
         }
  
  
@@ -678,7 +846,7 @@
             padding: 12px;
             background: transparent;
             color: var(--text);
-            border: 1px solid #444;
+            border: 1px solid #CCCCCC;
             border-radius: 4px;
             cursor: pointer;
             font-weight: 600;
@@ -690,11 +858,11 @@
             border-color: var(--text);
         }
  
-        /* ===== Work 그리드: 균일한 정규 CSS Grid ===== */
+        /* ===== Work 그리드: Desktop 4열 고정 CSS Grid ===== */
         .masonry-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-            gap: 32px 24px;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 40px 24px;
             margin-bottom: 40px;
             align-items: start;
         }
@@ -702,20 +870,20 @@
         .masonry-item {
             box-sizing: border-box;
             cursor: pointer;
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            transition: transform 0.35s ease, box-shadow 0.3s ease;
             position: relative;
-            border-radius: 8px;
+            border-radius: 2px;
         }
  
         .masonry-item:hover {
-            transform: translateY(-6px);
+            transform: translateY(-4px);
         }
  
         /* ===== Admin 모드 표시 (레이아웃에 영향 없는 outline 사용) ===== */
         .masonry-item.admin-mode {
-            outline: 2px dashed #E73F1E;
+            outline: 2px dashed #111111;
             outline-offset: 6px;
-            border-radius: 8px;
+            border-radius: 2px;
         }
  
         /* jiggle 중에는 hover 이동 효과 비활성화 (흔들림과 충돌 방지) */
@@ -727,15 +895,15 @@
         .masonry-item.dragging {
             animation: none !important;
             opacity: 0.5;
-            outline: 2px dashed #E73F1E;
+            outline: 2px dashed #111111;
             outline-offset: 6px;
         }
  
         /* 드래그 대상 카드 (drop zone 하이라이트) */
         .masonry-item.drag-over .masonry-item-image {
-            outline: 2px solid #E73F1E;
+            outline: 2px solid #111111;
             outline-offset: -2px;
-            box-shadow: 0 0 20px rgba(231, 63, 30, 0.45);
+            box-shadow: 0 0 20px rgba(17, 17, 17, 0.45);
         }
  
         /* Admin 모드에서 커서 변경 */
@@ -752,9 +920,9 @@
             width: 100%;
             aspect-ratio: 16 / 9;
             display: block;
-            background: rgba(255, 255, 255, 0.05);
+            background: rgba(0, 0, 0, 0.04);
             position: relative;
-            border-radius: 6px;
+            border-radius: 2px;
             overflow: hidden;
             isolation: isolate;
         }
@@ -789,7 +957,7 @@
             justify-content: center;
             opacity: 0;
             transition: opacity 0.3s ease;
-            border-radius: 6px;
+            border-radius: 2px;
         }
  
         .masonry-item:hover .masonry-item-overlay {
@@ -799,7 +967,7 @@
         .play-button {
             width: 60px;
             height: 60px;
-            background: rgba(231, 63, 30, 0.95);
+            background: rgba(17, 17, 17, 0.95);
             border-radius: 50%;
             display: flex;
             align-items: center;
@@ -812,7 +980,7 @@
  
         .masonry-item:hover .play-button {
             transform: scale(1);
-            background: rgba(231, 63, 30, 1);
+            background: rgba(17, 17, 17, 1);
         }
  
         /* 포트폴리오 카드 버튼 스타일 (썸네일 컨테이너 기준 absolute) */
@@ -838,15 +1006,15 @@
         .portfolio-delete-btn {
             top: 12px;
             right: 12px;
-            background: linear-gradient(135deg, #E73F1E 0%, #C73418 100%);
+            background: linear-gradient(135deg, #111111 0%, #000000 100%);
             color: #fff;
-            box-shadow: 0 4px 12px rgba(231, 63, 30, 0.5);
+            box-shadow: 0 4px 12px rgba(17, 17, 17, 0.5);
         }
  
         .portfolio-delete-btn:hover {
-            background: linear-gradient(135deg, #C73418 0%, #A82C14 100%);
+            background: linear-gradient(135deg, #000000 0%, #1A1A1A 100%);
             transform: scale(1.15);
-            box-shadow: 0 6px 16px rgba(231, 63, 30, 0.6);
+            box-shadow: 0 6px 16px rgba(17, 17, 17, 0.6);
         }
  
         .portfolio-delete-btn:active {
@@ -858,16 +1026,16 @@
             bottom: 12px;
             right: 12px;
             background: rgba(0, 0, 0, 0.7);
-            color: #E73F1E;
-            border: 2px solid #E73F1E;
-            box-shadow: 0 4px 12px rgba(231, 63, 30, 0.3);
+            color: #111111;
+            border: 2px solid #111111;
+            box-shadow: 0 4px 12px rgba(17, 17, 17, 0.3);
         }
  
         .portfolio-edit-btn:hover {
-            background: #E73F1E;
+            background: #111111;
             color: #fff;
             transform: scale(1.15);
-            box-shadow: 0 6px 16px rgba(231, 63, 30, 0.5);
+            box-shadow: 0 6px 16px rgba(17, 17, 17, 0.5);
         }
  
         .portfolio-edit-btn:active {
@@ -882,25 +1050,43 @@
             font-size: 14px;
             font-weight: 600;
             margin-bottom: 6px;
-            color: #ffffff;
+            color: #111111;
             letter-spacing: 0.3px;
             transition: color 0.3s ease;
         }
  
         .masonry-item:hover .portfolio-title {
-            color: #E73F1E;
+            color: #111111;
         }
  
         .portfolio-meta {
             font-size: 12px;
-            color: #aaaaaa;
+            color: #888888;
             font-weight: 400;
             letter-spacing: 0.2px;
             transition: color 0.3s ease;
         }
  
         .masonry-item:hover .portfolio-meta {
-            color: #cccccc;
+            color: #555555;
+        }
+
+        /* 카드 하단 태그 칩 */
+        .portfolio-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+            margin-top: 10px;
+        }
+
+        .portfolio-tag {
+            font-size: 11px;
+            font-weight: 500;
+            color: #777777;
+            background: #EFEFEC;
+            padding: 3px 9px;
+            border-radius: 3px;
+            letter-spacing: 0.1px;
         }
  
         /* About 페이지 */
@@ -912,43 +1098,62 @@
         .about-container {
             max-width: 900px;
             margin: 0 auto;
-            text-align: center;
+            text-align: left;
         }
  
         .about-title {
             display: inline-block;
-            font-family: 'Black Han Sans', sans-serif;
+            font-family: 'Pretendard', 'Inter', sans-serif;
             border: 2px solid var(--text);
             padding: 16px 24px;
             margin-bottom: 60px;
             font-size: 24px;
-            font-weight: 400;
+            font-weight: 800;
             letter-spacing: -0.3px;
         }
  
         .about-content {
             max-width: 800px;
-            margin: 0 auto 60px;
+            margin: 0 auto 60px 0;
+            text-align: left;
         }
  
         .about-content p {
-            font-size: 14px;
-            line-height: 1.9;
-            color: var(--text);
-            margin-bottom: 20px;
+            font-size: 15px;
+            font-weight: 400;
+            line-height: 1.95;
+            color: #111111;
+            margin-bottom: 22px;
         }
  
         .about-content strong {
-            font-weight: 600;
+            font-weight: 700;
+            color: #1A1A1A;
+        }
+
+        .about-content strong.highlight {
+            color: #111111;
+            font-weight: 800;
+        }
+
+        .about-subhead {
+            display: block;
+            font-family: 'Pretendard', 'Inter', sans-serif;
+            font-size: 19px;
+            font-weight: 700;
+            letter-spacing: -0.2px;
+            color: #111111;
+            margin-top: 44px;
+            margin-bottom: 18px;
         }
  
         .about-image {
             width: 120px;
             height: 120px;
-            margin: 0 auto;
+            margin: 0;
             border-radius: 50%;
             overflow: hidden;
-            background: rgba(255, 255, 255, 0.1);
+            background: rgba(17, 17, 17, 0.05);
             display: flex;
             align-items: center;
             justify-content: center;
@@ -989,7 +1194,7 @@
         }
  
         .pricing-card {
-            border: 1px solid rgba(255, 255, 255, 0.2);
+            border: 1px solid var(--line);
             padding: 48px 36px;
             transition: all 0.3s ease;
         }
@@ -1001,7 +1206,7 @@
  
         .pricing-card.featured {
             border-color: var(--accent);
-            background: rgba(231, 63, 30, 0.08);
+            background: rgba(17, 17, 17, 0.08);
         }
  
         .pricing-badge {
@@ -1033,8 +1238,8 @@
         }
  
         .delivery-time {
-            background: rgba(231, 63, 30, 0.1);
-            border: 1px solid rgba(231, 63, 30, 0.3);
+            background: rgba(17, 17, 17, 0.1);
+            border: 1px solid rgba(17, 17, 17, 0.3);
             padding: 14px 16px;
             border-radius: 6px;
             margin-bottom: 24px;
@@ -1060,7 +1265,7 @@
         .features-list li {
             font-size: 14px;
             padding: 12px 0;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            border-bottom: 1px solid var(--line);
             color: var(--text);
         }
  
@@ -1102,8 +1307,8 @@
         /* Add-on 옵션 배너 - Full Width */
         .addon-banner {
             width: 100%;
-            background: rgba(231, 63, 30, 0.08);
-            border: 1px solid rgba(231, 63, 30, 0.3);
+            background: rgba(17, 17, 17, 0.08);
+            border: 1px solid rgba(17, 17, 17, 0.3);
             border-radius: 6px;
             padding: 18px 40px;
             display: flex;
@@ -1205,7 +1410,7 @@
             color: var(--accent);
             margin-bottom: 24px;
             padding-bottom: 12px;
-            border-bottom: 1px solid rgba(231, 63, 30, 0.3);
+            border-bottom: 1px solid rgba(17, 17, 17, 0.3);
         }
  
         .form-row {
@@ -1237,11 +1442,11 @@
         .form-group textarea,
         .form-group select {
             width: 100%;
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px solid rgba(255, 255, 255, 0.1);
+            background: #FFFFFF;
+            border: 1px solid var(--line);
             color: var(--text);
             padding: 14px 16px;
-            font-family: 'Inter', sans-serif;
+            font-family: 'Pretendard', 'Inter', sans-serif;
             font-size: 14px;
             transition: all 0.3s ease;
             border-radius: 4px;
@@ -1252,8 +1457,8 @@
         .form-group select:focus {
             outline: none;
             border-color: var(--accent);
-            background: rgba(255, 255, 255, 0.08);
-            box-shadow: 0 0 0 3px rgba(231, 63, 30, 0.1);
+            background: #FFFFFF;
+            box-shadow: 0 0 0 3px rgba(17, 17, 17, 0.08);
         }
  
         .form-group textarea {
@@ -1281,7 +1486,7 @@
             width: 100%;
             padding: 16px 24px;
             background: var(--accent);
-            color: #000000;
+            color: var(--dark);
             border: 1px solid var(--accent);
             font-size: 13px;
             font-weight: 600;
@@ -1317,8 +1522,8 @@
             display: inline-block;
             width: 14px;
             height: 14px;
-            border: 2px solid rgba(0,0,0,0.3);
-            border-top: 2px solid #000000;
+            border: 2px solid rgba(245, 245, 243, 0.35);
+            border-top: 2px solid #F5F5F3;
             border-radius: 50%;
             animation: spin 0.8s linear infinite;
         }
@@ -1394,7 +1599,7 @@
         }
  
         .contact-item {
-            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            border-top: 1px solid var(--line);
             padding-top: 40px;
         }
  
@@ -1415,8 +1620,8 @@
         /* 반응형 */
         @media (max-width: 1200px) {
             .masonry-grid {
-                grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
-                gap: 28px 20px;
+                grid-template-columns: repeat(3, 1fr);
+                gap: 32px 20px;
             }
         }
  
@@ -1434,8 +1639,16 @@
             }
  
             .masonry-grid {
-                grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
-                gap: 24px 16px;
+                grid-template-columns: repeat(2, 1fr);
+                gap: 28px 16px;
+            }
+
+            .work-header {
+                gap: 24px 32px;
+            }
+
+            .filter-menu {
+                gap: 32px;
             }
  
             h1 {
@@ -1452,20 +1665,6 @@
  
             #about-page {
                 padding-top: 100px;
-            }
- 
-            .landing-desc {
-                font-size: 16px;
-            }
- 
-            .landing-cta {
-                flex-direction: column;
-                gap: 12px;
-            }
- 
-            .cta-button {
-                width: 100%;
-                padding: 14px 24px;
             }
  
             .form-row {
@@ -1505,21 +1704,24 @@
             }
  
             .nav-links {
-                gap: 12px;
+                gap: 16px;
             }
  
             .nav-links a {
-                font-size: 11px;
+                font-size: 15px;
             }
         }
  
         /* 섹션 헤더 */
         .section-title {
-            font-size: 14px;
-            font-weight: 600;
-            letter-spacing: 0.5px;
-            margin-bottom: 60px;
-            text-transform: uppercase;
+            font-family: 'Pretendard', 'Inter', sans-serif;
+            font-size: clamp(2.5rem, 4vw, 3rem);
+            font-weight: 800;
+            letter-spacing: -0.02em;
+            line-height: 1;
+            margin-bottom: 0;
+            text-transform: none;
+            color: var(--text);
         }
  
         /* 유튜브 비디오 라이트박스 모달 */
@@ -1643,7 +1845,7 @@
             gap: 24px;
             margin-bottom: 32px;
             padding-top: 24px;
-            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            border-top: 1px solid var(--line);
         }
  
         .portfolio-modal-item {
@@ -1676,7 +1878,7 @@
             flex: 1;
             padding: 14px 24px;
             background: var(--accent);
-            color: #000000;
+            color: var(--dark);
             border: none;
             border-radius: 6px;
             font-size: 13px;
@@ -1777,24 +1979,23 @@
     <!-- 랜딩 페이지 -->
     <section class="landing-page" id="landing">
         <div class="landing-content">
-            <h1 class="landing-title">민지현</h1>
-            <p class="landing-subtitle">영상편집자</p>
-            <p class="landing-desc">고퀄리티 영화 같은 영상,<br>마감일 맞춰서 빠르게 받아보세요.</p>
-            <div class="landing-cta">
-                <button class="cta-button" onclick="showPage('work')">포트폴리오 보기</button>
-                <button class="cta-button primary" onclick="showPage('estimate')">빠른 견적 문의</button>
+            <h1 class="landing-title">EGG<br>STUDIO</h1>
+            <p class="landing-subtitle"><strong class="landing-subtitle-lead">1인 영상 제작사 Egg Studio를 운영하고 있는 민지현입니다.</strong><br>유튜브 콘텐츠부터 브랜디드 필름, AI 영상 연출까지. 몰입감 있는 서사로 브랜드의 가치를 높이는 영상 프로젝트를 만듭니다.</p>
+            <div class="landing-cta-row">
+                <button class="landing-cta-btn solid" onclick="showPage('work')">포트폴리오 보기</button>
+                <button class="landing-cta-btn outline" onclick="showPage('estimate')">빠른 견적 문의</button>
             </div>
         </div>
-        <div class="scroll-indicator">
-            <div class="scroll-dot"></div>
-            <span>Scroll</span>
+        <div class="landing-footer-row">
+            <span class="landing-year">©2026</span>
+            <a class="landing-contact-link" href="mailto:purplemint2627@gmail.com">Contact</a>
         </div>
     </section>
  
     <!-- 네비게이션 -->
     <nav>
         <div class="nav-container container">
-            <div class="nav-brand" onclick="scrollToLanding()" style="cursor: pointer;">민지현</div>
+            <div class="nav-brand" onclick="scrollToLanding()" style="cursor: pointer;">EGG!</div>
             <div class="nav-links">
                 <a class="nav-link active" data-page="work" onclick="showPage('work')">work</a>
                 <a class="nav-link" data-page="about" onclick="showPage('about')">about</a>
@@ -1808,16 +2009,37 @@
     <!-- WORK 페이지 -->
     <section id="work-page" class="page active">
         <div class="container">
-            <div class="section-title">최근 작업</div>
-            
-            <!-- 카테고리 필터 버튼 -->
-            <div style="display: flex; gap: 10px; margin-bottom: 40px; flex-wrap: wrap; justify-content: center;">
-                <button onclick="window.filterPortfolio('전체')" class="category-filter active" data-category="전체">전체</button>
-                <button onclick="window.filterPortfolio('유튜브 롱폼')" class="category-filter" data-category="유튜브 롱폼">유튜브 롱폼</button>
-                <button onclick="window.filterPortfolio('숏폼')" class="category-filter" data-category="숏폼">숏폼</button>
-                <button onclick="window.filterPortfolio('단편 영화')" class="category-filter" data-category="단편 영화">단편 영화</button>
-                <button onclick="window.filterPortfolio('AI 영상')" class="category-filter" data-category="AI 영상">AI 영상</button>
+            <div class="work-header">
+                <div class="section-title">All Work</div>
+
+                <!-- 인터랙티브 텍스트 필터 (Service / Key Word 세로 리스트) -->
+                <div class="filter-menu">
+                    <div class="filter-group">
+                        <span class="filter-group-label">Service</span>
+                        <div class="filter-tag-list">
+                            <span class="filter-tag-text active" data-filter="전체" onclick="window.filterPortfolio('전체')">전체</span>
+                            <span class="filter-tag-text" data-filter="유튜브 롱폼" onclick="window.filterPortfolio('유튜브 롱폼')">유튜브 롱폼</span>
+                            <span class="filter-tag-text" data-filter="숏폼" onclick="window.filterPortfolio('숏폼')">숏폼</span>
+                            <span class="filter-tag-text" data-filter="단편 영화" onclick="window.filterPortfolio('단편 영화')">단편 영화</span>
+                            <span class="filter-tag-text" data-filter="AI 영상" onclick="window.filterPortfolio('AI 영상')">AI 영상</span>
+                        </div>
+                    </div>
+                    <div class="filter-group">
+                        <span class="filter-group-label">Key Word</span>
+                        <div class="filter-tag-list">
+                            <span class="filter-tag-text" data-filter="시네마틱" onclick="window.filterPortfolio('시네마틱')">시네마틱</span>
+                            <span class="filter-tag-text" data-filter="컷편집" onclick="window.filterPortfolio('컷편집')">컷편집</span>
+                            <span class="filter-tag-text" data-filter="정밀색보정" onclick="window.filterPortfolio('정밀색보정')">정밀색보정</span>
+                            <span class="filter-tag-text" data-filter="기획·PD" onclick="window.filterPortfolio('기획·PD')">기획·PD</span>
+                            <span class="filter-tag-text" data-filter="브랜디드필름" onclick="window.filterPortfolio('브랜디드필름')">브랜디드필름</span>
+                            <span class="filter-tag-text" data-filter="현장촬영" onclick="window.filterPortfolio('현장촬영')">현장촬영</span>
+                        </div>
+                    </div>
+                </div>
             </div>
+
+            <!-- 선택된 필터 태그 칩 -->
+            <div class="active-filter-chip-row" id="activeFilterChipRow" style="display: none;"></div>
             
             <div class="masonry-grid" id="masonryGrid">
                 <!-- portfolioData에서 동적으로 생성됩니다 -->
@@ -1831,28 +2053,27 @@
             <div class="about-title">about</div>
             
             <div class="about-content">
-                <p><strong>고퀄리티 영화 같은 영상, 마감일 맞춰서 빠르게 받아보세요.</strong></p>
- 
-                <p>안녕하세요, 영상편집자 민지현입니다.</p>
- 
-                <p>유튜브 채널을 운영할 때 가장 답답한 순간은 두 가지입니다.<br>편집이 너무 늦어져서 업로드 일정이 꼬이거나, 반대로 빨리 받아봤더니 영상이 너무 성의 없을 때.</p>
- 
-                <p>저는 이 두 가지 고민을 한 번에 해결해 드립니다.</p>
- 
-                <p style="margin-top: 40px; margin-bottom: 20px;"><strong>지루할 틈 없는 영화 같은 연출</strong></p>
-                <p>단순히 잘라 붙이기만 하는 지루한 편집이 아닙니다. 장면의 흐름과 사운드, 화면 구성을 센스 있게 조율해 시청자가 끝까지 몰입해서 보게 만듭니다. 채널의 분위기 자체를 훨씬 고급스럽게 만들어 드립니다.</p>
- 
-                <p style="margin-top: 40px; margin-bottom: 20px;"><strong>약속을 철저히 지키는 빠른 전달</strong></p>
-                <p>제 가장 큰 장점은 작업 속도가 정말 빠르다는 점입니다. 아무리 퀄리티가 높아도 제때 나오지 않으면 소용없다는 것을 잘 알고 있습니다. 긴급한 프로젝트도, 타이트한 업로드 일정도 차질 없이 딱 맞춰 전달합니다.</p>
- 
-                <p style="margin-top: 40px;">답답한 소통이나 지연 없이, 원하는 느낌의 영상을 가장 빠르게 받아보고 싶으시다면 언제든 편하게 문의해 주세요.<br>영상으로 채널의 스펙을 확실히 올려드리겠습니다.</p>
+                <p>안녕하세요, <strong class="highlight">1인 영상 제작사 Egg Studio</strong>를 운영하고 있는 <strong class="highlight">민지현</strong>입니다.</p>
+
+                <p>저는 <strong class="highlight">성균관대학교</strong>에서 <strong class="highlight">영상학과</strong>, <strong class="highlight">미술학과</strong>, <strong class="highlight">연기예술학과</strong>를 전공하며 연출과 미장센, 연기적 호흡에 대한 깊이 있는 이해를 바탕으로 완성도 높은 영상 프로젝트를 만들고 있습니다.</p>
+
+                <strong class="about-subhead">다양한 채널에서 쌓아온 실전 경험</strong>
+                <p>구독자 30만 명의 영화·드라마 분석 채널 <strong class="highlight">'영화 소녀'</strong>의 메인 편집자로 활동하며 몰입감 있는 서사와 영화적 연출 감각을 다졌고, 구독자 1만 명의 <strong class="highlight">'부업왕부킹'</strong> 채널에서는 메인 편집자이자 PD로서 4개월간 영상 기획부터 제작 전반을 주도하였습니다. 이외에도 수많은 유튜브 채널 및 브랜딩 외주 미팅을 거쳐 다양한 장르의 콘텐츠를 안정적으로 제작해 오고 있습니다.</p>
+
+                <strong class="about-subhead">철저한 마감일 준수와 넓은 작업 스펙트럼</strong>
+                <p>제 작업의 가장 큰 무기는 <strong class="highlight">철저한 마감일 준수</strong>와 <strong class="highlight">넓은 작업 스펙트럼</strong>입니다. 단순한 컷편집과 숏폼 콘텐츠는 물론, 긴 호흡의 30분 이상 유튜브 롱폼 영상까지 지루할 틈 없는 섬세한 연출로 완벽히 소화해 냅니다. 또한, 필요시 최신 <strong class="highlight">AI 영상 기술</strong>을 직접 연출에 활용하여 독창적이고 풍부한 비주얼 소스를 영상 속에 녹여낼 수 있습니다.</p>
+
+                <strong class="about-subhead">현장 대응까지 가능한 자체 장비</strong>
+                <p>편집 작업뿐만 아니라 현장 대응력도 갖추고 있습니다. <strong class="highlight">SONY A7C2</strong> 카메라와 <strong class="highlight">DJI 마이크 2대</strong>, 삼각대 등 고성능 촬영 및 음향 <strong class="highlight">장비</strong>를 자체 보유하고 있어, 단순 편집을 넘어 필요에 따른 고화질 현장 촬영 및 인터뷰 진행까지 유연하게 지원해 드립니다.</p>
+
+                <p style="margin-top: 40px;">답답한 소통이나 일정 지연 없이, 채널의 퀄리티와 스펙을 확실히 올려드리는 기획 파트너가 되어드리겠습니다.</p>
             </div>
  
             <div class="about-image">
                 <svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
-                    <circle cx="100" cy="100" r="95" fill="none" stroke="rgba(255,255,255,0.3)" stroke-width="1"/>
-                    <circle cx="100" cy="80" r="25" fill="rgba(255,255,255,0.2)"/>
-                    <path d="M 70 120 Q 100 140 130 120" fill="none" stroke="rgba(255,255,255,0.2)" stroke-width="2"/>
+                    <circle cx="100" cy="100" r="95" fill="none" stroke="rgba(17,17,17,0.25)" stroke-width="1"/>
+                    <circle cx="100" cy="80" r="25" fill="rgba(17,17,17,0.15)"/>
+                    <path d="M 70 120 Q 100 140 130 120" fill="none" stroke="rgba(17,17,17,0.15)" stroke-width="2"/>
                 </svg>
             </div>
         </div>
@@ -2103,10 +2324,10 @@
     </section>
  
     <!-- Footer -->
-    <footer style="background: #0a0a0a; border-top: 1px solid #222; padding: 20px 0; text-align: center; position: relative;">
-        <div style="color: #666; font-size: 12px; padding: 20px;">
-            <p style="margin: 0;">© 2024 SCENE.FILL STUDIO. All rights reserved.</p>
-            <button onclick="toggleAdminMode()" style="position: absolute; bottom: 20px; right: 20px; background: transparent; border: 1px solid #444; color: #666; padding: 4px 8px; border-radius: 3px; cursor: pointer; font-size: 10px; transition: all 0.3s ease;" title="관리자 모드">🔐</button>
+    <footer style="background: var(--dark); border-top: 1px solid var(--line); padding: 20px 0; text-align: center; position: relative;">
+        <div style="color: #666666; font-size: 12px; padding: 20px;">
+            <p style="margin: 0;">© 2026 EGG Studio. All rights reserved.</p>
+            <button onclick="toggleAdminMode()" style="position: absolute; bottom: 20px; right: 20px; background: transparent; border: 1px solid #CCCCCC; color: #666666; padding: 4px 8px; border-radius: 3px; cursor: pointer; font-size: 10px; transition: all 0.3s ease;" title="관리자 모드">🔐</button>
         </div>
     </footer>
  
@@ -2164,7 +2385,7 @@
         const ADMIN_PASSWORD = "1234";  // ← 여기서 비밀번호 변경 가능
         let isAdminMode = false;
         let portfolioData = [];
-        let currentCategory = '전체';  // 현재 필터된 카테고리
+        let activeFilters = new Set();  // 현재 활성화된 다중 필터 키워드 집합 (비어있으면 전체 노출)
         // ================================
  
         // ======================================
@@ -2182,7 +2403,9 @@
                 youtubeUrl: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ',
                 contribution: '컨셉 기획 100%, 촬영 100%, 편집 100%',
                 duration: '5분 42초',
-                views: '25만 회'
+                views: '25만 회',
+                customThumbnail: null,
+                tags: ['유튜브 롱폼', '시네마틱', '기획·PD', '현장촬영']
             },
             {
                 youtubeId: 'jNQXAC9IVRw',
@@ -2192,7 +2415,9 @@
                 youtubeUrl: 'https://www.youtube.com/watch?v=jNQXAC9IVRw',
                 contribution: '편집 100%, 그래픽 디자인 80%',
                 duration: '3분 18초',
-                views: '8만 회'
+                views: '8만 회',
+                customThumbnail: null,
+                tags: ['숏폼', '컷편집']
             },
             {
                 youtubeId: '9bZkp7q19f0',
@@ -2202,7 +2427,9 @@
                 youtubeUrl: 'https://www.youtube.com/watch?v=9bZkp7q19f0',
                 contribution: '기획 100%, 촬영 100%, 편집 100%, 색보정 100%',
                 duration: '8분 15초',
-                views: '15만 회'
+                views: '15만 회',
+                customThumbnail: null,
+                tags: ['유튜브 롱폼', '시네마틱', '정밀색보정']
             },
             {
                 youtubeId: 'V-_O7gl0DQA',
@@ -2212,7 +2439,9 @@
                 youtubeUrl: 'https://www.youtube.com/watch?v=V-_O7gl0DQA',
                 contribution: '편집 100%, 색보정 100%, 자막 제작 100%',
                 duration: '6분 30초',
-                views: '없음 (개인 제작)'
+                views: '없음 (개인 제작)',
+                customThumbnail: null,
+                tags: ['숏폼', '정밀색보정']
             },
             {
                 youtubeId: 'JGwWNGJdvx8',
@@ -2222,7 +2451,9 @@
                 youtubeUrl: 'https://www.youtube.com/watch?v=JGwWNGJdvx8',
                 contribution: '촬영 100%, 편집 100%, 동영상 자막 80%',
                 duration: '4분 45초',
-                views: '18만 회'
+                views: '18만 회',
+                customThumbnail: null,
+                tags: ['단편 영화', '브랜디드필름', '기획·PD', '현장촬영']
             },
             {
                 youtubeId: 'kFFBqVrFWWI',
@@ -2232,7 +2463,9 @@
                 youtubeUrl: 'https://www.youtube.com/watch?v=kFFBqVrFWWI',
                 contribution: '촬영 100%, 모션그래픽 80%',
                 duration: '2분 20초',
-                views: '12만 회'
+                views: '12만 회',
+                customThumbnail: null,
+                tags: ['숏폼', '컷편집']
             },
             {
                 youtubeId: 'GyBTVLdOECw',
@@ -2242,9 +2475,63 @@
                 youtubeUrl: 'https://www.youtube.com/watch?v=GyBTVLdOECw',
                 contribution: '기획 100%, 편집 100%',
                 duration: '미확인',
-                views: '없음 (개인 제작)'
+                views: '없음 (개인 제작)',
+                customThumbnail: null,
+                tags: ['단편 영화', '시네마틱', '기획·PD']
             }
         ];
+
+        // ======================================
+        // 🖼️ 썸네일 결정 로직
+        // ------------------------------------
+        // customThumbnail(직접 업로드한 이미지 또는 외부 이미지 URL)이
+        // 있으면 최우선으로 사용하고, 없으면 기존 유튜브 썸네일 자동
+        // 추출 방식(https://img.youtube.com/vi/...)을 기본값(fallback)
+        // 으로 사용한다.
+        // ======================================
+        function getThumbnailUrl(item) {
+            if (!item) return '';
+            if (item.customThumbnail && String(item.customThumbnail).trim() !== '') {
+                return item.customThumbnail;
+            }
+            if (item.youtubeId) {
+                return `https://img.youtube.com/vi/${item.youtubeId}/maxresdefault.jpg`;
+            }
+            return '';
+        }
+
+        // 파일 업로드(input[type=file])를 Base64 문자열로 변환
+        function readFileAsBase64(file) {
+            return new Promise((resolve, reject) => {
+                if (!file) {
+                    resolve('');
+                    return;
+                }
+                const reader = new FileReader();
+                reader.onload = () => resolve(reader.result);
+                reader.onerror = reject;
+                reader.readAsDataURL(file);
+            });
+        }
+
+        // 파일 선택(change) 시 미리보기 박스에 이미지 표시
+        function handleThumbnailFilePreview(inputEl, previewImgId) {
+            const previewImg = document.getElementById(previewImgId);
+            if (!previewImg) return;
+            const file = inputEl.files && inputEl.files[0];
+            if (!file) {
+                previewImg.style.display = 'none';
+                previewImg.src = '';
+                return;
+            }
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                previewImg.src = e.target.result;
+                previewImg.style.display = 'block';
+            };
+            reader.readAsDataURL(file);
+        }
+
         // ======================================
         // 🔐 Admin 전역 함수들 (최상단)
         // ======================================
@@ -2260,12 +2547,12 @@
  
             modal.innerHTML = `
                 <div style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); display: flex; align-items: center; justify-content: center; z-index: 3000;">
-                    <div style="background: var(--dark-secondary); border: 2px solid #E73F1E; padding: 40px; border-radius: 8px; max-width: 400px; width: 90%; text-align: center;">
-                        <h2 style="color: #E73F1E; margin: 0 0 20px 0; font-size: 18px;">🔐 관리자 비밀번호</h2>
-                        <input type="password" id="adminPasswordInput" placeholder="비밀번호 입력" style="width: 100%; padding: 12px; background: #0a0a0a; border: 1px solid #333; color: #fff; border-radius: 4px; box-sizing: border-box; margin-bottom: 20px; font-size: 14px;" onkeypress="if(event.key==='Enter') window.submitAdminPassword()">
+                    <div style="background: var(--dark-secondary); border: 2px solid #111111; padding: 40px; border-radius: 8px; max-width: 400px; width: 90%; text-align: center;">
+                        <h2 style="color: #111111; margin: 0 0 20px 0; font-size: 18px;">🔐 관리자 비밀번호</h2>
+                        <input type="password" id="adminPasswordInput" placeholder="비밀번호 입력" style="width: 100%; padding: 12px; background: #F5F5F3; border: 1px solid #DADAD6; color: #111111; border-radius: 4px; box-sizing: border-box; margin-bottom: 20px; font-size: 14px;" onkeypress="if(event.key==='Enter') window.submitAdminPassword()">
                         <div style="display: flex; gap: 10px;">
-                            <button onclick="window.submitAdminPassword()" style="flex: 1; background: #E73F1E; color: #fff; border: none; padding: 12px; cursor: pointer; border-radius: 4px; font-weight: 600;">확인</button>
-                            <button onclick="window.closePasswordModal()" style="flex: 1; background: #333; color: #fff; border: 1px solid #666; padding: 12px; cursor: pointer; border-radius: 4px;">취소</button>
+                            <button onclick="window.submitAdminPassword()" style="flex: 1; background: #111111; color: #fff; border: none; padding: 12px; cursor: pointer; border-radius: 4px; font-weight: 600;">확인</button>
+                            <button onclick="window.closePasswordModal()" style="flex: 1; background: transparent; color: #111111; border: 1px solid #CCCCCC; padding: 12px; cursor: pointer; border-radius: 4px;">취소</button>
                         </div>
                     </div>
                 </div>
@@ -2330,18 +2617,18 @@
             }
  
             adminPanel.innerHTML = `
-                <div style="background: var(--dark-secondary); border-bottom: 2px solid #E73F1E; padding: 20px; position: relative; z-index: 1000;">
+                <div style="background: var(--dark-secondary); border-bottom: 2px solid #111111; padding: 20px; position: relative; z-index: 1000;">
                     <div style="max-width: 1200px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center;">
                         <div>
-                            <h3 style="color: #E73F1E; margin: 0; font-size: 16px;">🔐 관리자 모드 (포트폴리오 편집)</h3>
-                            <p style="color: #aaa; margin: 8px 0 0 0; font-size: 13px;">카드가 흔들릴 때 드래그하여 순서를 변경하거나 ✕ 버튼으로 삭제/✏️ 버튼으로 수정할 수 있습니다.</p>
+                            <h3 style="color: #111111; margin: 0; font-size: 16px;">🔐 관리자 모드 (포트폴리오 편집)</h3>
+                            <p style="color: #666666; margin: 8px 0 0 0; font-size: 13px;">카드가 흔들릴 때 드래그하여 순서를 변경하거나 ✕ 버튼으로 삭제/✏️ 버튼으로 수정할 수 있습니다.</p>
                         </div>
-                        <button onclick="window.closeAdminMode()" style="background: #333; color: #fff; border: 1px solid #666; padding: 8px 16px; cursor: pointer; border-radius: 4px;">종료</button>
+                        <button onclick="window.closeAdminMode()" style="background: transparent; color: #111111; border: 1px solid #CCCCCC; padding: 8px 16px; cursor: pointer; border-radius: 4px;">종료</button>
                     </div>
                 </div>
-                <div style="background: #0a0a0a; padding: 20px; border-bottom: 1px solid #333;">
+                <div style="background: #F5F5F3; padding: 20px; border-bottom: 1px solid #DADAD6;">
                     <div style="max-width: 1200px; margin: 0 auto;">
-                        <button onclick="window.showAddPortfolioForm()" style="background: #E73F1E; color: #fff; border: none; padding: 12px 20px; cursor: pointer; border-radius: 4px; font-weight: 600; font-size: 14px;">+ 새 영상 추가</button>
+                        <button onclick="window.showAddPortfolioForm()" style="background: #111111; color: #fff; border: none; padding: 12px 20px; cursor: pointer; border-radius: 4px; font-weight: 600; font-size: 14px;">+ 새 영상 추가</button>
                     </div>
                 </div>
             `;
@@ -2392,23 +2679,62 @@
             renderPortfolioGrid();
         };
  
-        // 포트폴리오 카테고리 필터링
-        window.filterPortfolio = function(category) {
-            currentCategory = category;
+        // 포트폴리오 필터링 (Service / Key Word 다중 선택 필터)
+        // '전체' 클릭 → 모든 필터 초기화, 그 외 키워드 클릭 → 선택 토글(다중 선택 가능)
+        window.filterPortfolio = function(filterValue) {
+            if (filterValue === '전체') {
+                activeFilters.clear();
+            } else if (activeFilters.has(filterValue)) {
+                activeFilters.delete(filterValue);
+            } else {
+                activeFilters.add(filterValue);
+            }
             
-            // 필터 버튼 활성화 상태 업데이트
-            const filterButtons = document.querySelectorAll('.category-filter');
-            filterButtons.forEach(btn => {
-                if (btn.getAttribute('data-category') === category) {
-                    btn.classList.add('active');
-                } else {
-                    btn.classList.remove('active');
-                }
-            });
-            
-            // 포트폴리오 그리드 다시 렌더링
+            updateFilterActiveStates();
+            renderActiveFilterChip();
             renderPortfolioGrid();
         };
+
+        // 태그 칩의 '×' 버튼 전용 — 해당 키워드만 필터에서 제거
+        window.removeFilterKeyword = function(filterValue) {
+            activeFilters.delete(filterValue);
+            
+            updateFilterActiveStates();
+            renderActiveFilterChip();
+            renderPortfolioGrid();
+        };
+
+        // 상단 텍스트 필터(Service / Key Word)의 활성 스타일(볼드 블랙) 갱신
+        function updateFilterActiveStates() {
+            const filterTexts = document.querySelectorAll('.filter-tag-text');
+            filterTexts.forEach(el => {
+                const value = el.getAttribute('data-filter');
+                const isActive = value === '전체'
+                    ? activeFilters.size === 0
+                    : activeFilters.has(value);
+                el.classList.toggle('active', isActive);
+            });
+        }
+
+        // 선택된 키워드들을 그리드 위 태그 칩(Filter Tag Chip)들로 표시 — 다중 칩 지원
+        function renderActiveFilterChip() {
+            const chipRow = document.getElementById('activeFilterChipRow');
+            if (!chipRow) return;
+            
+            if (activeFilters.size === 0) {
+                chipRow.style.display = 'none';
+                chipRow.innerHTML = '';
+                return;
+            }
+            
+            chipRow.style.display = 'flex';
+            chipRow.innerHTML = Array.from(activeFilters).map(keyword => `
+                <span class="filter-chip">
+                    ${keyword}
+                    <button type="button" onclick="window.removeFilterKeyword('${keyword.replace(/'/g, "\\'")}')" aria-label="${keyword} 필터 해제">×</button>
+                </span>
+            `).join('');
+        }
  
         // ===== 견적 신청 히스토리 관련 함수 =====
  
@@ -2565,26 +2891,38 @@
             modal.style.cssText = 'position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); display: flex; align-items: center; justify-content: center; z-index: 2000;';
             
             modal.innerHTML = `
-                <div style="background: var(--dark-secondary); border: 1px solid #E73F1E; padding: 30px; border-radius: 8px; max-width: 600px; width: 90%; max-height: 90vh; overflow-y: auto;">
+                <div style="background: var(--dark-secondary); border: 1px solid #111111; padding: 30px; border-radius: 8px; max-width: 600px; width: 90%; max-height: 90vh; overflow-y: auto;">
                     <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
-                        <h2 style="color: #E73F1E; margin: 0; font-size: 20px;">새 영상 추가</h2>
-                        <button onclick="document.getElementById('adminFormModal').remove()" style="background: none; border: none; color: #fff; font-size: 24px; cursor: pointer;">×</button>
+                        <h2 style="color: #111111; margin: 0; font-size: 20px;">새 영상 추가</h2>
+                        <button onclick="document.getElementById('adminFormModal').remove()" style="background: none; border: none; color: #111111; font-size: 24px; cursor: pointer;">×</button>
                     </div>
  
                     <form onsubmit="window.handleAddPortfolio(event)" style="display: flex; flex-direction: column; gap: 15px;">
                         <div>
-                            <label style="color: #aaa; display: block; margin-bottom: 5px; font-size: 12px;">YouTube URL 또는 ID *</label>
-                            <input type="text" id="adminYoutubeId" placeholder="예: https://youtu.be/dQw4w9WgXcQ 또는 dQw4w9WgXcQ" required style="width: 100%; padding: 10px; background: #0a0a0a; border: 1px solid #333; color: #fff; border-radius: 4px; box-sizing: border-box;">
+                            <label style="color: #666666; display: block; margin-bottom: 5px; font-size: 12px;">YouTube URL 또는 ID *</label>
+                            <input type="text" id="adminYoutubeId" placeholder="예: https://youtu.be/dQw4w9WgXcQ 또는 dQw4w9WgXcQ" required style="width: 100%; padding: 10px; background: #F5F5F3; border: 1px solid #DADAD6; color: #111111; border-radius: 4px; box-sizing: border-box;">
+                        </div>
+
+                        <div style="border: 1px dashed #CCCCCC; border-radius: 6px; padding: 12px; background: rgba(17,17,17,0.04);">
+                            <label style="color: #111111; display: block; margin-bottom: 8px; font-size: 12px; font-weight: 600;">커스텀 썸네일 (선택 사항 · 파일 업로드가 URL보다 우선 적용됩니다)</label>
+
+                            <label style="color: #666666; display: block; margin-bottom: 5px; font-size: 12px;">이미지 파일 선택</label>
+                            <input type="file" id="adminThumbnailFile" accept="image/*" onchange="handleThumbnailFilePreview(this, 'adminThumbnailPreview')" style="width: 100%; padding: 8px; background: #F5F5F3; border: 1px solid #DADAD6; color: #111111; border-radius: 4px; box-sizing: border-box; margin-bottom: 10px;">
+
+                            <label style="color: #666666; display: block; margin-bottom: 5px; font-size: 12px;">또는 외부 이미지 URL 직접 입력</label>
+                            <input type="text" id="adminThumbnailUrl" placeholder="예: https://example.com/my-thumbnail.jpg" style="width: 100%; padding: 10px; background: #F5F5F3; border: 1px solid #DADAD6; color: #111111; border-radius: 4px; box-sizing: border-box; margin-bottom: 10px;">
+
+                            <img id="adminThumbnailPreview" src="" alt="썸네일 미리보기" style="display: none; width: 100%; max-height: 220px; object-fit: cover; border-radius: 4px; border: 1px solid #DADAD6;">
                         </div>
  
                         <div>
-                            <label style="color: #aaa; display: block; margin-bottom: 5px; font-size: 12px;">영상 제목 *</label>
-                            <input type="text" id="adminTitle" placeholder="예: Reminder of Spring" required style="width: 100%; padding: 10px; background: #0a0a0a; border: 1px solid #333; color: #fff; border-radius: 4px; box-sizing: border-box;">
+                            <label style="color: #666666; display: block; margin-bottom: 5px; font-size: 12px;">영상 제목 *</label>
+                            <input type="text" id="adminTitle" placeholder="예: Reminder of Spring" required style="width: 100%; padding: 10px; background: #F5F5F3; border: 1px solid #DADAD6; color: #111111; border-radius: 4px; box-sizing: border-box;">
                         </div>
  
                         <div>
-                            <label style="color: #aaa; display: block; margin-bottom: 5px; font-size: 12px;">카테고리 *</label>
-                            <select id="adminCategory" name="category" required style="width: 100%; padding: 10px; background: #0a0a0a; border: 1px solid #333; color: #fff; border-radius: 4px; box-sizing: border-box;">
+                            <label style="color: #666666; display: block; margin-bottom: 5px; font-size: 12px;">카테고리 *</label>
+                            <select id="adminCategory" name="category" required style="width: 100%; padding: 10px; background: #F5F5F3; border: 1px solid #DADAD6; color: #111111; border-radius: 4px; box-sizing: border-box;">
                                 <option value="">카테고리를 선택하세요</option>
                                 <option value="유튜브 롱폼">유튜브 롱폼</option>
                                 <option value="숏폼">숏폼</option>
@@ -2594,28 +2932,33 @@
                         </div>
  
                         <div>
-                            <label style="color: #aaa; display: block; margin-bottom: 5px; font-size: 12px;">참여 역할 *</label>
-                            <input type="text" id="adminRole" placeholder="예: shot | directed | edited" required style="width: 100%; padding: 10px; background: #0a0a0a; border: 1px solid #333; color: #fff; border-radius: 4px; box-sizing: border-box;">
+                            <label style="color: #666666; display: block; margin-bottom: 5px; font-size: 12px;">참여 역할 *</label>
+                            <input type="text" id="adminRole" placeholder="예: shot | directed | edited" required style="width: 100%; padding: 10px; background: #F5F5F3; border: 1px solid #DADAD6; color: #111111; border-radius: 4px; box-sizing: border-box;">
                         </div>
  
                         <div>
-                            <label style="color: #aaa; display: block; margin-bottom: 5px; font-size: 12px;">작업 범위 및 설명 *</label>
-                            <input type="text" id="adminContribution" placeholder="예: 컨셉 기획 100%, 촬영 100%, 편집 100%" required style="width: 100%; padding: 10px; background: #0a0a0a; border: 1px solid #333; color: #fff; border-radius: 4px; box-sizing: border-box;">
+                            <label style="color: #666666; display: block; margin-bottom: 5px; font-size: 12px;">작업 범위 및 설명 *</label>
+                            <input type="text" id="adminContribution" placeholder="예: 컨셉 기획 100%, 촬영 100%, 편집 100%" required style="width: 100%; padding: 10px; background: #F5F5F3; border: 1px solid #DADAD6; color: #111111; border-radius: 4px; box-sizing: border-box;">
                         </div>
  
                         <div>
-                            <label style="color: #aaa; display: block; margin-bottom: 5px; font-size: 12px;">영상 길이</label>
-                            <input type="text" id="adminDuration" placeholder="예: 5분 42초" style="width: 100%; padding: 10px; background: #0a0a0a; border: 1px solid #333; color: #fff; border-radius: 4px; box-sizing: border-box;">
+                            <label style="color: #666666; display: block; margin-bottom: 5px; font-size: 12px;">영상 길이</label>
+                            <input type="text" id="adminDuration" placeholder="예: 5분 42초" style="width: 100%; padding: 10px; background: #F5F5F3; border: 1px solid #DADAD6; color: #111111; border-radius: 4px; box-sizing: border-box;">
                         </div>
  
                         <div>
-                            <label style="color: #aaa; display: block; margin-bottom: 5px; font-size: 12px;">조회수</label>
-                            <input type="text" id="adminViews" placeholder="예: 25만 회" style="width: 100%; padding: 10px; background: #0a0a0a; border: 1px solid #333; color: #fff; border-radius: 4px; box-sizing: border-box;">
+                            <label style="color: #666666; display: block; margin-bottom: 5px; font-size: 12px;">조회수</label>
+                            <input type="text" id="adminViews" placeholder="예: 25만 회" style="width: 100%; padding: 10px; background: #F5F5F3; border: 1px solid #DADAD6; color: #111111; border-radius: 4px; box-sizing: border-box;">
+                        </div>
+
+                        <div>
+                            <label style="color: #666666; display: block; margin-bottom: 5px; font-size: 12px;">태그 (쉼표로 구분 · Category/Style 필터와 카드 하단 태그에 사용됩니다)</label>
+                            <input type="text" id="adminTags" placeholder="예: 유튜브 롱폼, 시네마틱, 정밀색보정" style="width: 100%; padding: 10px; background: #F5F5F3; border: 1px solid #DADAD6; color: #111111; border-radius: 4px; box-sizing: border-box;">
                         </div>
  
                         <div style="display: flex; gap: 10px; margin-top: 20px;">
-                            <button type="submit" style="flex: 1; background: #E73F1E; color: #fff; border: none; padding: 12px; cursor: pointer; border-radius: 4px; font-weight: 600;">저장</button>
-                            <button type="button" onclick="document.getElementById('adminFormModal').remove()" style="flex: 1; background: #333; color: #fff; border: 1px solid #666; padding: 12px; cursor: pointer; border-radius: 4px;">취소</button>
+                            <button type="submit" style="flex: 1; background: #111111; color: #fff; border: none; padding: 12px; cursor: pointer; border-radius: 4px; font-weight: 600;">저장</button>
+                            <button type="button" onclick="document.getElementById('adminFormModal').remove()" style="flex: 1; background: transparent; color: #111111; border: 1px solid #CCCCCC; padding: 12px; cursor: pointer; border-radius: 4px;">취소</button>
                         </div>
                     </form>
                 </div>
@@ -2623,7 +2966,7 @@
         };
  
         // 포트폴리오 추가 처리 - 전역 함수
-        window.handleAddPortfolio = function(event) {
+        window.handleAddPortfolio = async function(event) {
             event.preventDefault();
             
             console.log('🟢 [handleAddPortfolio] 함수 시작');
@@ -2648,6 +2991,31 @@
  
             console.log('📺 YouTube ID:', youtubeId);
  
+            // ===== 커스텀 썸네일 결정 (파일 업로드가 URL 입력보다 우선) =====
+            let customThumbnail = '';
+            const thumbnailFileInput = document.getElementById('adminThumbnailFile');
+            const thumbnailUrlInput = document.getElementById('adminThumbnailUrl');
+            const selectedFile = thumbnailFileInput && thumbnailFileInput.files ? thumbnailFileInput.files[0] : null;
+ 
+            if (selectedFile) {
+                try {
+                    customThumbnail = await readFileAsBase64(selectedFile);
+                    console.log('🖼️ 업로드 파일을 Base64로 변환 완료');
+                } catch (e) {
+                    console.error('❌ 썸네일 파일 읽기 오류:', e);
+                    alert('⚠️ 썸네일 이미지 파일을 읽는 중 오류가 발생했습니다.');
+                }
+            } else if (thumbnailUrlInput && thumbnailUrlInput.value.trim() !== '') {
+                customThumbnail = thumbnailUrlInput.value.trim();
+                console.log('🔗 외부 이미지 URL 사용:', customThumbnail);
+            }
+ 
+            // 태그 입력값을 배열로 변환 (쉼표 구분, 빈 항목 제거)
+            const adminTagsInput = document.getElementById('adminTags');
+            const parsedTags = adminTagsInput
+                ? adminTagsInput.value.split(',').map(t => t.trim()).filter(t => t.length > 0)
+                : [];
+ 
             const newItem = {
                 youtubeId: youtubeId,
                 title: document.getElementById('adminTitle').value.trim(),
@@ -2656,7 +3024,9 @@
                 youtubeUrl: `https://www.youtube.com/watch?v=${youtubeId}`,
                 contribution: document.getElementById('adminContribution').value.trim(),
                 duration: document.getElementById('adminDuration').value.trim() || '미확인',
-                views: document.getElementById('adminViews').value.trim() || '미확인'
+                views: document.getElementById('adminViews').value.trim() || '미확인',
+                customThumbnail: customThumbnail || null,
+                tags: parsedTags
             };
  
             console.log('📦 새 항목:', newItem);
@@ -2748,26 +3118,43 @@
             modal.style.cssText = 'position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); display: flex; align-items: center; justify-content: center; z-index: 2000;';
             
             modal.innerHTML = `
-                <div style="background: var(--dark-secondary); border: 1px solid #E73F1E; padding: 30px; border-radius: 8px; max-width: 600px; width: 90%; max-height: 90vh; overflow-y: auto;">
+                <div style="background: var(--dark-secondary); border: 1px solid #111111; padding: 30px; border-radius: 8px; max-width: 600px; width: 90%; max-height: 90vh; overflow-y: auto;">
                     <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
-                        <h2 style="color: #E73F1E; margin: 0; font-size: 20px;">포트폴리오 수정</h2>
-                        <button onclick="document.getElementById('editPortfolioModal').remove()" style="background: none; border: none; color: #fff; font-size: 24px; cursor: pointer;">×</button>
+                        <h2 style="color: #111111; margin: 0; font-size: 20px;">포트폴리오 수정</h2>
+                        <button onclick="document.getElementById('editPortfolioModal').remove()" style="background: none; border: none; color: #111111; font-size: 24px; cursor: pointer;">×</button>
                     </div>
  
                     <form onsubmit="window.handleEditPortfolio(event, ${index})" style="display: flex; flex-direction: column; gap: 15px;">
                         <div>
-                            <label style="color: #aaa; display: block; margin-bottom: 5px; font-size: 12px;">YouTube URL 또는 ID</label>
-                            <input type="text" id="editYoutubeId" value="${item.youtubeId}" placeholder="예: dQw4w9WgXcQ" style="width: 100%; padding: 10px; background: #0a0a0a; border: 1px solid #333; color: #fff; border-radius: 4px; box-sizing: border-box;">
+                            <label style="color: #666666; display: block; margin-bottom: 5px; font-size: 12px;">YouTube URL 또는 ID</label>
+                            <input type="text" id="editYoutubeId" value="${item.youtubeId}" placeholder="예: dQw4w9WgXcQ" style="width: 100%; padding: 10px; background: #F5F5F3; border: 1px solid #DADAD6; color: #111111; border-radius: 4px; box-sizing: border-box;">
+                        </div>
+
+                        <div style="border: 1px dashed #CCCCCC; border-radius: 6px; padding: 12px; background: rgba(17,17,17,0.04);">
+                            <label style="color: #111111; display: block; margin-bottom: 8px; font-size: 12px; font-weight: 600;">커스텀 썸네일 (선택 사항 · 파일 업로드가 URL보다 우선 적용됩니다)</label>
+
+                            <label style="color: #666666; display: block; margin-bottom: 5px; font-size: 12px;">이미지 파일 선택 (새로 선택 시 기존 썸네일을 대체합니다)</label>
+                            <input type="file" id="editThumbnailFile" accept="image/*" onchange="handleThumbnailFilePreview(this, 'editThumbnailPreview')" style="width: 100%; padding: 8px; background: #F5F5F3; border: 1px solid #DADAD6; color: #111111; border-radius: 4px; box-sizing: border-box; margin-bottom: 10px;">
+
+                            <label style="color: #666666; display: block; margin-bottom: 5px; font-size: 12px;">또는 외부 이미지 URL 직접 입력</label>
+                            <input type="text" id="editThumbnailUrl" value="${(item.customThumbnail && !item.customThumbnail.startsWith('data:')) ? item.customThumbnail : ''}" placeholder="예: https://example.com/my-thumbnail.jpg" style="width: 100%; padding: 10px; background: #F5F5F3; border: 1px solid #DADAD6; color: #111111; border-radius: 4px; box-sizing: border-box; margin-bottom: 10px;">
+
+                            <img id="editThumbnailPreview" src="${getThumbnailUrl(item) || ''}" alt="썸네일 미리보기" style="display: ${getThumbnailUrl(item) ? 'block' : 'none'}; width: 100%; max-height: 220px; object-fit: cover; border-radius: 4px; border: 1px solid #DADAD6;">
+
+                            <label style="color: #666666; display: flex; align-items: center; gap: 6px; margin-top: 10px; font-size: 12px; cursor: pointer;">
+                                <input type="checkbox" id="editThumbnailRemove" style="cursor: pointer;">
+                                커스텀 썸네일 제거하고 유튜브 자동 썸네일 사용
+                            </label>
                         </div>
  
                         <div>
-                            <label style="color: #aaa; display: block; margin-bottom: 5px; font-size: 12px;">영상 제목</label>
-                            <input type="text" id="editTitle" value="${item.title}" placeholder="예: Reminder of Spring" style="width: 100%; padding: 10px; background: #0a0a0a; border: 1px solid #333; color: #fff; border-radius: 4px; box-sizing: border-box;">
+                            <label style="color: #666666; display: block; margin-bottom: 5px; font-size: 12px;">영상 제목</label>
+                            <input type="text" id="editTitle" value="${item.title}" placeholder="예: Reminder of Spring" style="width: 100%; padding: 10px; background: #F5F5F3; border: 1px solid #DADAD6; color: #111111; border-radius: 4px; box-sizing: border-box;">
                         </div>
  
                         <div>
-                            <label style="color: #aaa; display: block; margin-bottom: 5px; font-size: 12px;">카테고리</label>
-                            <select id="editCategory" style="width: 100%; padding: 10px; background: #0a0a0a; border: 1px solid #333; color: #fff; border-radius: 4px; box-sizing: border-box;">
+                            <label style="color: #666666; display: block; margin-bottom: 5px; font-size: 12px;">카테고리</label>
+                            <select id="editCategory" style="width: 100%; padding: 10px; background: #F5F5F3; border: 1px solid #DADAD6; color: #111111; border-radius: 4px; box-sizing: border-box;">
                                 <option value="유튜브 롱폼" ${item.category === '유튜브 롱폼' ? 'selected' : ''}>유튜브 롱폼</option>
                                 <option value="숏폼" ${item.category === '숏폼' ? 'selected' : ''}>숏폼</option>
                                 <option value="단편 영화" ${item.category === '단편 영화' ? 'selected' : ''}>단편 영화</option>
@@ -2776,28 +3163,33 @@
                         </div>
  
                         <div>
-                            <label style="color: #aaa; display: block; margin-bottom: 5px; font-size: 12px;">참여 역할</label>
-                            <input type="text" id="editRole" value="${item.role}" placeholder="예: shot | directed | edited" style="width: 100%; padding: 10px; background: #0a0a0a; border: 1px solid #333; color: #fff; border-radius: 4px; box-sizing: border-box;">
+                            <label style="color: #666666; display: block; margin-bottom: 5px; font-size: 12px;">참여 역할</label>
+                            <input type="text" id="editRole" value="${item.role}" placeholder="예: shot | directed | edited" style="width: 100%; padding: 10px; background: #F5F5F3; border: 1px solid #DADAD6; color: #111111; border-radius: 4px; box-sizing: border-box;">
                         </div>
  
                         <div>
-                            <label style="color: #aaa; display: block; margin-bottom: 5px; font-size: 12px;">작업 범위 및 설명</label>
-                            <input type="text" id="editContribution" value="${item.contribution}" placeholder="예: 컨셉 기획 100%, 촬영 100%, 편집 100%" style="width: 100%; padding: 10px; background: #0a0a0a; border: 1px solid #333; color: #fff; border-radius: 4px; box-sizing: border-box;">
+                            <label style="color: #666666; display: block; margin-bottom: 5px; font-size: 12px;">작업 범위 및 설명</label>
+                            <input type="text" id="editContribution" value="${item.contribution}" placeholder="예: 컨셉 기획 100%, 촬영 100%, 편집 100%" style="width: 100%; padding: 10px; background: #F5F5F3; border: 1px solid #DADAD6; color: #111111; border-radius: 4px; box-sizing: border-box;">
                         </div>
  
                         <div>
-                            <label style="color: #aaa; display: block; margin-bottom: 5px; font-size: 12px;">영상 길이</label>
-                            <input type="text" id="editDuration" value="${item.duration || ''}" placeholder="예: 5분 42초" style="width: 100%; padding: 10px; background: #0a0a0a; border: 1px solid #333; color: #fff; border-radius: 4px; box-sizing: border-box;">
+                            <label style="color: #666666; display: block; margin-bottom: 5px; font-size: 12px;">영상 길이</label>
+                            <input type="text" id="editDuration" value="${item.duration || ''}" placeholder="예: 5분 42초" style="width: 100%; padding: 10px; background: #F5F5F3; border: 1px solid #DADAD6; color: #111111; border-radius: 4px; box-sizing: border-box;">
                         </div>
  
                         <div>
-                            <label style="color: #aaa; display: block; margin-bottom: 5px; font-size: 12px;">조회수</label>
-                            <input type="text" id="editViews" value="${item.views || ''}" placeholder="예: 25만 회" style="width: 100%; padding: 10px; background: #0a0a0a; border: 1px solid #333; color: #fff; border-radius: 4px; box-sizing: border-box;">
+                            <label style="color: #666666; display: block; margin-bottom: 5px; font-size: 12px;">조회수</label>
+                            <input type="text" id="editViews" value="${item.views || ''}" placeholder="예: 25만 회" style="width: 100%; padding: 10px; background: #F5F5F3; border: 1px solid #DADAD6; color: #111111; border-radius: 4px; box-sizing: border-box;">
+                        </div>
+
+                        <div>
+                            <label style="color: #666666; display: block; margin-bottom: 5px; font-size: 12px;">태그 (쉼표로 구분 · Category/Style 필터와 카드 하단 태그에 사용됩니다)</label>
+                            <input type="text" id="editTags" value="${Array.isArray(item.tags) ? item.tags.join(', ') : ''}" placeholder="예: 유튜브 롱폼, 시네마틱, 정밀색보정" style="width: 100%; padding: 10px; background: #F5F5F3; border: 1px solid #DADAD6; color: #111111; border-radius: 4px; box-sizing: border-box;">
                         </div>
  
                         <div style="display: flex; gap: 10px; margin-top: 20px;">
-                            <button type="submit" style="flex: 1; background: #E73F1E; color: #fff; border: none; padding: 12px; cursor: pointer; border-radius: 4px; font-weight: 600;">수정 완료</button>
-                            <button type="button" onclick="document.getElementById('editPortfolioModal').remove()" style="flex: 1; background: #333; color: #fff; border: 1px solid #666; padding: 12px; cursor: pointer; border-radius: 4px;">취소</button>
+                            <button type="submit" style="flex: 1; background: #111111; color: #fff; border: none; padding: 12px; cursor: pointer; border-radius: 4px; font-weight: 600;">수정 완료</button>
+                            <button type="button" onclick="document.getElementById('editPortfolioModal').remove()" style="flex: 1; background: transparent; color: #111111; border: 1px solid #CCCCCC; padding: 12px; cursor: pointer; border-radius: 4px;">취소</button>
                         </div>
                     </form>
                 </div>
@@ -2805,7 +3197,7 @@
         };
  
         // 포트폴리오 수정 처리 - 전역 함수
-        window.handleEditPortfolio = function(event, index) {
+        window.handleEditPortfolio = async function(event, index) {
             event.preventDefault();
  
             const youtubeInput = document.getElementById('editYoutubeId').value;
@@ -2818,6 +3210,36 @@
                 youtubeId = youtubeInput.split('youtu.be/')[1];
             }
  
+            // ===== 커스텀 썸네일 결정 =====
+            // 우선순위: 새로 선택한 파일 > 입력된 외부 URL > "제거" 체크 시 없음 > 기존 값 유지
+            const existingItem = portfolioData[index] || {};
+            let customThumbnail = existingItem.customThumbnail || '';
+ 
+            const removeCheckbox = document.getElementById('editThumbnailRemove');
+            const thumbnailFileInput = document.getElementById('editThumbnailFile');
+            const thumbnailUrlInput = document.getElementById('editThumbnailUrl');
+            const selectedFile = thumbnailFileInput && thumbnailFileInput.files ? thumbnailFileInput.files[0] : null;
+ 
+            if (removeCheckbox && removeCheckbox.checked) {
+                customThumbnail = '';
+            } else if (selectedFile) {
+                try {
+                    customThumbnail = await readFileAsBase64(selectedFile);
+                    console.log('🖼️ 업로드 파일을 Base64로 변환 완료');
+                } catch (e) {
+                    console.error('❌ 썸네일 파일 읽기 오류:', e);
+                    alert('⚠️ 썸네일 이미지 파일을 읽는 중 오류가 발생했습니다.');
+                }
+            } else if (thumbnailUrlInput && thumbnailUrlInput.value.trim() !== '') {
+                customThumbnail = thumbnailUrlInput.value.trim();
+            }
+ 
+            // 태그 입력값을 배열로 변환 (쉼표 구분, 빈 항목 제거)
+            const editTagsInput = document.getElementById('editTags');
+            const parsedTags = editTagsInput
+                ? editTagsInput.value.split(',').map(t => t.trim()).filter(t => t.length > 0)
+                : [];
+ 
             // portfolioData 업데이트
             portfolioData[index] = {
                 youtubeId: youtubeId,
@@ -2827,7 +3249,9 @@
                 youtubeUrl: `https://www.youtube.com/watch?v=${youtubeId}`,
                 contribution: document.getElementById('editContribution').value,
                 duration: document.getElementById('editDuration').value || '미확인',
-                views: document.getElementById('editViews').value || '미확인'
+                views: document.getElementById('editViews').value || '미확인',
+                customThumbnail: customThumbnail || null,
+                tags: parsedTags
             };
  
             // LocalStorage 저장
@@ -2842,6 +3266,14 @@
             alert('✅ 영상이 수정되었습니다!');
         };
  
+        // 브랜드 로고(EGG Studio) 클릭 시 랜딩 히어로 최상단으로 이동
+        function scrollToLanding() {
+            const landing = document.getElementById('landing');
+            if (landing) {
+                landing.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }
+        }
+
         function showPage(pageName) {
             // 모든 페이지 숨기기
             document.querySelectorAll('.page').forEach(page => {
@@ -2879,12 +3311,12 @@
                 savePortfolioData();
             }
             
-            // currentCategory 안전성 체크
-            if (!currentCategory) {
-                currentCategory = '전체';
+            // activeFilters 안전성 체크
+            if (!activeFilters || !(activeFilters instanceof Set)) {
+                activeFilters = new Set();
             }
             
-            console.log(`✅ renderPortfolioGrid 시작 - currentCategory: ${currentCategory}, portfolioData 길이: ${portfolioData.length}`);
+            console.log(`✅ renderPortfolioGrid 시작 - activeFilters: [${Array.from(activeFilters).join(', ')}], portfolioData 길이: ${portfolioData.length}`);
             
             // 플레이스홀더 SVG 생성 함수
             function createPlaceholderSVG(index) {
@@ -2905,17 +3337,20 @@
             // portfolioData 배열을 순회하며 카드 생성
             let renderedCount = 0;
             portfolioData.forEach((item, index) => {
-                // ===== 카테고리 필터링 로직 (예외 처리 강화) =====
-                // [전체]일 때는 모든 카드 표시
-                // 특정 카테고리일 때는 해당 카테고리만 표시
-                // category가 없거나 undefined인 경우 [전체]에서만 표시
-                if (currentCategory !== '전체') {
-                    if (!item.category || item.category === undefined) {
-                        // category가 없으면 [전체]를 제외한 다른 필터에서는 스킵
-                        return;
+                // ===== 다중 선택 필터링 로직 (선택된 키워드 중 하나라도 일치하면 OR 매칭으로 노출) =====
+                // activeFilters가 비어있으면(= '전체') 모든 카드 표시
+                // 하나 이상 선택된 경우: item.category 또는 item.tags 중 선택된 키워드와 하나라도 겹치면 노출
+                if (activeFilters.size > 0) {
+                    const itemTags = Array.isArray(item.tags) ? item.tags : [];
+                    let hasMatch = false;
+                    for (const keyword of activeFilters) {
+                        if (item.category === keyword || itemTags.includes(keyword)) {
+                            hasMatch = true;
+                            break;
+                        }
                     }
-                    if (item.category !== currentCategory) {
-                        // 카테고리가 일치하지 않으면 스킵
+                    if (!hasMatch) {
+                        // 선택된 키워드 중 어느 것도 일치하지 않으면 스킵
                         return;
                     }
                 }
@@ -2937,7 +3372,7 @@
                 // 드래그 이벤트 데이터 저장
                 masonryItem.dataset.index = index;
                 
-                const imageUrl = `https://img.youtube.com/vi/${item.youtubeId}/maxresdefault.jpg`;
+                const imageUrl = getThumbnailUrl(item);
                 
                 // Admin 모드일 때만 보이는 삭제 버튼 HTML (썸네일 컨테이너 기준 우측 상단 고정)
                 const deleteButtonHTML = isAdminMode ? `
@@ -2948,6 +3383,12 @@
                 const editButtonHTML = isAdminMode ? `
                     <button class="portfolio-edit-btn" data-index="${index}" title="수정" draggable="false">✏️</button>
                 ` : '';
+                
+                // 카드 하단 태그 칩 HTML (#유튜브롱폼, #시네마틱 등)
+                const itemTags = Array.isArray(item.tags) ? item.tags : [];
+                const tagsHTML = itemTags.length > 0
+                    ? `<div class="portfolio-tags">${itemTags.map(tag => `<span class="portfolio-tag">#${String(tag).replace(/\s|·/g, '')}</span>`).join('')}</div>`
+                    : '';
                 
                 // HTML 생성 - 버튼은 16:9 썸네일 컨테이너 내부에 위치시켜
                 // 제목 텍스트 길이와 무관하게 항상 썸네일 우측 상단/하단에 고정되도록 함
@@ -2969,6 +3410,7 @@
                     <div class="portfolio-info">
                         <div class="portfolio-title">${item.title}</div>
                         <p class="portfolio-meta">${item.role}</p>
+                        ${tagsHTML}
                     </div>
                 `;
                 
@@ -3141,7 +3583,7 @@
             const modal = document.getElementById('portfolioModal');
             
             // 모달 데이터 채우기
-            document.getElementById('portfolioModalThumbnail').src = `https://img.youtube.com/vi/${portfolio.youtubeId}/maxresdefault.jpg`;
+            document.getElementById('portfolioModalThumbnail').src = getThumbnailUrl(portfolio);
             document.getElementById('portfolioModalTitle').textContent = portfolio.title;
             document.getElementById('portfolioModalRole').textContent = portfolio.role;
             document.getElementById('portfolioModalContribution').textContent = portfolio.contribution;
@@ -3187,9 +3629,9 @@
             loadPortfolioData();
             console.log('✅ portfolioData 로드 완료:', portfolioData.length, '개');
             
-            // 2. currentCategory 초기값 설정
-            currentCategory = '전체';
-            console.log('🏷️ currentCategory 초기화:', currentCategory);
+            // 2. activeFilters 초기값 설정 (빈 Set = 전체 노출)
+            activeFilters = new Set();
+            console.log('🏷️ activeFilters 초기화:', Array.from(activeFilters));
             
             // 3. 포트폴리오 그리드 렌더링
             console.log('🎬 포트폴리오 그리드 렌더링 중...');
@@ -3504,30 +3946,79 @@
             }
  
             console.log('🚀 EmailJS 실제 전송 시작...');
-            console.log('전송 데이터:', {
+
+            // ===== EmailJS 템플릿으로 전달할 파라미터 =====
+            // 키 이름은 EmailJS 대시보드 → Email Templates 안의 {{변수명}}과
+            // 반드시 1:1로 일치해야 합니다. (아래 3번 안내 참고)
+            // 일부 템플릿은 개별 필드 대신 {{message}} 하나로 본문 전체를
+            // 구성하는 경우가 많아, 통합 메시지도 함께 전달합니다.
+            const deadlineFormatted = formatDeadline(formData.deadline);
+            const referenceLink = formData.reference || '(없음)';
+            const addOnLabel = formData.addon === 'yes' ? '필요' : '불필요';
+
+            const emailParams = {
                 from_name: formData.name,
                 from_email: formData.email,
                 phone: formData.phone,
                 package: formData.package,
                 camera: formData.cameraSetup,
-                deadline: formatDeadline(formData.deadline),
-                reference_link: formData.reference || '(없음)',
-                add_on: formData.addon === 'yes' ? '필요' : '불필요'
-            });
- 
-            // EmailJS 실제 전송
-            emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, {
-                from_name: formData.name,
-                from_email: formData.email,
-                phone: formData.phone,
-                package: formData.package,
-                camera: formData.cameraSetup,
-                deadline: formatDeadline(formData.deadline),
-                reference_link: formData.reference || '(없음)',
+                deadline: deadlineFormatted,
+                reference_link: referenceLink,
                 description: formData.description,
-                add_on: formData.addon === 'yes' ? '필요' : '불필요',
-                reply_to: formData.email
-            }).then(function(response) {
+                add_on: addOnLabel,
+                reply_to: formData.email,
+                // {{message}} 변수를 쓰는 템플릿을 위한 통합 본문
+                message: [
+                    '이름: ' + formData.name,
+                    '이메일: ' + formData.email,
+                    '연락처: ' + formData.phone,
+                    '패키지: ' + formData.package,
+                    '카메라 대수: ' + formData.cameraSetup,
+                    '희망 마감일: ' + deadlineFormatted,
+                    '참고 링크: ' + referenceLink,
+                    'AI Add-on: ' + addOnLabel,
+                    '',
+                    '[프로젝트 상세 설명]',
+                    formData.description
+                ].join('\n')
+            };
+
+            console.log('📨 전송 파라미터 (EmailJS 템플릿 변수와 이름이 일치해야 합니다):', emailParams);
+
+            // ===== 무한 대기 방지용 타임아웃 안전장치 =====
+            const EMAILJS_TIMEOUT_MS = 8000;
+            function createTimeoutPromise(ms) {
+                return new Promise(function(_, reject) {
+                    setTimeout(function() {
+                        const timeoutError = new Error('EmailJS 응답이 ' + (ms / 1000) + '초 내에 도착하지 않았습니다.');
+                        timeoutError.isTimeout = true;
+                        reject(timeoutError);
+                    }, ms);
+                });
+            }
+
+            // 버튼/에러메시지 상태를 항상 원래대로 복구하는 헬퍼
+            function resetSubmitUI() {
+                submitBtn.disabled = false;
+                submitBtn.innerHTML = '견적 신청';
+                submitBtn.classList.remove('loading');
+            }
+
+            // EmailJS 실제 전송 (8초 타임아웃과 Promise.race로 경쟁시킴)
+            const sendPromise = emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, emailParams);
+
+            // 타임아웃으로 이미 버튼이 복구된 후 실제 응답이 뒤늦게 도착해도
+            // "Uncaught (in promise)" 경고 없이 콘솔에서 확인할 수 있도록 별도 로깅
+            sendPromise.then(function(lateResponse) {
+                console.log('ℹ️ [지연 응답] emailjs.send()가 타임아웃 이후 성공 응답을 보냈습니다:', lateResponse);
+            }).catch(function(lateError) {
+                console.error('⚠️ [지연 응답] emailjs.send()가 타임아웃 이후 실패 응답을 보냈습니다:', lateError);
+            });
+
+            Promise.race([
+                sendPromise,
+                createTimeoutPromise(EMAILJS_TIMEOUT_MS)
+            ]).then(function(response) {
                 // 전송 성공
                 console.log('✅ [성공] 이메일 전송 성공!');
                 console.log('응답:', response);
@@ -3554,10 +4045,6 @@
                 // 폼 초기화
                 form.reset();
                 
-                // 버튼 상태 복구
-                submitBtn.disabled = false;
-                submitBtn.innerHTML = '견적 신청';
-                submitBtn.classList.remove('loading');
                 // 에러 메시지 초기화
                 errorMessages.forEach(msg => msg.classList.remove('show'));
                 inputFields.forEach(field => field.classList.remove('error'));
@@ -3568,24 +4055,29 @@
                 }, 5000);
  
             }).catch(function(error) {
-                // 전송 실패
-                console.error('❌ [실패] 이메일 전송 실패');
-                console.error('에러 상세:', error);
-                console.error('에러 코드:', error.status);
-                console.error('에러 메시지:', error.text);
+                // 전송 실패 (EmailJS 오류 또는 8초 타임아웃)
+                console.error('❌ [실패] 이메일 전송 실패 또는 타임아웃');
+                console.error('에러 객체 전체:', error);
+                console.error('에러 코드(status):', error && error.status);
+                console.error('에러 메시지(text):', error && error.text);
+                console.error('에러 메시지(message):', error && error.message);
  
                 let errorDetailMsg = '전송에 실패했습니다. ';
-                
-                if (error.status === 400) {
-                    errorDetailMsg = '요청 데이터 오류입니다. ';
-                } else if (error.status === 401) {
-                    errorDetailMsg = 'EmailJS 인증 오류입니다. ';
-                } else if (error.status === 404) {
-                    errorDetailMsg = 'EmailJS 서비스를 찾을 수 없습니다. ';
-                } else if (error.status === 500) {
+ 
+                if (error && error.isTimeout) {
+                    errorDetailMsg = '서버 응답이 지연되고 있습니다 (8초 초과). 네트워크 상태를 확인하시거나 잠시 후 다시 시도해주세요. ';
+                } else if (error && error.status === 400) {
+                    errorDetailMsg = '요청 데이터 오류입니다. (EmailJS 템플릿 변수명이 일치하는지 확인해주세요) ';
+                } else if (error && error.status === 401) {
+                    errorDetailMsg = 'EmailJS 인증 오류입니다. (Public Key를 확인해주세요) ';
+                } else if (error && error.status === 404) {
+                    errorDetailMsg = 'EmailJS 서비스 또는 템플릿을 찾을 수 없습니다. (Service ID/Template ID를 확인해주세요) ';
+                } else if (error && error.status === 500) {
                     errorDetailMsg = 'EmailJS 서버 오류입니다. ';
-                } else if (error.text) {
+                } else if (error && error.text) {
                     errorDetailMsg = '오류: ' + error.text + ' ';
+                } else if (error && error.message) {
+                    errorDetailMsg = '오류: ' + error.message + ' ';
                 }
  
                 const finalErrorMsg = errorDetailMsg + 'purplemint2627@gmail.com 으로 직접 문의 부탁드립니다.';
@@ -3595,16 +4087,15 @@
                 messageDiv.textContent = finalErrorMsg;
                 
                 alert('❌ 이메일 전송에 실패했습니다.\n\n' + finalErrorMsg);
-                
-                // 버튼 상태 복구
-                submitBtn.disabled = false;
-                submitBtn.innerHTML = '견적 신청';
-                submitBtn.classList.remove('loading');
  
                 // 5초 후 메시지 숨김
                 setTimeout(function() {
                     messageDiv.classList.remove('error');
                 }, 5000);
+            }).finally(function() {
+                // 성공/실패/타임아웃 어떤 경우에도 버튼 상태는 반드시 복구
+                resetSubmitUI();
+                console.log('🔁 [완료] 버튼 상태 복구 완료 (성공/실패/타임아웃 공통 처리)');
             });
         }
     </script>
