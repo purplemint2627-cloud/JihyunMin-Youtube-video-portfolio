@@ -9,7 +9,7 @@
         // ========================================
         // 📧 EmailJS 설정 상수 (sendEmail()에서 fetch()로 REST API 직접 호출)
         // ========================================
-        const EMAILJS_PUBLIC_KEY = "IsvZNVNiPaTSihvTR4SXv";   // = user_id
+        const EMAILJS_PUBLIC_KEY = "IsvZNVNiPaTSihvTR4SXv";   // REST API body에는 'public_key' 키로 전달
         const EMAILJS_SERVICE_ID = "youtube editing_web";   // ⚠️ EmailJS 대시보드 설정값과 동일하게 공백 포함 (Service ID: "youtube editing_web")
         const EMAILJS_TEMPLATE_ID = "template_9ge8ik3";
         const EMAILJS_API_URL = "https://api.emailjs.com/api/v1.0/email/send";
@@ -3867,7 +3867,7 @@
             const requestBody = {
                 service_id: EMAILJS_SERVICE_ID,
                 template_id: EMAILJS_TEMPLATE_ID,
-                user_id: EMAILJS_PUBLIC_KEY,
+                public_key: EMAILJS_PUBLIC_KEY,
                 template_params: {
                     from_name: formData.name,
                     from_email: formData.email,
