@@ -4,6 +4,30 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
+    <!-- ===== Supabase SDK (Client Hub 실제 진행상황 조회 + Admin 칸반 보드) ===== -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script type="text/javascript">
+        // ========================================
+        // 🗄️ Supabase 설정
+        // ========================================
+        const SUPABASE_URL = "https://njlflrfjuaexufgsqdwx.supabase.co";
+        const SUPABASE_KEY = "sb_publishable_GVzPnWVhB31__z_Ub7vocw_sogyi";
+        // 주의: CDN이 만든 전역 객체 이름도 'supabase'이므로, 클라이언트 인스턴스는
+        // 반드시 다른 변수명(sbClient)에 담아야 전역 객체를 덮어쓰지 않습니다.
+        let sbClient = null;
+        try {
+            if (typeof supabase !== 'undefined') {
+                sbClient = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+                console.log('✅ [Supabase] 클라이언트 초기화 완료');
+            } else {
+                console.error('❌ [Supabase] SDK 로드 실패 — CDN이 차단되었을 수 있습니다.');
+            }
+        } catch (sbInitError) {
+            console.error('❌ [Supabase] 초기화 오류:', sbInitError);
+        }
+        // ========================================
+    </script>
+
     <title>EGG Studio | 영상편집자 · PD 민지현</title>
     
     <!-- ===== SEO 메타 태그 ===== -->
@@ -57,7 +81,7 @@
             color: var(--text);
             font-family: 'Pretendard', 'Inter', sans-serif;
             -webkit-font-smoothing: antialiased;
-            line-height: 1.6;
+            line-height: 1.65;
         }
  
         ::-webkit-scrollbar {
@@ -110,8 +134,9 @@
  
         p {
             font-size: 15px;
-            font-weight: 300;
-            line-height: 1.8;
+            font-weight: 400;
+            line-height: 1.65;
+            color: #111111;
         }
  
         .caption {
@@ -133,6 +158,28 @@
             overflow: hidden;
             padding: 140px 32px 32px;
         }
+
+        /* 배경 쇼릴 (무음 자동 재생) — 텍스트 가독성을 위해 얇은 오버레이로 덮임 */
+        .landing-video-bg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            z-index: 0;
+        }
+
+        .landing-video-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: var(--dark);
+            opacity: 0.3;
+            z-index: 1;
+        }
  
         .landing-content {
             flex: 1;
@@ -142,6 +189,8 @@
             justify-content: center;
             text-align: center;
             width: 100%;
+            position: relative;
+            z-index: 2;
         }
  
         .landing-title {
@@ -229,6 +278,7 @@
             gap: 20px 32px;
             border-top: 1px solid var(--line);
             padding-top: 22px;
+            position: relative;
             z-index: 2;
             animation: fadeInUp 1s ease-out 0.5s both;
         }
@@ -431,7 +481,263 @@
         .nav-links a.active {
             color: var(--text);
         }
- 
+
+        /* ===== 사이드바 토글 버튼 (좌측 슬라이딩 Drawer) ===== */
+        .sidebar-toggle-btn {
+            background: transparent;
+            border: none;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 6px;
+            color: var(--text);
+            flex-shrink: 0;
+            transition: opacity 0.2s ease;
+        }
+
+        .sidebar-toggle-btn:hover {
+            opacity: 0.6;
+        }
+
+        /* ===== 좌측 슬라이딩 Drawer (사이드바) ===== */
+        .drawer-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(17, 17, 17, 0.4);
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.35s ease;
+            z-index: 2900;
+        }
+
+        .drawer-overlay.active {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .side-drawer {
+            position: fixed;
+            top: 0;
+            left: -400px;
+            width: 380px;
+            max-width: 88vw;
+            height: 100%;
+            background: #FFFFFF;
+            box-shadow: 4px 0 30px rgba(0, 0, 0, 0.12);
+            z-index: 2950;
+            transition: left 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+            display: flex;
+            flex-direction: column;
+        }
+
+        .side-drawer.open {
+            left: 0;
+        }
+
+        .side-drawer-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 26px 24px 0 24px;
+        }
+
+        .side-drawer-brand {
+            font-family: 'Pretendard', 'Inter', sans-serif;
+            font-size: 16px;
+            font-weight: 900;
+            letter-spacing: -0.3px;
+            text-transform: uppercase;
+            color: #111111;
+        }
+
+        .side-drawer-close {
+            background: none;
+            border: none;
+            cursor: pointer;
+            color: #111111;
+            display: flex;
+            align-items: center;
+            padding: 4px;
+        }
+
+        .drawer-tabs {
+            display: flex;
+            gap: 4px;
+            padding: 20px 24px 0 24px;
+            border-bottom: 1px solid var(--line);
+        }
+
+        .drawer-tab-btn {
+            flex: 1;
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 12px 4px;
+            font-size: 12px;
+            font-weight: 700;
+            letter-spacing: 0.02em;
+            color: #999999;
+            border-bottom: 2px solid transparent;
+            transition: color 0.2s ease, border-color 0.2s ease;
+        }
+
+        .drawer-tab-btn.active {
+            color: #111111;
+            border-bottom-color: #111111;
+        }
+
+        .drawer-panel {
+            display: none;
+            padding: 26px 24px 32px 24px;
+            overflow-y: auto;
+            flex: 1;
+        }
+
+        .drawer-panel.active {
+            display: block;
+        }
+
+        .drawer-panel-title {
+            font-size: 11px;
+            font-weight: 700;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            color: #999999;
+            margin-bottom: 18px;
+        }
+
+        /* Workflow 리스트 */
+        .workflow-list {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .workflow-step {
+            display: flex;
+            gap: 14px;
+            padding: 14px 0;
+            border-bottom: 1px solid var(--line);
+        }
+
+        .workflow-step:last-child {
+            border-bottom: none;
+        }
+
+        .workflow-step-num {
+            font-family: 'Pretendard', 'Inter', sans-serif;
+            font-size: 13px;
+            font-weight: 800;
+            color: #CCCCCC;
+            flex-shrink: 0;
+            min-width: 22px;
+        }
+
+        .workflow-step-text {
+            font-size: 13px;
+            font-weight: 600;
+            color: #111111;
+            letter-spacing: -0.01em;
+            line-height: 1.5;
+        }
+
+        /* Client Hub 리스트 */
+        .client-hub-list {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            margin-bottom: 32px;
+        }
+
+        .client-hub-item {
+            width: 100%;
+            text-align: left;
+            background: none;
+            border: none;
+            border-bottom: 1px solid var(--line);
+            padding: 16px 2px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            font-size: 13px;
+            font-weight: 600;
+            color: #111111;
+            transition: opacity 0.2s ease;
+        }
+
+        .client-hub-item:hover {
+            opacity: 0.55;
+        }
+
+        .status-check-box {
+            border: 1px solid var(--line);
+            border-radius: 6px;
+            padding: 18px;
+        }
+
+        .status-check-box .form-group {
+            margin-bottom: 12px;
+        }
+
+        .status-check-box label {
+            font-size: 11px;
+            font-weight: 700;
+            color: #999999;
+            margin-bottom: 6px;
+            display: block;
+        }
+
+        .status-check-box input {
+            width: 100%;
+            padding: 10px 12px;
+            border: 1px solid var(--line);
+            border-radius: 4px;
+            font-size: 13px;
+            font-family: 'Pretendard', 'Inter', sans-serif;
+            color: #111111;
+        }
+
+        .status-check-btn {
+            width: 100%;
+            padding: 11px;
+            background: #111111;
+            color: #F5F5F3;
+            border: none;
+            border-radius: 4px;
+            font-size: 12px;
+            font-weight: 700;
+            cursor: pointer;
+            margin-top: 6px;
+            transition: opacity 0.2s ease;
+        }
+
+        .status-check-btn:hover {
+            opacity: 0.8;
+        }
+
+        .status-result {
+            margin-top: 16px;
+            padding: 14px;
+            background: #F5F5F3;
+            border-radius: 6px;
+            font-size: 12.5px;
+            line-height: 1.6;
+            color: #111111;
+            display: none;
+        }
+
+        .status-result.show {
+            display: block;
+        }
+
+        .status-result-note {
+            display: block;
+            margin-top: 8px;
+            font-size: 10.5px;
+            color: #999999;
+        }
+
         /* 컨테이너 */
         .container {
             max-width: 1400px;
@@ -920,13 +1226,31 @@
             height: 100%;
             object-fit: cover;
             display: block;
-            transition: transform 0.45s ease, filter 0.45s ease;
+            filter: grayscale(85%) saturate(0.9) contrast(1.02);
+            transition: transform 0.6s ease, filter 0.6s ease;
         }
  
         .masonry-item:hover .masonry-item-image img,
         .masonry-item:hover .masonry-item-image svg {
-            transform: scale(1.05);
-            filter: brightness(0.75);
+            transform: scale(1.03);
+            filter: grayscale(0%) saturate(1) contrast(1.02);
+        }
+
+        /* 호버 프리뷰 영상 (item.previewVideo가 있을 때만 렌더링됨) */
+        .masonry-item-preview-video {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            opacity: 0;
+            transition: opacity 0.4s ease;
+            pointer-events: none;
+        }
+
+        .masonry-item:hover .masonry-item-preview-video {
+            opacity: 1;
         }
  
         .masonry-item-overlay {
@@ -935,7 +1259,7 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background: linear-gradient(180deg, rgba(0,0,0,0.05) 0%, rgba(0,0,0,0.45) 100%);
+            background: linear-gradient(180deg, rgba(0,0,0,0.02) 0%, rgba(0,0,0,0.3) 100%);
             display: flex;
             align-items: center;
             justify-content: center;
@@ -1031,11 +1355,13 @@
         }
  
         .portfolio-title {
-            font-size: 14px;
-            font-weight: 600;
+            font-family: 'Pretendard', 'Inter', sans-serif;
+            font-size: 15px;
+            font-weight: 700;
             margin-bottom: 6px;
             color: #111111;
-            letter-spacing: 0.3px;
+            letter-spacing: -0.03em;
+            line-height: 1.4;
             transition: color 0.3s ease;
         }
  
@@ -1044,10 +1370,12 @@
         }
  
         .portfolio-meta {
+            font-family: 'Pretendard', 'Inter', sans-serif;
             font-size: 12px;
-            color: #888888;
+            color: #666666;
             font-weight: 400;
-            letter-spacing: 0.2px;
+            letter-spacing: -0.01em;
+            line-height: 1.5;
             transition: color 0.3s ease;
         }
  
@@ -1064,13 +1392,14 @@
         }
 
         .portfolio-tag {
+            font-family: 'Pretendard', 'Inter', sans-serif;
             font-size: 11px;
-            font-weight: 500;
+            font-weight: 600;
             color: #777777;
             background: #EFEFEC;
             padding: 3px 9px;
             border-radius: 3px;
-            letter-spacing: 0.1px;
+            letter-spacing: -0.02em;
         }
  
         /* About 페이지 */
@@ -1248,15 +1577,22 @@
  
         .features-list li {
             font-size: 14px;
-            padding: 12px 0;
+            padding: 12px 0 12px 26px;
             border-bottom: 1px solid var(--line);
             color: var(--text);
+            position: relative;
         }
  
         .features-list li:before {
-            content: "— ";
-            color: var(--accent);
-            margin-right: 8px;
+            content: "";
+            position: absolute;
+            left: 0;
+            top: 15px;
+            width: 14px;
+            height: 14px;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23111111' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='20 6 9 17 4 12'%3E%3C/polyline%3E%3C/svg%3E");
+            background-size: contain;
+            background-repeat: no-repeat;
         }
  
         .pricing-card button {
@@ -1310,11 +1646,6 @@
             line-height: 1.5;
         }
  
-        .addon-icon {
-            font-size: 18px;
-            flex-shrink: 0;
-        }
- 
         .addon-label {
             font-weight: 600;
             color: var(--accent);
@@ -1336,10 +1667,6 @@
             .addon-content {
                 gap: 10px;
                 font-size: 12px;
-            }
- 
-            .addon-icon {
-                font-size: 16px;
             }
  
             .addon-label {
@@ -1381,7 +1708,114 @@
         .estimate-container h2 {
             margin-bottom: 40px;
         }
- 
+
+        /* 견적 신청 버튼 하단 — 직접 연락처 안내 구역 */
+        .direct-contact {
+            margin-top: 40px;
+            padding-top: 32px;
+            border-top: 1px solid var(--line);
+            text-align: center;
+        }
+
+        .direct-contact-title {
+            font-size: 12px;
+            font-weight: 700;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            color: var(--text-muted);
+            margin-bottom: 14px;
+        }
+
+        .direct-contact-info {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin-bottom: 14px;
+        }
+
+        .direct-contact-info a {
+            font-size: 15px;
+            font-weight: 700;
+            color: var(--text);
+            border-bottom: 1px solid var(--text);
+            padding-bottom: 1px;
+            transition: opacity 0.2s ease;
+        }
+
+        .direct-contact-info a:hover {
+            opacity: 0.55;
+        }
+
+        .direct-contact-divider {
+            color: var(--line);
+            font-size: 14px;
+        }
+
+        .direct-contact-desc {
+            font-size: 13px;
+            font-weight: 400;
+            line-height: 1.7;
+            color: var(--text-muted);
+            max-width: 480px;
+            margin: 0 auto;
+        }
+
+        /* 기능성 칩 (Quick Action Chips) */
+        .quick-action-chips {
+            display: flex;
+            justify-content: center;
+            gap: 12px;
+            flex-wrap: wrap;
+            margin-top: 20px;
+        }
+
+        .quick-chip {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 18px;
+            border: 1px solid var(--line);
+            background: #FFFFFF;
+            border-radius: 30px;
+            font-size: 12.5px;
+            font-weight: 600;
+            color: #111111;
+            cursor: pointer;
+            transition: border-color 0.2s ease, background 0.2s ease, transform 0.2s ease;
+        }
+
+        .quick-chip:hover {
+            border-color: #111111;
+            background: #F5F5F3;
+            transform: translateY(-1px);
+        }
+
+        /* 토스트 알림 */
+        .toast-notice {
+            position: fixed;
+            left: 50%;
+            bottom: 40px;
+            transform: translateX(-50%) translateY(20px);
+            background: #111111;
+            color: #F5F5F3;
+            padding: 13px 22px;
+            border-radius: 30px;
+            font-size: 13px;
+            font-weight: 600;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease, transform 0.3s ease;
+            z-index: 4000;
+            white-space: nowrap;
+        }
+
+        .toast-notice.show {
+            opacity: 1;
+            transform: translateX(-50%) translateY(0);
+        }
+
         .form-section {
             margin-bottom: 48px;
         }
@@ -1957,11 +2391,276 @@
             }
         }
  
+        /* ===== Admin 칸반 보드 (Trello 스타일) ===== */
+        .kanban-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(17, 17, 17, 0.55);
+            z-index: 5000;
+            display: none;
+            align-items: flex-start;
+            justify-content: center;
+            padding: 30px 20px;
+            overflow-y: auto;
+        }
+
+        .kanban-overlay.active {
+            display: flex;
+        }
+
+        .kanban-modal {
+            background: #F5F5F3;
+            border-radius: 10px;
+            width: 100%;
+            max-width: 1500px;
+            min-height: 80vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .kanban-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 22px 28px;
+            border-bottom: 1px solid var(--line);
+            background: #FFFFFF;
+            border-radius: 10px 10px 0 0;
+        }
+
+        .kanban-title {
+            font-family: 'Pretendard', 'Inter', sans-serif;
+            font-size: 18px;
+            font-weight: 800;
+            color: #111111;
+        }
+
+        .kanban-close-btn {
+            background: none;
+            border: none;
+            cursor: pointer;
+            color: #111111;
+            display: flex;
+            align-items: center;
+            padding: 6px;
+        }
+
+        .kanban-board {
+            display: flex;
+            gap: 16px;
+            padding: 24px;
+            overflow-x: auto;
+            flex: 1;
+        }
+
+        .kanban-column {
+            flex: 0 0 260px;
+            background: #EFEFEC;
+            border-radius: 8px;
+            display: flex;
+            flex-direction: column;
+            max-height: 100%;
+        }
+
+        .kanban-column-header {
+            padding: 14px 14px 10px 14px;
+            font-size: 12.5px;
+            font-weight: 800;
+            color: #111111;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .kanban-column-count {
+            font-size: 11px;
+            font-weight: 700;
+            color: #999999;
+            background: #FFFFFF;
+            padding: 1px 8px;
+            border-radius: 10px;
+        }
+
+        .kanban-cards {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            padding: 0 10px 10px 10px;
+            overflow-y: auto;
+            min-height: 40px;
+        }
+
+        .kanban-card {
+            background: #FFFFFF;
+            border-radius: 6px;
+            padding: 12px 14px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+        }
+
+        .kanban-card-title {
+            font-size: 13px;
+            font-weight: 700;
+            color: #111111;
+            margin-bottom: 4px;
+            letter-spacing: -0.02em;
+        }
+
+        .kanban-card-meta {
+            font-size: 11.5px;
+            color: #777777;
+            line-height: 1.6;
+            margin-bottom: 8px;
+        }
+
+        .kanban-card-select {
+            width: 100%;
+            font-size: 11px;
+            padding: 6px 8px;
+            border: 1px solid var(--line);
+            border-radius: 4px;
+            color: #111111;
+            margin-bottom: 8px;
+            background: #FAFAF8;
+        }
+
+        .kanban-card-actions {
+            display: flex;
+            gap: 6px;
+        }
+
+        .kanban-card-actions button {
+            flex: 1;
+            font-size: 11px;
+            font-weight: 600;
+            padding: 6px 0;
+            border: 1px solid var(--line);
+            background: #FFFFFF;
+            color: #111111;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background 0.15s ease;
+        }
+
+        .kanban-card-actions button:hover {
+            background: #F0F0EE;
+        }
+
+        .kanban-add-card-btn {
+            margin: 0 10px 12px 10px;
+            padding: 9px;
+            border: 1px dashed #CCCCCC;
+            background: transparent;
+            border-radius: 6px;
+            font-size: 12px;
+            font-weight: 600;
+            color: #777777;
+            cursor: pointer;
+            transition: all 0.15s ease;
+        }
+
+        .kanban-add-card-btn:hover {
+            border-color: #111111;
+            color: #111111;
+        }
+
+        /* 카드 추가/수정용 폼 모달 */
+        .kanban-form-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(17, 17, 17, 0.55);
+            z-index: 5100;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .kanban-form-box {
+            background: #FFFFFF;
+            border-radius: 8px;
+            padding: 28px;
+            width: 100%;
+            max-width: 400px;
+        }
+
+        .kanban-form-box h3 {
+            font-size: 16px;
+            font-weight: 800;
+            margin-bottom: 20px;
+            color: #111111;
+        }
+
+        .kanban-form-box .form-group {
+            margin-bottom: 14px;
+        }
+
+        .kanban-form-box label {
+            font-size: 11px;
+            font-weight: 700;
+            color: #999999;
+            display: block;
+            margin-bottom: 6px;
+        }
+
+        .kanban-form-box input,
+        .kanban-form-box select {
+            width: 100%;
+            padding: 10px 12px;
+            border: 1px solid var(--line);
+            border-radius: 4px;
+            font-size: 13px;
+            font-family: 'Pretendard', 'Inter', sans-serif;
+            color: #111111;
+        }
+
+        .kanban-form-actions {
+            display: flex;
+            gap: 8px;
+            margin-top: 20px;
+        }
+
+        .kanban-form-actions button {
+            flex: 1;
+            padding: 11px;
+            border-radius: 4px;
+            font-size: 12.5px;
+            font-weight: 700;
+            cursor: pointer;
+            border: none;
+        }
+
+        .kanban-form-save {
+            background: #111111;
+            color: #F5F5F3;
+        }
+
+        .kanban-form-cancel {
+            background: transparent;
+            border: 1px solid var(--line) !important;
+            color: #111111;
+        }
+
+        @media (max-width: 768px) {
+            .kanban-board {
+                padding: 16px;
+            }
+
+            .kanban-column {
+                flex: 0 0 220px;
+            }
+        }
+
     </style>
 </head>
 <body>
     <!-- 랜딩 페이지 -->
     <section class="landing-page" id="landing">
+        <!-- 배경 쇼릴 (무음 자동 재생 · 루프) — 아래 <source> 경로를 실제 쇼릴 파일로 교체해주세요 -->
+        <video class="landing-video-bg" autoplay muted loop playsinline preload="auto">
+            <source src="assets/showreel.mp4" type="video/mp4">
+            <source src="assets/showreel.webm" type="video/webm">
+        </video>
+        <div class="landing-video-overlay"></div>
         <div class="landing-content">
             <h1 class="landing-title">EGG<br>STUDIO</h1>
             <p class="landing-subtitle"><strong class="landing-subtitle-lead">1인 영상 제작사 Egg Studio를 운영하고 있는 민지현입니다.</strong><br>유튜브 콘텐츠부터 브랜디드 필름, AI 영상 연출까지. 몰입감 있는 서사로 브랜드의 가치를 높이는 영상 프로젝트를 만듭니다.</p>
@@ -1979,7 +2678,12 @@
     <!-- 네비게이션 -->
     <nav>
         <div class="nav-container container">
-            <div class="nav-brand" onclick="scrollToLanding()" style="cursor: pointer;">EGG!</div>
+            <div style="display: flex; align-items: center; gap: 16px;">
+                <button class="sidebar-toggle-btn" onclick="window.openSidebar()" title="워크플로우 & 클라이언트 허브" aria-label="사이드바 메뉴 열기">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
+                </button>
+                <div class="nav-brand" onclick="scrollToLanding()" style="cursor: pointer;">EGG!</div>
+            </div>
             <div class="nav-links">
                 <a class="nav-link active" data-page="work" onclick="showPage('work')">work</a>
                 <a class="nav-link" data-page="about" onclick="showPage('about')">about</a>
@@ -1989,6 +2693,98 @@
             </div>
         </div>
     </nav>
+
+    <!-- 좌측 슬라이딩 사이드바 (Drawer) -->
+    <div class="drawer-overlay" id="drawerOverlay" onclick="window.closeSidebar()"></div>
+    <aside class="side-drawer" id="sideDrawer">
+        <div class="side-drawer-header">
+            <div class="side-drawer-brand">EGG Studio</div>
+            <button class="side-drawer-close" onclick="window.closeSidebar()" aria-label="사이드바 닫기">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+            </button>
+        </div>
+
+        <div class="drawer-tabs">
+            <button class="drawer-tab-btn active" data-tab="workflow" onclick="window.switchDrawerTab('workflow')">Workflow</button>
+            <button class="drawer-tab-btn" data-tab="clienthub" onclick="window.switchDrawerTab('clienthub')">Client Hub</button>
+        </div>
+
+        <!-- A. Production Workflow -->
+        <div class="drawer-panel active" id="drawerPanel-workflow">
+            <div class="drawer-panel-title">EGG Studio Production Workflow</div>
+            <ol class="workflow-list">
+                <li class="workflow-step">
+                    <span class="workflow-step-num">01</span>
+                    <span class="workflow-step-text">기획 &amp; 컨셉 연출</span>
+                </li>
+                <li class="workflow-step">
+                    <span class="workflow-step-num">02</span>
+                    <span class="workflow-step-text">대본 &amp; 비주얼 콘티 (AI 시안)</span>
+                </li>
+                <li class="workflow-step">
+                    <span class="workflow-step-num">03</span>
+                    <span class="workflow-step-text">현장 촬영 / 촬영 영상 제출 / AI 소스 생성</span>
+                </li>
+                <li class="workflow-step">
+                    <span class="workflow-step-num">04</span>
+                    <span class="workflow-step-text">종합 편집 (컷편집 &amp; 롱폼)</span>
+                </li>
+                <li class="workflow-step">
+                    <span class="workflow-step-num">05</span>
+                    <span class="workflow-step-text">정밀 색보정 &amp; 사운드 디자인</span>
+                </li>
+                <li class="workflow-step">
+                    <span class="workflow-step-num">06</span>
+                    <span class="workflow-step-text">최종 검수 / 마감 납품</span>
+                </li>
+            </ol>
+        </div>
+
+        <!-- B. Client Hub -->
+        <div class="drawer-panel" id="drawerPanel-clienthub">
+            <div class="drawer-panel-title">Client Hub</div>
+            <div class="client-hub-list">
+                <button class="client-hub-item" onclick="window.closeSidebar(); window.showHistoryModal();">
+                    나의 견적 문의 내역 보기
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
+                </button>
+            </div>
+
+            <div class="drawer-panel-title">작업 진행 현황 확인</div>
+            <div class="status-check-box">
+                <div class="form-group">
+                    <label for="statusCheckName">이름</label>
+                    <input type="text" id="statusCheckName" placeholder="예: 홍길동">
+                </div>
+                <div class="form-group" style="margin-bottom: 0;">
+                    <label for="statusCheckPhone">연락처</label>
+                    <input type="tel" id="statusCheckPhone" placeholder="예: 010-1234-5678">
+                </div>
+                <button class="status-check-btn" onclick="window.checkProjectStatus()">진행 현황 확인</button>
+
+                <div class="status-result" id="statusResult"></div>
+            </div>
+
+            <div style="text-align: center; margin-top: 40px;">
+                <span onclick="window.handleAdminHiddenTrigger()" style="font-size: 10px; color: #DDDDDD; cursor: default; letter-spacing: 2px; user-select: none;">· · ·</span>
+            </div>
+        </div>
+    </aside>
+
+    <!-- Admin 칸반 보드 (Trello 스타일) -->
+    <div class="kanban-overlay" id="kanbanOverlay">
+        <div class="kanban-modal">
+            <div class="kanban-header">
+                <div class="kanban-title">Project Kanban — 클라이언트 진행 현황 관리</div>
+                <button class="kanban-close-btn" onclick="window.closeKanbanAdmin()" aria-label="닫기">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+                </button>
+            </div>
+            <div class="kanban-board" id="kanbanBoard">
+                <!-- JS가 6개 칼럼과 카드들을 동적으로 렌더링합니다 -->
+            </div>
+        </div>
+    </div>
  
     <!-- WORK 페이지 -->
     <section id="work-page" class="page active">
@@ -2075,7 +2871,7 @@
                     <h3>숏폼 편집</h3>
                     <div class="price-amount">50,000</div>
                     <span class="price-unit">원 / 건</span>
-                    <div class="delivery-time">⚡ 24시간~2일 이내 마감</div>
+                    <div class="delivery-time">24시간~2일 이내 마감</div>
                     <p class="price-desc">1분 이내 숏폼 (쇼츠, 릴스, 틱톡)</p>
                     <ul class="features-list">
                         <li>기본 색보정</li>
@@ -2092,7 +2888,7 @@
                     <h3>단순 컷편집</h3>
                     <div class="price-amount">150,000</div>
                     <span class="price-unit">원 / 건</span>
-                    <div class="delivery-time">⚡ 1~2일 이내 마감</div>
+                    <div class="delivery-time">1~2일 이내 마감</div>
                     <p class="price-desc">영상 길이 상관없이 싱크 맞춤 및 기본 컷 정리</p>
                     <ul class="features-list">
                         <li>싱크 맞춤</li>
@@ -2109,7 +2905,7 @@
                     <h3>유튜브 일반</h3>
                     <div class="price-amount">200,000</div>
                     <span class="price-unit">원 / 건</span>
-                    <div class="delivery-time">⚡ 2~3일 이내 마감</div>
+                    <div class="delivery-time">2~3일 이내 마감</div>
                     <p class="price-desc">5분 ~ 20분 / 영화적 연출, 자막, BGM, 효과음 포함</p>
                     <ul class="features-list">
                         <li>영화적 연출 편집</li>
@@ -2128,7 +2924,7 @@
                     <h3>유튜브 중장편</h3>
                     <div class="price-amount">250,000</div>
                     <span class="price-unit">원 / 건</span>
-                    <div class="delivery-time">⚡ 3~4일 이내 마감</div>
+                    <div class="delivery-time">3~4일 이내 마감</div>
                     <p class="price-desc">20분 ~ 30분 / 긴 호흡의 몰입감 있는 서사 구조</p>
                     <ul class="features-list">
                         <li>몰입감 있는 서사 편집</li>
@@ -2147,7 +2943,7 @@
                     <h3>유튜브 롱폼</h3>
                     <div class="price-amount">400,000</div>
                     <span class="price-unit">원 / 건</span>
-                    <div class="delivery-time">⚡ 4~5일 이내 마감</div>
+                    <div class="delivery-time">4~5일 이내 마감</div>
                     <p class="price-desc">1시간 내외 / 풀버전 롱폼 고퀄리티 종합 편집</p>
                     <ul class="features-list">
                         <li>풀버전 고퀄리티 편집</li>
@@ -2160,12 +2956,28 @@
                     </ul>
                     <button onclick="selectPackage('유튜브 롱폼 (400,000원)', 'youtube-longform')">선택</button>
                 </div>
+                <!-- 6. AI 영상 생성 및 연출 -->
+                <div class="pricing-card">
+                    <div class="pricing-badge">AI CREATIVE</div>
+                    <h3>AI 영상 생성 및 연출</h3>
+                    <div class="price-amount">300,000</div>
+                    <span class="price-unit">원~ / 건 (옵션에 따라 변동)</span>
+                    <div class="delivery-time">3~5일 이내 마감</div>
+                    <p class="price-desc">생성형 AI 소스 제작 및 브랜디드·숏폼·시네마틱 영상 종합 연출</p>
+                    <ul class="features-list">
+                        <li>AI 생성 소스 기반 커스텀 비주얼 제작 (Midjourney / Runway 등 활용)</li>
+                        <li>브랜디드 필름, 시네마틱 숏폼, 숏폼 광고, 뮤직비디오 선택 가능</li>
+                        <li>프롬프트 생성 및 고화질 업스케일링 포함</li>
+                        <li>전문 색보정(Color Grading) & 사운드 디자인/BGM 작업</li>
+                        <li>기획 단계 1:1 맞춤 콘셉트 조율</li>
+                    </ul>
+                    <button onclick="selectPackage('AI 영상 연출 (300,000원~)', 'ai-video')">선택</button>
+                </div>
             </div>
  
             <!-- Add-on 옵션 배너 -->
             <div class="addon-banner" style="margin-top: 60px;">
                 <div class="addon-content">
-                    <span class="addon-icon">✨</span>
                     <span class="addon-label">Add-on 옵션</span>
                     <span class="addon-description">AI 영상 소스 생성 및 추가: +50,000원~ (작업 분량 및 난이도에 따라 협의)</span>
                 </div>
@@ -2180,7 +2992,7 @@
                 <h2 style="margin: 0;">빠른 견적 신청</h2>
                 <div style="display: flex; align-items: center; gap: 8px;">
                     <button onclick="window.showHistoryModal()" class="history-button" title="제출한 견적 신청 내역 확인">
-                        📜 내 신청 내역 <span id="historyCount">(0)</span>
+                        내 신청 내역 <span id="historyCount">(0)</span>
                     </button>
                     <div class="history-tooltip-wrapper">
                         <span class="history-tooltip-icon">ℹ️</span>
@@ -2228,6 +3040,7 @@
                             <option value="유튜브 일반 (200,000원)">유튜브 일반 (5~20분) - 200,000원 (2~3일 마감)</option>
                             <option value="유튜브 중장편 (250,000원)">유튜브 중장편 (20~30분) - 250,000원 (3~4일 마감)</option>
                             <option value="유튜브 롱폼 (400,000원)">유튜브 롱폼 (1시간 내외) - 400,000원 (4~5일 마감)</option>
+                            <option value="AI 영상 연출 (300,000원~)">AI 영상 연출 - 300,000원~ (3~5일 마감)</option>
                             <option value="커스텀 패키지">커스텀 패키지 (상담 후 견적)</option>
                         </select>
                         <div class="form-error-message" id="packageError">패키지를 선택해주세요</div>
@@ -2260,7 +3073,7 @@
                     <div class="form-group">
                         <label style="display: flex; align-items: center; gap: 10px; cursor: pointer; font-weight: normal;">
                             <input type="checkbox" id="addon" name="addon" style="width: auto; cursor: pointer;">
-                            <span>✨ AI 영상 소스 생성 및 추가 필요 (+50,000원~)</span>
+                            <span>AI 영상 소스 생성 및 추가 필요 (+50,000원~)</span>
                         </label>
                         <p class="form-hint">체크하면 AI를 활용한 추가 영상 소스 생성 옵션이 포함됩니다.</p>
                     </div>
@@ -2280,6 +3093,28 @@
                 <button type="submit" class="submit-btn">견적 신청</button>
                 <div class="form-message" id="formMessage"></div>
             </form>
+
+            <!-- Direct Contact — 견적 신청 버튼 바로 아래, 직접 연락 안내 -->
+            <div class="direct-contact">
+                <div class="direct-contact-title">Direct Contact</div>
+                <div class="direct-contact-info">
+                    <a href="mailto:purplemint2627@gmail.com">purplemint2627@gmail.com</a>
+                    <span class="direct-contact-divider">|</span>
+                    <a href="tel:010-5248-0797">010-5248-0797</a>
+                </div>
+                <p class="direct-contact-desc">추가 문의 사항이 있으시거나 빠른 상담이 필요하신 경우 이메일 또는 문자(24시간 가능)로 편하게 연락 주시기 바랍니다.</p>
+
+                <div class="quick-action-chips">
+                    <button type="button" class="quick-chip" onclick="window.copyEmailChip()">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+                        이메일 주소 복사
+                    </button>
+                    <a class="quick-chip" href="sms:01052480797" onclick="window.handleSmsChip(event)">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>
+                        010-5248-0797 문자 문의
+                    </a>
+                </div>
+            </div>
         </div>
     </section>
  
@@ -2304,6 +3139,17 @@
                     <div class="contact-value">24시 연중 무휴</div>
                 </div>
             </div>
+
+            <div class="quick-action-chips" style="margin-top: 40px;">
+                <button type="button" class="quick-chip" onclick="window.copyEmailChip()">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+                    이메일 주소 복사
+                </button>
+                <a class="quick-chip" href="sms:01052480797" onclick="window.handleSmsChip(event)">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>
+                    010-5248-0797 문자 문의
+                </a>
+            </div>
         </div>
     </section>
  
@@ -2311,7 +3157,9 @@
     <footer style="background: var(--dark); border-top: 1px solid var(--line); padding: 20px 0; text-align: center; position: relative;">
         <div style="color: #666666; font-size: 12px; padding: 20px;">
             <p style="margin: 0;">© 2026 EGG Studio. All rights reserved.</p>
-            <button onclick="toggleAdminMode()" style="position: absolute; bottom: 20px; right: 20px; background: transparent; border: 1px solid #CCCCCC; color: #666666; padding: 4px 8px; border-radius: 3px; cursor: pointer; font-size: 10px; transition: all 0.3s ease;" title="관리자 모드">🔐</button>
+            <button onclick="toggleAdminMode()" style="position: absolute; bottom: 20px; right: 20px; background: transparent; border: 1px solid #CCCCCC; color: #666666; padding: 5px; border-radius: 3px; cursor: pointer; display: inline-flex; align-items: center; justify-content: center; transition: all 0.3s ease;" title="관리자 모드">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="11" width="14" height="10" rx="2"></rect><path d="M8 11V7a4 4 0 0 1 8 0v4"></path></svg>
+            </button>
         </div>
     </footer>
  
@@ -2319,14 +3167,14 @@
     <div class="youtube-modal" id="youtubeModal">
         <div class="youtube-modal-content">
             <iframe id="youtubeIframe" src="" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-            <button class="youtube-modal-close" onclick="closeYoutube()">&times;</button>
+            <button class="youtube-modal-close" onclick="closeYoutube()"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg></button>
         </div>
     </div>
  
     <!-- 포트폴리오 상세 정보 모달 -->
     <div class="portfolio-modal" id="portfolioModal">
         <div class="portfolio-modal-content">
-            <button class="portfolio-modal-close" onclick="closePortfolioModal()">&times;</button>
+            <button class="portfolio-modal-close" onclick="closePortfolioModal()"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg></button>
             <div class="portfolio-modal-thumbnail">
                 <img id="portfolioModalThumbnail" src="" alt="">
             </div>
@@ -2532,7 +3380,7 @@
             modal.innerHTML = `
                 <div style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); display: flex; align-items: center; justify-content: center; z-index: 3000;">
                     <div style="background: var(--dark-secondary); border: 2px solid #111111; padding: 40px; border-radius: 8px; max-width: 400px; width: 90%; text-align: center;">
-                        <h2 style="color: #111111; margin: 0 0 20px 0; font-size: 18px;">🔐 관리자 비밀번호</h2>
+                        <h2 style="color: #111111; margin: 0 0 20px 0; font-size: 18px;">관리자 비밀번호</h2>
                         <input type="password" id="adminPasswordInput" placeholder="비밀번호 입력" style="width: 100%; padding: 12px; background: #F5F5F3; border: 1px solid #DADAD6; color: #111111; border-radius: 4px; box-sizing: border-box; margin-bottom: 20px; font-size: 14px;" onkeypress="if(event.key==='Enter') window.submitAdminPassword()">
                         <div style="display: flex; gap: 10px;">
                             <button onclick="window.submitAdminPassword()" style="flex: 1; background: #111111; color: #fff; border: none; padding: 12px; cursor: pointer; border-radius: 4px; font-weight: 600;">확인</button>
@@ -2567,7 +3415,7 @@
                 window.closePasswordModal();
                 window.showAdminPanel();
             } else {
-                alert('❌ 비밀번호가 잘못되었습니다.');
+                alert('비밀번호가 잘못되었습니다.');
                 document.getElementById('adminPasswordInput').value = '';
             }
         };
@@ -2579,14 +3427,14 @@
  
         // Admin 모드 토글 - 전역 함수
         window.toggleAdminMode = function() {
-            const password = prompt('🔐 관리자 비밀번호를 입력하세요:');
+            const password = prompt('관리자 비밀번호를 입력하세요:');
             if (password === null) return;
  
             if (verifyAdminPassword(password)) {
                 isAdminMode = true;
                 window.showAdminPanel();
             } else {
-                alert('❌ 비밀번호가 잘못되었습니다.');
+                alert('비밀번호가 잘못되었습니다.');
                 isAdminMode = false;
             }
         };
@@ -2604,8 +3452,8 @@
                 <div style="background: var(--dark-secondary); border-bottom: 2px solid #111111; padding: 20px; position: relative; z-index: 1000;">
                     <div style="max-width: 1200px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center;">
                         <div>
-                            <h3 style="color: #111111; margin: 0; font-size: 16px;">🔐 관리자 모드 (포트폴리오 편집)</h3>
-                            <p style="color: #666666; margin: 8px 0 0 0; font-size: 13px;">카드가 흔들릴 때 드래그하여 순서를 변경하거나 ✕ 버튼으로 삭제/✏️ 버튼으로 수정할 수 있습니다.</p>
+                            <h3 style="color: #111111; margin: 0; font-size: 16px;">관리자 모드 (포트폴리오 편집)</h3>
+                            <p style="color: #666666; margin: 8px 0 0 0; font-size: 13px;">카드가 흔들릴 때 드래그하여 순서를 변경하거나 삭제 버튼으로 삭제, 수정 버튼으로 수정할 수 있습니다.</p>
                         </div>
                         <button onclick="window.closeAdminMode()" style="background: transparent; color: #111111; border: 1px solid #CCCCCC; padding: 8px 16px; cursor: pointer; border-radius: 4px;">종료</button>
                     </div>
@@ -2715,7 +3563,7 @@
             chipRow.innerHTML = Array.from(activeFilters).map(keyword => `
                 <span class="filter-chip">
                     ${keyword}
-                    <button type="button" onclick="window.removeFilterKeyword('${keyword.replace(/'/g, "\\'")}')" aria-label="${keyword} 필터 해제">×</button>
+                    <button type="button" onclick="window.removeFilterKeyword('${keyword.replace(/'/g, "\\'")}')" aria-label="${keyword} 필터 해제"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg></button>
                 </span>
             `).join('');
         }
@@ -2776,11 +3624,11 @@
                 modal.innerHTML = `
                     <div class="history-modal-content">
                         <div class="history-modal-header">
-                            <h3 class="history-modal-title">📜 내 신청 내역</h3>
-                            <button class="history-modal-close" onclick="window.closeHistoryModal()">×</button>
+                            <h3 class="history-modal-title">내 신청 내역</h3>
+                            <button class="history-modal-close" onclick="window.closeHistoryModal()"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg></button>
                         </div>
                         <div class="history-modal-notice">
-                            💡 안내: 로그인 없이 현재 기기(브라우저)에 안전하게 저장된 내역입니다. 다른 기기로 접속하시거나 브라우저 쿠키를 삭제할 경우 내역이 보이지 않을 수 있으며, 자세한 신청 내용은 입력하신 이메일에서도 확인하실 수 있습니다.
+                            안내: 로그인 없이 현재 기기(브라우저)에 안전하게 저장된 내역입니다. 다른 기기로 접속하시거나 브라우저 쿠키를 삭제할 경우 내역이 보이지 않을 수 있으며, 자세한 신청 내용은 입력하신 이메일에서도 확인하실 수 있습니다.
                         </div>
                         <div class="history-empty">
                             <p>아직 신청한 견적 내역이 없습니다.</p>
@@ -2794,7 +3642,7 @@
                     cardsHTML += `
                         <div class="history-card">
                             <div class="history-card-header">
-                                <span class="history-card-date">📅 ${estimate.submittedAt}</span>
+                                <span class="history-card-date">${estimate.submittedAt}</span>
                                 <span class="history-card-package">${estimate.package}</span>
                             </div>
                             <div class="history-card-row">
@@ -2812,7 +3660,7 @@
                             </div>
                             ` : ''}
                             <div class="history-card-description">
-                                <strong style="color: var(--text);">📝 프로젝트 설명:</strong><br>
+                                <strong style="color: var(--text);">프로젝트 설명:</strong><br>
                                 ${estimate.description}
                             </div>
                         </div>
@@ -2822,18 +3670,18 @@
                 modal.innerHTML = `
                     <div class="history-modal-content">
                         <div class="history-modal-header">
-                            <h3 class="history-modal-title">📜 내 신청 내역 (총 ${historyData.length}개)</h3>
-                            <button class="history-modal-close" onclick="window.closeHistoryModal()">×</button>
+                            <h3 class="history-modal-title">내 신청 내역 (총 ${historyData.length}개)</h3>
+                            <button class="history-modal-close" onclick="window.closeHistoryModal()"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg></button>
                         </div>
                         <div class="history-modal-notice">
-                            💡 안내: 로그인 없이 현재 기기(브라우저)에 안전하게 저장된 내역입니다. 다른 기기로 접속하시거나 브라우저 쿠키를 삭제할 경우 내역이 보이지 않을 수 있으며, 자세한 신청 내용은 입력하신 이메일에서도 확인하실 수 있습니다.
+                            안내: 로그인 없이 현재 기기(브라우저)에 안전하게 저장된 내역입니다. 다른 기기로 접속하시거나 브라우저 쿠키를 삭제할 경우 내역이 보이지 않을 수 있으며, 자세한 신청 내용은 입력하신 이메일에서도 확인하실 수 있습니다.
                         </div>
                         <div class="history-cards">
                             ${cardsHTML}
                         </div>
                         <div class="history-modal-footer">
                             <button type="button" class="history-close-btn" onclick="window.closeHistoryModal()">닫기</button>
-                            <button type="button" class="history-delete-btn" onclick="if(confirm('정말로 모든 신청 내역을 삭제하시겠습니까?')) { window.deleteAllHistory(); }">🗑️ 전체 삭제</button>
+                            <button type="button" class="history-delete-btn" onclick="if(confirm('정말로 모든 신청 내역을 삭제하시겠습니까?')) { window.deleteAllHistory(); }">전체 삭제</button>
                         </div>
                     </div>
                 `;
@@ -2862,6 +3710,466 @@
             window.closeHistoryModal();
             alert('모든 신청 내역이 삭제되었습니다.');
         };
+
+        // ===== 좌측 슬라이딩 사이드바 (Drawer) =====
+        window.openSidebar = function() {
+            const drawer = document.getElementById('sideDrawer');
+            const overlay = document.getElementById('drawerOverlay');
+            if (drawer) drawer.classList.add('open');
+            if (overlay) overlay.classList.add('active');
+        };
+
+        window.closeSidebar = function() {
+            const drawer = document.getElementById('sideDrawer');
+            const overlay = document.getElementById('drawerOverlay');
+            if (drawer) drawer.classList.remove('open');
+            if (overlay) overlay.classList.remove('active');
+        };
+
+        window.switchDrawerTab = function(tabName) {
+            document.querySelectorAll('.drawer-tab-btn').forEach(btn => {
+                btn.classList.toggle('active', btn.getAttribute('data-tab') === tabName);
+            });
+            document.querySelectorAll('.drawer-panel').forEach(panel => {
+                panel.classList.toggle('active', panel.id === 'drawerPanel-' + tabName);
+            });
+        };
+
+        // 6단계 워크플로우 이름 (Client Hub 조회 결과 표시 및 칸반 칼럼 제목에 공통 사용)
+        const WORKFLOW_STEPS = [
+            '01. 기획 & 컨셉 연출',
+            '02. 대본 & 비주얼 콘티 (AI 시안)',
+            '03. 현장 촬영 / 촬영 영상 제출 / AI 소스 생성',
+            '04. 종합 편집 (컷편집 & 롱폼)',
+            '05. 정밀 색보정 & 사운드 디자인',
+            '06. 최종 검수 / 마감 납품'
+        ];
+
+        // ===== Client Hub: 작업 진행 현황 확인 (Supabase 실시간 연동) =====
+        window.checkProjectStatus = async function() {
+            const nameInput = document.getElementById('statusCheckName');
+            const phoneInput = document.getElementById('statusCheckPhone');
+            const resultBox = document.getElementById('statusResult');
+            const checkBtn = document.querySelector('.status-check-btn');
+            if (!nameInput || !phoneInput || !resultBox) return;
+
+            const name = nameInput.value.trim();
+            const phone = phoneInput.value.trim();
+
+            if (!name || !phone) {
+                resultBox.classList.add('show');
+                resultBox.innerHTML = '이름과 연락처를 모두 입력해주세요.';
+                return;
+            }
+
+            if (!sbClient) {
+                resultBox.classList.add('show');
+                resultBox.innerHTML = '조회 시스템에 연결할 수 없습니다. 잠시 후 다시 시도해주세요.';
+                console.error('❌ [checkProjectStatus] sbClient가 초기화되지 않았습니다.');
+                return;
+            }
+
+            const originalBtnText = checkBtn ? checkBtn.textContent : '';
+            if (checkBtn) {
+                checkBtn.disabled = true;
+                checkBtn.textContent = '조회 중...';
+            }
+
+            try {
+                const { data, error } = await sbClient
+                    .from('projects')
+                    .select('*')
+                    .eq('client_name', name)
+                    .eq('phone', phone)
+                    .order('updated_at', { ascending: false })
+                    .limit(1);
+
+                if (error) {
+                    console.error('❌ [checkProjectStatus] Supabase 조회 오류:', error);
+                    resultBox.classList.add('show');
+                    resultBox.innerHTML = '조회 중 오류가 발생했습니다. 잠시 후 다시 시도해주세요.' +
+                        '<span class="status-result-note">오류 상세는 콘솔을 확인해주세요.</span>';
+                    return;
+                }
+
+                if (!data || data.length === 0) {
+                    resultBox.classList.add('show');
+                    resultBox.innerHTML = '진행 중인 프로젝트 내역을 찾을 수 없습니다.' +
+                        '<span class="status-result-note">이름/연락처를 다시 확인하시거나 담당자에게 문의해주세요.</span>';
+                    return;
+                }
+
+                const project = data[0];
+                const stepIndex = Math.min(Math.max(parseInt(project.status_step, 10) - 1, 0), WORKFLOW_STEPS.length - 1);
+                const stepLabel = WORKFLOW_STEPS[stepIndex] || `${project.status_step}단계`;
+                const projectTitle = project.project_title ? `「${project.project_title}」 ` : '';
+
+                resultBox.classList.add('show');
+                resultBox.innerHTML =
+                    name + '님, ' + projectTitle + '프로젝트는 현재 <strong>[' + stepLabel + ']</strong> 단계 진행 중입니다.<br>' +
+                    '예상 마무리: ' + (project.deadline_info || '협의 중') +
+                    '<span class="status-result-note">최종 업데이트: ' + (project.updated_at ? new Date(project.updated_at).toLocaleString('ko-KR') : '-') + '</span>';
+
+            } catch (err) {
+                console.error('❌ [checkProjectStatus] 예외 발생:', err);
+                resultBox.classList.add('show');
+                resultBox.innerHTML = '조회 중 오류가 발생했습니다. 잠시 후 다시 시도해주세요.';
+            } finally {
+                if (checkBtn) {
+                    checkBtn.disabled = false;
+                    checkBtn.textContent = originalBtnText || '진행 현황 확인';
+                }
+            }
+        };
+
+        // ===== 비밀 Admin 진입 (Client Hub 하단 숨겨진 트리거) =====
+        window.handleAdminHiddenTrigger = function() {
+            const password = prompt('관리자 비밀번호를 입력하세요:');
+            if (password === '1234') {
+                window.openKanbanAdmin();
+            } else if (password !== null) {
+                alert('비밀번호가 잘못되었습니다.');
+            }
+        };
+
+        // ===== Admin 칸반 보드 열기/닫기 =====
+        window.openKanbanAdmin = function() {
+            window.closeSidebar();
+            const overlay = document.getElementById('kanbanOverlay');
+            if (overlay) overlay.classList.add('active');
+            loadKanbanData();
+        };
+
+        window.closeKanbanAdmin = function() {
+            const overlay = document.getElementById('kanbanOverlay');
+            if (overlay) overlay.classList.remove('active');
+        };
+
+        // ===== 칸반 데이터 로드 (Supabase) =====
+        async function loadKanbanData() {
+            const board = document.getElementById('kanbanBoard');
+            if (!board) return;
+
+            if (!sbClient) {
+                board.innerHTML = '<p style="padding: 20px; color: #999;">Supabase 연결에 실패했습니다. 콘솔을 확인해주세요.</p>';
+                console.error('❌ [loadKanbanData] sbClient가 초기화되지 않았습니다.');
+                return;
+            }
+
+            board.innerHTML = '<p style="padding: 20px; color: #999;">불러오는 중...</p>';
+
+            try {
+                const { data, error } = await sbClient
+                    .from('projects')
+                    .select('*')
+                    .order('updated_at', { ascending: false });
+
+                if (error) {
+                    console.error('❌ [loadKanbanData] Supabase 조회 오류:', error);
+                    board.innerHTML = '<p style="padding: 20px; color: #999;">데이터를 불러오지 못했습니다. (' + error.message + ')</p>';
+                    return;
+                }
+
+                renderKanbanBoard(data || []);
+            } catch (err) {
+                console.error('❌ [loadKanbanData] 예외 발생:', err);
+                board.innerHTML = '<p style="padding: 20px; color: #999;">데이터를 불러오지 못했습니다.</p>';
+            }
+        }
+
+        // ===== 칸반 보드 렌더링 (6개 칼럼) =====
+        function renderKanbanBoard(projects) {
+            const board = document.getElementById('kanbanBoard');
+            if (!board) return;
+
+            let html = '';
+            for (let step = 1; step <= 6; step++) {
+                const columnProjects = projects.filter(p => parseInt(p.status_step, 10) === step);
+                const stepLabel = WORKFLOW_STEPS[step - 1];
+
+                let cardsHTML = '';
+                columnProjects.forEach(p => {
+                    const optionsHTML = WORKFLOW_STEPS.map((label, idx) => {
+                        const stepNum = idx + 1;
+                        return `<option value="${stepNum}" ${stepNum === step ? 'selected' : ''}>${label}</option>`;
+                    }).join('');
+
+                    cardsHTML += `
+                        <div class="kanban-card">
+                            <div class="kanban-card-title">${escapeHTML(p.project_title || '(제목 없음)')}</div>
+                            <div class="kanban-card-meta">
+                                ${escapeHTML(p.client_name || '')} · ${escapeHTML(p.phone || '')}<br>
+                                마감: ${escapeHTML(p.deadline_info || '-')}
+                            </div>
+                            <select class="kanban-card-select" onchange="window.updateCardStatus('${p.id}', this.value)">
+                                ${optionsHTML}
+                            </select>
+                            <div class="kanban-card-actions">
+                                <button onclick="window.showEditCardForm('${p.id}')">수정</button>
+                                <button onclick="window.deleteKanbanCard('${p.id}')">삭제</button>
+                            </div>
+                        </div>
+                    `;
+                });
+
+                html += `
+                    <div class="kanban-column">
+                        <div class="kanban-column-header">
+                            <span>${stepLabel}</span>
+                            <span class="kanban-column-count">${columnProjects.length}</span>
+                        </div>
+                        <div class="kanban-cards">${cardsHTML}</div>
+                        <button class="kanban-add-card-btn" onclick="window.showAddCardForm(${step})">+ 새 클라이언트 추가</button>
+                    </div>
+                `;
+            }
+
+            board.innerHTML = html;
+        }
+
+        // HTML 이스케이프 (칸반 카드에 클라이언트 입력값을 그대로 표시하므로 XSS 방지)
+        function escapeHTML(str) {
+            const div = document.createElement('div');
+            div.textContent = str == null ? '' : String(str);
+            return div.innerHTML;
+        }
+
+        // ===== 카드 추가 폼 =====
+        window.showAddCardForm = function(step) {
+            const optionsHTML = WORKFLOW_STEPS.map((label, idx) => {
+                const stepNum = idx + 1;
+                return `<option value="${stepNum}" ${stepNum === step ? 'selected' : ''}>${label}</option>`;
+            }).join('');
+
+            const formHTML = `
+                <div class="kanban-form-overlay" id="kanbanFormOverlay">
+                    <div class="kanban-form-box">
+                        <h3>새 클라이언트 추가</h3>
+                        <div class="form-group">
+                            <label for="kfClientName">클라이언트 이름</label>
+                            <input type="text" id="kfClientName" placeholder="예: 홍길동">
+                        </div>
+                        <div class="form-group">
+                            <label for="kfPhone">연락처</label>
+                            <input type="tel" id="kfPhone" placeholder="예: 010-1234-5678">
+                        </div>
+                        <div class="form-group">
+                            <label for="kfProjectTitle">프로젝트명</label>
+                            <input type="text" id="kfProjectTitle" placeholder="예: 브랜드 홍보 영상">
+                        </div>
+                        <div class="form-group">
+                            <label for="kfDeadline">예상 마감일 (D-day)</label>
+                            <input type="text" id="kfDeadline" placeholder="예: D-3일 18:00">
+                        </div>
+                        <div class="form-group">
+                            <label for="kfStatusStep">진행 단계</label>
+                            <select id="kfStatusStep">${optionsHTML}</select>
+                        </div>
+                        <div class="kanban-form-actions">
+                            <button type="button" class="kanban-form-cancel" onclick="window.closeKanbanForm()">취소</button>
+                            <button type="button" class="kanban-form-save" onclick="window.saveKanbanCard(null)">저장</button>
+                        </div>
+                    </div>
+                </div>
+            `;
+            document.body.insertAdjacentHTML('beforeend', formHTML);
+        };
+
+        // ===== 카드 수정 폼 =====
+        window.showEditCardForm = async function(id) {
+            if (!sbClient) return;
+            const { data, error } = await sbClient.from('projects').select('*').eq('id', id).single();
+            if (error || !data) {
+                alert('데이터를 불러오지 못했습니다.');
+                return;
+            }
+
+            const optionsHTML = WORKFLOW_STEPS.map((label, idx) => {
+                const stepNum = idx + 1;
+                return `<option value="${stepNum}" ${stepNum === parseInt(data.status_step, 10) ? 'selected' : ''}>${label}</option>`;
+            }).join('');
+
+            const formHTML = `
+                <div class="kanban-form-overlay" id="kanbanFormOverlay">
+                    <div class="kanban-form-box">
+                        <h3>클라이언트 정보 수정</h3>
+                        <div class="form-group">
+                            <label for="kfClientName">클라이언트 이름</label>
+                            <input type="text" id="kfClientName" value="${escapeHTML(data.client_name || '')}">
+                        </div>
+                        <div class="form-group">
+                            <label for="kfPhone">연락처</label>
+                            <input type="tel" id="kfPhone" value="${escapeHTML(data.phone || '')}">
+                        </div>
+                        <div class="form-group">
+                            <label for="kfProjectTitle">프로젝트명</label>
+                            <input type="text" id="kfProjectTitle" value="${escapeHTML(data.project_title || '')}">
+                        </div>
+                        <div class="form-group">
+                            <label for="kfDeadline">예상 마감일 (D-day)</label>
+                            <input type="text" id="kfDeadline" value="${escapeHTML(data.deadline_info || '')}">
+                        </div>
+                        <div class="form-group">
+                            <label for="kfStatusStep">진행 단계</label>
+                            <select id="kfStatusStep">${optionsHTML}</select>
+                        </div>
+                        <div class="kanban-form-actions">
+                            <button type="button" class="kanban-form-cancel" onclick="window.closeKanbanForm()">취소</button>
+                            <button type="button" class="kanban-form-save" onclick="window.saveKanbanCard('${id}')">저장</button>
+                        </div>
+                    </div>
+                </div>
+            `;
+            document.body.insertAdjacentHTML('beforeend', formHTML);
+        };
+
+        window.closeKanbanForm = function() {
+            const overlay = document.getElementById('kanbanFormOverlay');
+            if (overlay) overlay.remove();
+        };
+
+        // ===== 카드 저장 (신규 추가 / 수정 공통) =====
+        window.saveKanbanCard = async function(editId) {
+            if (!sbClient) {
+                alert('데이터베이스에 연결할 수 없습니다.');
+                return;
+            }
+
+            const clientName = document.getElementById('kfClientName').value.trim();
+            const phone = document.getElementById('kfPhone').value.trim();
+            const projectTitle = document.getElementById('kfProjectTitle').value.trim();
+            const deadlineInfo = document.getElementById('kfDeadline').value.trim();
+            const statusStep = parseInt(document.getElementById('kfStatusStep').value, 10);
+
+            if (!clientName || !phone || !projectTitle) {
+                alert('클라이언트 이름, 연락처, 프로젝트명은 필수 입력입니다.');
+                return;
+            }
+
+            const payload = {
+                client_name: clientName,
+                phone: phone,
+                project_title: projectTitle,
+                deadline_info: deadlineInfo,
+                status_step: statusStep,
+                updated_at: new Date().toISOString()
+            };
+
+            try {
+                let result;
+                if (editId) {
+                    result = await sbClient.from('projects').update(payload).eq('id', editId);
+                } else {
+                    result = await sbClient.from('projects').insert([payload]);
+                }
+
+                if (result.error) {
+                    console.error('❌ [saveKanbanCard] Supabase 오류:', result.error);
+                    alert('저장에 실패했습니다: ' + result.error.message);
+                    return;
+                }
+
+                window.closeKanbanForm();
+                loadKanbanData();
+            } catch (err) {
+                console.error('❌ [saveKanbanCard] 예외 발생:', err);
+                alert('저장 중 오류가 발생했습니다.');
+            }
+        };
+
+        // ===== 카드 상태(칼럼) 변경 =====
+        window.updateCardStatus = async function(id, newStep) {
+            if (!sbClient) return;
+            try {
+                const { error } = await sbClient
+                    .from('projects')
+                    .update({ status_step: parseInt(newStep, 10), updated_at: new Date().toISOString() })
+                    .eq('id', id);
+
+                if (error) {
+                    console.error('❌ [updateCardStatus] Supabase 오류:', error);
+                    alert('상태 변경에 실패했습니다: ' + error.message);
+                    return;
+                }
+                loadKanbanData();
+            } catch (err) {
+                console.error('❌ [updateCardStatus] 예외 발생:', err);
+            }
+        };
+
+        // ===== 카드 삭제 =====
+        window.deleteKanbanCard = async function(id) {
+            if (!confirm('이 클라이언트 카드를 삭제하시겠습니까?')) return;
+            if (!sbClient) return;
+
+            try {
+                const { error } = await sbClient.from('projects').delete().eq('id', id);
+                if (error) {
+                    console.error('❌ [deleteKanbanCard] Supabase 오류:', error);
+                    alert('삭제에 실패했습니다: ' + error.message);
+                    return;
+                }
+                loadKanbanData();
+            } catch (err) {
+                console.error('❌ [deleteKanbanCard] 예외 발생:', err);
+            }
+        };
+
+        // ===== 토스트 알림 =====
+        function showToast(message) {
+            let toast = document.getElementById('toastNotice');
+            if (!toast) {
+                toast = document.createElement('div');
+                toast.id = 'toastNotice';
+                toast.className = 'toast-notice';
+                document.body.appendChild(toast);
+            }
+            toast.textContent = message;
+            toast.classList.add('show');
+            clearTimeout(toast._hideTimer);
+            toast._hideTimer = setTimeout(function() {
+                toast.classList.remove('show');
+            }, 2600);
+        }
+
+        // ===== 기능성 칩 (Quick Action Chips) =====
+        window.copyEmailChip = function() {
+            const email = 'purplemint2627@gmail.com';
+            if (navigator.clipboard && navigator.clipboard.writeText) {
+                navigator.clipboard.writeText(email).then(function() {
+                    showToast('이메일 주소가 복사되었습니다!');
+                }).catch(function() {
+                    showToast('이메일 주소가 복사되었습니다!');
+                });
+            } else {
+                showToast('이메일 주소가 복사되었습니다!');
+            }
+        };
+
+        window.handleSmsChip = function(event) {
+            const phone = '010-5248-0797';
+            const isMobile = /Mobi|Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
+
+            if (isMobile) {
+                // 모바일: href="sms:..." 기본 동작을 그대로 진행시켜 문자 앱으로 연결
+                return;
+            }
+
+            // 데스크톱: 문자 앱 연결이 불가능하므로 번호를 복사하고 안내
+            if (event && event.preventDefault) {
+                event.preventDefault();
+            }
+
+            if (navigator.clipboard && navigator.clipboard.writeText) {
+                navigator.clipboard.writeText(phone).then(function() {
+                    showToast('24시간 문자 문의 가능합니다!');
+                }).catch(function() {
+                    showToast('24시간 문자 문의 가능합니다!');
+                });
+            } else {
+                showToast('24시간 문자 문의 가능합니다!');
+            }
+        };
  
         // ===== 기타 함수 =====
         window.showAddPortfolioForm = function() {
@@ -2878,7 +4186,7 @@
                 <div style="background: var(--dark-secondary); border: 1px solid #111111; padding: 30px; border-radius: 8px; max-width: 600px; width: 90%; max-height: 90vh; overflow-y: auto;">
                     <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
                         <h2 style="color: #111111; margin: 0; font-size: 20px;">새 영상 추가</h2>
-                        <button onclick="document.getElementById('adminFormModal').remove()" style="background: none; border: none; color: #111111; font-size: 24px; cursor: pointer;">×</button>
+                        <button onclick="document.getElementById('adminFormModal').remove()" style="background: none; border: none; color: #111111; cursor: pointer; display: flex; align-items: center;"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg></button>
                     </div>
  
                     <form onsubmit="window.handleAddPortfolio(event)" style="display: flex; flex-direction: column; gap: 15px;">
@@ -2987,7 +4295,7 @@
                     console.log('🖼️ 업로드 파일을 Base64로 변환 완료');
                 } catch (e) {
                     console.error('❌ 썸네일 파일 읽기 오류:', e);
-                    alert('⚠️ 썸네일 이미지 파일을 읽는 중 오류가 발생했습니다.');
+                    alert('썸네일 이미지 파일을 읽는 중 오류가 발생했습니다.');
                 }
             } else if (thumbnailUrlInput && thumbnailUrlInput.value.trim() !== '') {
                 customThumbnail = thumbnailUrlInput.value.trim();
@@ -3029,7 +4337,7 @@
             console.log('🔄 renderPortfolioGrid 호출');
             renderPortfolioGrid();
             
-            alert('✅ 영상이 추가되었습니다!');
+            alert('영상이 추가되었습니다!');
         };
  
         // 새 영상 추가 함수
@@ -3040,7 +4348,7 @@
             
             if (!item || !item.youtubeId || !item.title || !item.category) {
                 console.error('❌ 필수 필드가 누락되었습니다.');
-                alert('❌ 필수 정보를 모두 입력해주세요.');
+                alert('필수 정보를 모두 입력해주세요.');
                 return;
             }
             
@@ -3083,7 +4391,7 @@
                 console.log('✅ portfolioData LocalStorage 저장 완료 (', portfolioData.length, '개)');
             } catch (e) {
                 console.error('❌ LocalStorage 저장 오류:', e);
-                alert('⚠️ 데이터 저장에 실패했습니다. 브라우저 저장소를 확인해주세요.');
+                alert('데이터 저장에 실패했습니다. 브라우저 저장소를 확인해주세요.');
             }
         }
  
@@ -3105,7 +4413,7 @@
                 <div style="background: var(--dark-secondary); border: 1px solid #111111; padding: 30px; border-radius: 8px; max-width: 600px; width: 90%; max-height: 90vh; overflow-y: auto;">
                     <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
                         <h2 style="color: #111111; margin: 0; font-size: 20px;">포트폴리오 수정</h2>
-                        <button onclick="document.getElementById('editPortfolioModal').remove()" style="background: none; border: none; color: #111111; font-size: 24px; cursor: pointer;">×</button>
+                        <button onclick="document.getElementById('editPortfolioModal').remove()" style="background: none; border: none; color: #111111; cursor: pointer; display: flex; align-items: center;"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg></button>
                     </div>
  
                     <form onsubmit="window.handleEditPortfolio(event, ${index})" style="display: flex; flex-direction: column; gap: 15px;">
@@ -3212,7 +4520,7 @@
                     console.log('🖼️ 업로드 파일을 Base64로 변환 완료');
                 } catch (e) {
                     console.error('❌ 썸네일 파일 읽기 오류:', e);
-                    alert('⚠️ 썸네일 이미지 파일을 읽는 중 오류가 발생했습니다.');
+                    alert('썸네일 이미지 파일을 읽는 중 오류가 발생했습니다.');
                 }
             } else if (thumbnailUrlInput && thumbnailUrlInput.value.trim() !== '') {
                 customThumbnail = thumbnailUrlInput.value.trim();
@@ -3247,7 +4555,7 @@
             // 그리드 다시 렌더링
             renderPortfolioGrid();
             
-            alert('✅ 영상이 수정되었습니다!');
+            alert('영상이 수정되었습니다!');
         };
  
         // 브랜드 로고(EGG Studio) 클릭 시 랜딩 히어로 최상단으로 이동
@@ -3382,12 +4690,16 @@
                 
                 // Admin 모드일 때만 보이는 삭제 버튼 HTML (썸네일 컨테이너 기준 우측 상단 고정)
                 const deleteButtonHTML = isAdminMode ? `
-                    <button class="portfolio-delete-btn" data-index="${index}" title="삭제" draggable="false">✕</button>
+                    <button class="portfolio-delete-btn" data-index="${index}" title="삭제" draggable="false">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+                    </button>
                 ` : '';
                 
                 // Admin 모드일 때만 보이는 수정 버튼 HTML (썸네일 컨테이너 기준 우측 하단 고정)
                 const editButtonHTML = isAdminMode ? `
-                    <button class="portfolio-edit-btn" data-index="${index}" title="수정" draggable="false">✏️</button>
+                    <button class="portfolio-edit-btn" data-index="${index}" title="수정" draggable="false">
+                        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg>
+                    </button>
                 ` : '';
                 
                 // 카드 하단 태그 칩 HTML (#유튜브롱폼, #시네마틱 등)
@@ -3395,6 +4707,18 @@
                 const tagsHTML = itemTags.length > 0
                     ? `<div class="portfolio-tags">${itemTags.map(tag => `<span class="portfolio-tag">#${String(tag).replace(/\s|·/g, '')}</span>`).join('')}</div>`
                     : '';
+                
+                // 호버 프리뷰 영상 HTML (item.previewVideo가 있을 때만 렌더링 — 없으면 기존처럼 썸네일만 표시)
+                const previewVideoHTML = item.previewVideo ? `
+                        <video
+                            class="masonry-item-preview-video"
+                            src="${item.previewVideo}"
+                            muted
+                            loop
+                            playsinline
+                            preload="none"
+                        ></video>
+                ` : '';
                 
                 // HTML 생성 - 버튼은 16:9 썸네일 컨테이너 내부에 위치시켜
                 // 제목 텍스트 길이와 무관하게 항상 썸네일 우측 상단/하단에 고정되도록 함
@@ -3407,6 +4731,7 @@
                             data-index="${index}"
                             loading="lazy"
                         >
+                        ${previewVideoHTML}
                         <div class="masonry-item-overlay">
                             <div class="play-button">▶</div>
                         </div>
@@ -3421,6 +4746,18 @@
                 `;
                 
                 masonryItem.innerHTML = html;
+
+                // 호버 프리뷰 영상 재생/정지 (마우스 진입 시 재생, 이탈 시 정지 + 처음으로 되감기)
+                const previewVideoEl = masonryItem.querySelector('.masonry-item-preview-video');
+                if (previewVideoEl) {
+                    masonryItem.addEventListener('mouseenter', () => {
+                        previewVideoEl.currentTime = 0;
+                        previewVideoEl.play().catch(() => {});
+                    });
+                    masonryItem.addEventListener('mouseleave', () => {
+                        previewVideoEl.pause();
+                    });
+                }
                 
                 // 삭제 버튼 이벤트 핸들러 추가
                 const deleteBtn = masonryItem.querySelector('.portfolio-delete-btn');
@@ -3661,10 +4998,16 @@
             // 최초 진입 시 항상 최상단(히어로)에서 시작하도록 스크롤 위치 보정
             window.scrollTo(0, 0);
             
-            // 7. URL 파라미터 확인 (?admin)
+            // 7. URL 파라미터 확인 (?admin, ?admin=true)
             const urlParams = new URLSearchParams(window.location.search);
-            if (urlParams.has('admin')) {
-                console.log('🔐 URL에서 ?admin 감지 - Admin 모드 진입');
+            if (urlParams.get('admin') === 'true') {
+                // ?admin=true → Client Hub 진행상황 관리용 칸반 보드 바로 오픈 (비밀번호 불필요)
+                console.log('🗂️ URL에서 ?admin=true 감지 - 칸반 Admin 진입');
+                setTimeout(() => {
+                    window.openKanbanAdmin();
+                }, 500);
+            } else if (urlParams.has('admin')) {
+                console.log('🔐 URL에서 ?admin 감지 - 포트폴리오 Admin 모드 진입');
                 setTimeout(() => {
                     window.toggleAdminMode();
                 }, 500);
@@ -3826,7 +5169,7 @@
             if (hasError) {
                 messageDiv.classList.remove('success');
                 messageDiv.classList.add('error');
-                messageDiv.textContent = '❌ 필수 입력 필드를 작성해주세요.';
+                messageDiv.textContent = '필수 입력 필드를 작성해주세요.';
                 return;
             }
  
@@ -3868,9 +5211,9 @@
  
                     messageDiv.classList.remove('error');
                     messageDiv.classList.add('success');
-                    messageDiv.textContent = '✓ 견적 신청이 성공적으로 접수되었습니다. 빠르게 확인 후 연락드리겠습니다.';
+                    messageDiv.textContent = '견적 신청이 성공적으로 접수되었습니다. 빠르게 확인 후 연락드리겠습니다.';
  
-                    alert('✅ 견적 신청이 성공적으로 접수되었습니다!');
+                    alert('견적 신청이 성공적으로 접수되었습니다!');
  
                     // 히스토리에 저장
                     saveEstimateHistory({
@@ -3905,9 +5248,9 @@
  
                         messageDiv.classList.remove('success');
                         messageDiv.classList.add('error');
-                        messageDiv.textContent = '❌ ' + failMsg;
+                        messageDiv.textContent = failMsg;
  
-                        alert('❌ ' + failMsg);
+                        alert(failMsg);
  
                         // 5초 후 메시지 숨김
                         setTimeout(function() {
@@ -3929,9 +5272,9 @@
  
                 messageDiv.classList.remove('success');
                 messageDiv.classList.add('error');
-                messageDiv.textContent = '❌ ' + failMsg;
+                messageDiv.textContent = failMsg;
  
-                alert('❌ ' + failMsg);
+                alert(failMsg);
  
                 // 5초 후 메시지 숨김
                 setTimeout(function() {
