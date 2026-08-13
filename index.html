@@ -10,7 +10,7 @@
         // 📧 EmailJS 설정 상수 (sendEmail()에서 fetch()로 REST API 직접 호출)
         // ========================================
         const EMAILJS_PUBLIC_KEY = "IsvZNVNiPaTSihvTR4SXv";   // = user_id
-        const EMAILJS_SERVICE_ID = "youtube_editing_web";
+        const EMAILJS_SERVICE_ID = "youtube editing_web";   // ⚠️ EmailJS 대시보드 설정값과 동일하게 공백 포함 (Service ID: "youtube editing_web")
         const EMAILJS_TEMPLATE_ID = "template_9ge8ik3";
         const EMAILJS_API_URL = "https://api.emailjs.com/api/v1.0/email/send";
         // ========================================
@@ -3896,56 +3896,64 @@
             .then(function(response) {
                 clearTimeout(timeoutId);
                 console.log('📮 [fetch 응답 수신] status:', response.status, '/ ok:', response.ok);
- 
-                if (!response.ok) {
-                    // 응답은 왔지만 실패 상태 코드 (400/401/403/404/500 등)
-                    return response.text().then(function(errorText) {
-                        throw new Error('EmailJS API 오류 (status ' + response.status + '): ' + errorText);
+
+                if (response.ok) {
+                    // ===== 전송 성공 =====
+                    console.log('✅ [성공] 이메일 전송 성공!');
+
+                    messageDiv.classList.remove('error');
+                    messageDiv.classList.add('success');
+                    messageDiv.textContent = '✓ 견적 신청이 성공적으로 접수되었습니다. 빠르게 확인 후 연락드리겠습니다.';
+
+                    alert('✅ 견적 신청이 성공적으로 접수되었습니다!');
+
+                    // 히스토리에 저장
+                    saveEstimateHistory({
+                        name: formData.name,
+                        email: formData.email,
+                        phone: formData.phone,
+                        package: formData.package,
+                        cameraSetup: formData.cameraSetup,
+                        deadline: formData.deadline,
+                        reference: formData.reference,
+                        description: formData.description,
+                        addon: formData.addon
+                    });
+
+                    // 폼 초기화
+                    form.reset();
+
+                    // 에러 메시지 초기화
+                    errorMessages.forEach(msg => msg.classList.remove('show'));
+                    inputFields.forEach(field => field.classList.remove('error'));
+
+                    // 5초 후 메시지 숨김
+                    setTimeout(function() {
+                        messageDiv.classList.remove('success');
+                    }, 5000);
+                } else {
+                    // ===== 전송 실패 (EmailJS API가 에러 상태 코드로 응답) =====
+                    return response.text().then(function(errText) {
+                        console.error('❌ [실패] EmailJS API 오류 응답 (status ' + response.status + '):', errText);
+
+                        messageDiv.classList.remove('success');
+                        messageDiv.classList.add('error');
+                        messageDiv.textContent = '❌ 전송 실패: ' + errText;
+
+                        alert('❌ 전송 실패: ' + errText);
+
+                        // 5초 후 메시지 숨김
+                        setTimeout(function() {
+                            messageDiv.classList.remove('error');
+                        }, 5000);
                     });
                 }
- 
-                return response.text();
-            })
-            .then(function(responseText) {
-                // 전송 성공
-                console.log('✅ [성공] 이메일 전송 성공! 응답:', responseText);
- 
-                messageDiv.classList.remove('error');
-                messageDiv.classList.add('success');
-                messageDiv.textContent = '✓ 견적 신청이 성공적으로 접수되었습니다. 빠르게 확인 후 연락드리겠습니다.';
- 
-                alert('견적 신청이 성공적으로 접수되었습니다!');
- 
-                // 히스토리에 저장
-                saveEstimateHistory({
-                    name: formData.name,
-                    email: formData.email,
-                    phone: formData.phone,
-                    package: formData.package,
-                    cameraSetup: formData.cameraSetup,
-                    deadline: formData.deadline,
-                    reference: formData.reference,
-                    description: formData.description,
-                    addon: formData.addon
-                });
- 
-                // 폼 초기화
-                form.reset();
- 
-                // 에러 메시지 초기화
-                errorMessages.forEach(msg => msg.classList.remove('show'));
-                inputFields.forEach(field => field.classList.remove('error'));
- 
-                // 5초 후 메시지 숨김
-                setTimeout(function() {
-                    messageDiv.classList.remove('success');
-                }, 5000);
             })
             .catch(function(error) {
                 clearTimeout(timeoutId);
  
-                // 전송 실패 (네트워크 오류, EmailJS API 오류, 7초 타임아웃 등)
-                console.error('❌ [실패] 이메일 전송 실패 또는 타임아웃');
+                // 네트워크 오류 또는 7초 타임아웃 등 fetch 자체가 실패한 경우
+                console.error('❌ [실패] 네트워크 오류 또는 타임아웃');
                 console.error('에러 객체 전체:', error);
                 console.error('에러 이름:', error && error.name);
                 console.error('에러 메시지:', error && error.message);
