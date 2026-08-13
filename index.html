@@ -3985,8 +3985,8 @@
 
             console.log('📨 전송 파라미터 (EmailJS 템플릿 변수와 이름이 일치해야 합니다):', emailParams);
 
-            // ===== 무한 대기 방지용 타임아웃 안전장치 =====
-            const EMAILJS_TIMEOUT_MS = 8000;
+            // ===== 무한 대기 방지용 타임아웃 안전장치 (7초) =====
+            const EMAILJS_TIMEOUT_MS = 7000;
             function createTimeoutPromise(ms) {
                 return new Promise(function(_, reject) {
                     setTimeout(function() {
@@ -4004,7 +4004,7 @@
                 submitBtn.classList.remove('loading');
             }
 
-            // EmailJS 실제 전송 (8초 타임아웃과 Promise.race로 경쟁시킴)
+            // EmailJS 실제 전송 (7초 타임아웃과 Promise.race로 경쟁시킴)
             const sendPromise = emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, emailParams);
 
             // 타임아웃으로 이미 버튼이 복구된 후 실제 응답이 뒤늦게 도착해도
@@ -4027,7 +4027,7 @@
                 messageDiv.classList.add('success');
                 messageDiv.textContent = '✓ 견적 신청이 성공적으로 접수되었습니다. 빠르게 확인 후 연락드리겠습니다.';
                 
-                alert('✅ 견적 신청이 성공적으로 전송되었습니다!\n\npurplemint2627@gmail.com으로 확인하신 후 빠르게 연락드리겠습니다.');
+                alert('견적 신청이 성공적으로 접수되었습니다!');
                 
                 // 히스토리에 저장
                 saveEstimateHistory({
@@ -4055,18 +4055,30 @@
                 }, 5000);
  
             }).catch(function(error) {
-                // 전송 실패 (EmailJS 오류 또는 8초 타임아웃)
+                // 전송 실패 (EmailJS 오류 또는 7초 타임아웃)
                 console.error('❌ [실패] 이메일 전송 실패 또는 타임아웃');
                 console.error('에러 객체 전체:', error);
                 console.error('에러 코드(status):', error && error.status);
                 console.error('에러 메시지(text):', error && error.text);
                 console.error('에러 메시지(message):', error && error.message);
  
+                // 7초 타임아웃인 경우: 지정된 문구로 즉시 안내 (다른 에러와 분리 처리)
+                if (error && error.isTimeout) {
+                    messageDiv.classList.remove('success');
+                    messageDiv.classList.add('error');
+                    messageDiv.textContent = '응답 시간이 초과되었습니다. 잠시 후 다시 시도해 주세요.';
+                    
+                    alert('응답 시간이 초과되었습니다. 잠시 후 다시 시도해 주세요.');
+                    
+                    setTimeout(function() {
+                        messageDiv.classList.remove('error');
+                    }, 5000);
+                    return;
+                }
+ 
                 let errorDetailMsg = '전송에 실패했습니다. ';
  
-                if (error && error.isTimeout) {
-                    errorDetailMsg = '서버 응답이 지연되고 있습니다 (8초 초과). 네트워크 상태를 확인하시거나 잠시 후 다시 시도해주세요. ';
-                } else if (error && error.status === 400) {
+                if (error && error.status === 400) {
                     errorDetailMsg = '요청 데이터 오류입니다. (EmailJS 템플릿 변수명이 일치하는지 확인해주세요) ';
                 } else if (error && error.status === 401) {
                     errorDetailMsg = 'EmailJS 인증 오류입니다. (Public Key를 확인해주세요) ';
