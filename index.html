@@ -55,28 +55,19 @@
             padding: 0;
             box-sizing: border-box;
         }
-
+ 
         :root {
-            --dark: #000000;
-            --dark-secondary: #1a1a1a;
+            --dark: #121212;
+            --dark-secondary: #1c1c1c;
             --text: #ffffff;
             --text-muted: #808080;
-            --accent: #ff6b35;
+            --accent: #E73F1E;
         }
-
-        /* Light Mode 변수 */
-        body.light-mode {
-            --dark: #ffffff;
-            --dark-secondary: #f8f9fa;
-            --text: #111111;
-            --text-muted: #666666;
-            --accent: #ff6b35;
-        }
-
+ 
         html {
             scroll-behavior: smooth;
         }
-
+ 
         body {
             background: var(--dark);
             color: var(--text);
@@ -84,250 +75,57 @@
             -webkit-font-smoothing: antialiased;
             line-height: 1.6;
         }
-
-        /* Light Mode - 추가 스타일 */
-        body.light-mode {
-            background: #f8f9fa;
-        }
-
-        body.light-mode nav {
-            background: rgba(255, 255, 255, 0.95);
-            border-bottom: 1px solid rgba(0, 0, 0, 0.1);
-        }
-
-        body.light-mode .pricing-card {
-            border: 1px solid rgba(0, 0, 0, 0.1);
-            background: #ffffff;
-        }
-
-        body.light-mode .pricing-card.featured {
-            border-color: var(--accent);
-            background: rgba(255, 107, 53, 0.08);
-        }
-
-        body.light-mode .pricing-card:hover {
-            border-color: #111111;
-        }
-
-        body.light-mode .addon-banner {
-            background: rgba(255, 107, 53, 0.08);
-            border: 1px solid rgba(255, 107, 53, 0.3);
-        }
-
-        body.light-mode .form-group input,
-        body.light-mode .form-group textarea,
-        body.light-mode .form-group select {
-            background: rgba(0, 0, 0, 0.03);
-            border: 1px solid rgba(0, 0, 0, 0.15);
-            color: #111111;
-        }
-
-        body.light-mode .form-group input:focus,
-        body.light-mode .form-group textarea:focus,
-        body.light-mode .form-group select:focus {
-            border-color: var(--accent);
-            background: rgba(255, 107, 53, 0.05);
-            box-shadow: 0 0 0 3px rgba(255, 107, 53, 0.1);
-        }
-
-        body.light-mode .form-group input::placeholder,
-        body.light-mode .form-group textarea::placeholder {
-            color: #999999;
-        }
-
-        body.light-mode .form-message.success {
-            background: rgba(26, 174, 57, 0.15);
-            color: #1a7d2a;
-        }
-
-        body.light-mode .form-message.error {
-            background: rgba(226, 75, 74, 0.15);
-            color: #c72c2a;
-        }
-
-        body.light-mode .form-group input.error,
-        body.light-mode .form-group textarea.error,
-        body.light-mode .form-group select.error {
-            border-color: #ff4444 !important;
-            background-color: rgba(255, 68, 68, 0.08);
-        }
-
-        body.light-mode .form-group input.error:focus,
-        body.light-mode .form-group textarea.error:focus,
-        body.light-mode .form-group select.error:focus {
-            border-color: #ff4444 !important;
-            box-shadow: 0 0 0 3px rgba(255, 68, 68, 0.1);
-        }
-        }
-
-        body.light-mode .masonry-item img,
-        body.light-mode .masonry-item svg {
-            background: rgba(0, 0, 0, 0.08);
-        }
-
-        body.light-mode .portfolio-title {
-            color: #111111;
-        }
-
-        body.light-mode .masonry-item:hover .portfolio-title {
-            color: #ff6b35;
-        }
-
-        body.light-mode .portfolio-meta {
-            color: #666666;
-        }
-
-        body.light-mode .masonry-item:hover .portfolio-meta {
-            color: #333333;
-        }
-
-        body.light-mode #work-page {
-            background: #f8f9fa;
-        }
-
-        body.light-mode .about-title {
-            border: 2px solid #111111;
-        }
-
-        body.light-mode .about-image {
-            background: rgba(0, 0, 0, 0.08);
-        }
-
-        body.light-mode .scroll-dot {
-            border: 2px solid #111111;
-        }
-
-        body.light-mode .cta-button {
-            border: 2px solid #111111;
-            color: #111111;
-        }
-
-        body.light-mode .cta-button:hover {
-            background: #111111;
-            color: #ffffff;
-        }
-
-        body.light-mode .cta-button.primary {
-            background: var(--accent);
-            border-color: var(--accent);
-            color: #ffffff;
-        }
-
-        body.light-mode .cta-button.primary:hover {
-            background: transparent;
-            color: var(--accent);
-        }
-
-        body.light-mode .features-list li {
-            border-bottom: 1px solid rgba(0, 0, 0, 0.08);
-        }
-
-        body.light-mode .contact-item {
-            border-top: 1px solid rgba(0, 0, 0, 0.1);
-        }
-
-        /* Light Mode - 유튜브 모달 */
-        body.light-mode .youtube-modal {
-            background: rgba(0, 0, 0, 0.9);
-        }
-
-        /* 테마 토글 버튼 */
-        .theme-toggle {
-            background: none;
-            border: none;
-            color: var(--text);
-            font-size: 16px;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            gap: 6px;
-            padding: 8px 12px;
-            border-radius: 4px;
-            transition: all 0.3s ease;
-        }
-
-        .theme-toggle:hover {
-            background: rgba(255, 255, 255, 0.1);
-        }
-
-        body.light-mode .theme-toggle:hover {
-            background: rgba(0, 0, 0, 0.1);
-        }
-
-        .theme-label {
-            font-size: 12px;
-            font-weight: 500;
-            letter-spacing: 0.5px;
-            text-transform: uppercase;
-        }
-
+ 
         ::-webkit-scrollbar {
             width: 8px;
         }
-
+ 
         ::-webkit-scrollbar-track {
             background: var(--dark);
         }
-
+ 
         ::-webkit-scrollbar-thumb {
             background: var(--text-muted);
             border-radius: 4px;
         }
-
-        body.light-mode::-webkit-scrollbar {
-            width: 8px;
-        }
-
-        body.light-mode::-webkit-scrollbar-track {
-            background: #f8f9fa;
-        }
-
-        body.light-mode::-webkit-scrollbar-thumb {
-            background: #d0d0d0;
-            border-radius: 4px;
-        }
-
-        body.light-mode::-webkit-scrollbar-thumb:hover {
-            background: #a8a8a8;
-        }
-
+ 
         a {
             text-decoration: none;
             color: inherit;
         }
-
+ 
         h1 {
             font-size: 72px;
             font-weight: 800;
             line-height: 1;
             letter-spacing: -2px;
         }
-
+ 
         h2 {
             font-size: 48px;
             font-weight: 800;
             line-height: 1.1;
             letter-spacing: -1.5px;
         }
-
+ 
         h3 {
             font-size: 24px;
             font-weight: 700;
             line-height: 1.2;
         }
-
+ 
         h4 {
             font-size: 16px;
             font-weight: 600;
             line-height: 1.4;
         }
-
+ 
         p {
             font-size: 15px;
             font-weight: 300;
             line-height: 1.8;
         }
-
+ 
         .caption {
             font-size: 12px;
             font-weight: 400;
@@ -335,7 +133,7 @@
             color: var(--text-muted);
             letter-spacing: 0.5px;
         }
-
+ 
         /* 랜딩 페이지 */
         .landing-page {
             height: 100vh;
@@ -343,20 +141,17 @@
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            background: #000000;
+            background: var(--dark);
             position: relative;
             overflow: hidden;
         }
-
-        body.light-mode .landing-page {
-            background: #ffffff;
-        }
-
+ 
+ 
         .landing-content {
             text-align: center;
             z-index: 2;
         }
-
+ 
         .landing-title {
             font-family: 'Black Han Sans', sans-serif;
             font-size: 96px;
@@ -366,7 +161,7 @@
             line-height: 1;
             animation: fadeInDown 1s ease-out;
         }
-
+ 
         .landing-subtitle {
             font-size: 24px;
             font-weight: 400;
@@ -375,7 +170,7 @@
             margin-bottom: 24px;
             animation: fadeInUp 1s ease-out 0.2s both;
         }
-
+ 
         .landing-desc {
             font-size: 18px;
             font-weight: 300;
@@ -385,7 +180,7 @@
             margin-bottom: 48px;
             animation: fadeInUp 1s ease-out 0.4s both;
         }
-
+ 
         .landing-cta {
             display: flex;
             gap: 16px;
@@ -393,7 +188,7 @@
             flex-wrap: wrap;
             animation: fadeInUp 1s ease-out 0.6s both;
         }
-
+ 
         .cta-button {
             padding: 16px 48px;
             border: 2px solid var(--text);
@@ -406,24 +201,24 @@
             cursor: pointer;
             transition: all 0.3s ease;
         }
-
+ 
         .cta-button:hover {
             background: var(--text);
             color: #000000;
             transform: translateY(-3px);
         }
-
+ 
         .cta-button.primary {
             background: var(--accent);
             border-color: var(--accent);
             color: #000000;
         }
-
+ 
         .cta-button.primary:hover {
             background: transparent;
             color: var(--accent);
         }
-
+ 
         /* 스크롤 인디케이터 */
         .scroll-indicator {
             position: absolute;
@@ -434,7 +229,7 @@
             gap: 12px;
             animation: fadeIn 1s ease-out 1s both;
         }
-
+ 
         .scroll-dot {
             width: 8px;
             height: 8px;
@@ -442,14 +237,14 @@
             border-radius: 50%;
             animation: bounce 2s infinite;
         }
-
+ 
         .scroll-indicator span {
             font-size: 12px;
             letter-spacing: 1px;
             text-transform: uppercase;
             color: var(--text-muted);
         }
-
+ 
         /* 애니메이션 */
         @keyframes fadeInDown {
             from {
@@ -461,7 +256,7 @@
                 transform: translateY(0);
             }
         }
-
+ 
         @keyframes fadeInUp {
             from {
                 opacity: 0;
@@ -472,7 +267,7 @@
                 transform: translateY(0);
             }
         }
-
+ 
         @keyframes fadeIn {
             from {
                 opacity: 0;
@@ -481,7 +276,7 @@
                 opacity: 1;
             }
         }
-
+ 
         @keyframes bounce {
             0%, 100% {
                 transform: translateY(0);
@@ -490,7 +285,7 @@
                 transform: translateY(-12px);
             }
         }
-
+ 
         /* iOS Jiggle 애니메이션 - Admin 모드 카드 흔들림 */
         @keyframes jiggle {
             0%, 100% {
@@ -503,11 +298,11 @@
                 transform: rotate(1.5deg);
             }
         }
-
+ 
         .masonry-item.jiggle {
             animation: jiggle 0.4s ease-in-out infinite;
         }
-
+ 
         /* 네비게이션 */
         nav {
             position: fixed;
@@ -518,7 +313,7 @@
             z-index: 100;
             border-bottom: 1px solid rgba(255, 255, 255, 0.1);
         }
-
+ 
         .nav-container {
             max-width: 1400px;
             margin: 0 auto;
@@ -527,20 +322,20 @@
             justify-content: space-between;
             align-items: center;
         }
-
+ 
         .nav-brand {
             font-family: 'Black Han Sans', sans-serif;
             font-size: 14px;
             font-weight: 400;
             letter-spacing: -0.2px;
         }
-
+ 
         .nav-links {
             display: flex;
             gap: 48px;
             align-items: center;
         }
-
+ 
         .nav-links a {
             font-size: 12px;
             color: var(--text-muted);
@@ -549,36 +344,36 @@
             font-weight: 400;
             cursor: pointer;
         }
-
+ 
         .nav-links a:hover,
         .nav-links a.active {
             color: var(--text);
         }
-
+ 
         /* 컨테이너 */
         .container {
             max-width: 1400px;
             margin: 0 auto;
             padding: 0 40px;
         }
-
+ 
         /* 페이지 */
         .page {
             display: none;
             min-height: 100vh;
             padding-top: 100px;
         }
-
+ 
         .page.active {
             display: block;
         }
-
+ 
         #work-page {
             padding-top: 120px;
             padding-bottom: 80px;
-            background: #000000;
+            background: var(--dark);
         }
-
+ 
         /* 마소닉 그리드 */
         .category-filter {
             padding: 10px 20px;
@@ -593,34 +388,21 @@
             text-transform: uppercase;
             letter-spacing: 0.5px;
         }
-
+ 
         .category-filter:hover {
             border-color: var(--accent);
             color: var(--accent);
         }
-
+ 
         .category-filter.active {
             background: var(--accent);
             border-color: var(--accent);
             color: #000000;
         }
-
-        body.light-mode .category-filter {
-            border-color: #ccc;
-            color: #666;
-        }
-
-        body.light-mode .category-filter:hover {
-            border-color: var(--accent);
-            color: var(--accent);
-        }
-
-        body.light-mode .category-filter.active {
-            background: var(--accent);
-            border-color: var(--accent);
-            color: #fff;
-        }
-
+ 
+ 
+ 
+ 
         /* 히스토리 버튼 스타일 */
         .history-button {
             padding: 10px 16px;
@@ -636,30 +418,22 @@
             letter-spacing: 0.5px;
             white-space: nowrap;
         }
-
+ 
         .history-button:hover {
             background: var(--accent);
             color: #000000;
             transform: translateY(-2px);
         }
-
-        body.light-mode .history-button {
-            border-color: var(--accent);
-            color: var(--accent);
-        }
-
-        body.light-mode .history-button:hover {
-            background: var(--accent);
-            color: #fff;
-        }
-
+ 
+ 
+ 
         /* 히스토리 Tooltip 스타일 */
         .history-tooltip-wrapper {
             position: relative;
             display: inline-block;
             cursor: help;
         }
-
+ 
         .history-tooltip-icon {
             display: inline-flex;
             align-items: center;
@@ -667,25 +441,25 @@
             width: 20px;
             height: 20px;
             border-radius: 50%;
-            background: rgba(255, 107, 53, 0.2);
+            background: rgba(231, 63, 30, 0.2);
             color: var(--accent);
             font-size: 12px;
             font-weight: bold;
             transition: all 0.3s ease;
             cursor: help;
         }
-
+ 
         .history-tooltip-icon:hover {
-            background: rgba(255, 107, 53, 0.4);
+            background: rgba(231, 63, 30, 0.4);
             transform: scale(1.1);
         }
-
+ 
         .history-tooltip {
             position: absolute;
             bottom: 100%;
             left: 50%;
             transform: translateX(-50%) translateY(-8px);
-            background: #1a1a1a;
+            background: var(--dark-secondary);
             border: 1px solid var(--accent);
             color: #aaa;
             padding: 10px 14px;
@@ -699,7 +473,7 @@
             z-index: 3000;
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
         }
-
+ 
         .history-tooltip::after {
             content: '';
             position: absolute;
@@ -709,31 +483,19 @@
             border: 6px solid transparent;
             border-top-color: var(--accent);
         }
-
+ 
         .history-tooltip-wrapper:hover .history-tooltip {
             opacity: 1;
             visibility: visible;
             transform: translateX(-50%) translateY(-10px);
         }
-
-        body.light-mode .history-tooltip-icon {
-            background: rgba(255, 107, 53, 0.1);
-            color: var(--accent);
-        }
-
-        body.light-mode .history-tooltip {
-            background: #f8f9fa;
-            border: 1px solid var(--accent);
-            color: #666;
-        }
-
-        body.light-mode .history-tooltip::after {
-            border-top-color: var(--accent);
-        }
-
+ 
+ 
+ 
+ 
         /* 히스토리 모달 안내 문구 스타일 */
         .history-modal-notice {
-            background: rgba(255, 107, 53, 0.1);
+            background: rgba(231, 63, 30, 0.1);
             border-left: 3px solid var(--accent);
             padding: 12px 15px;
             margin-bottom: 20px;
@@ -742,12 +504,8 @@
             line-height: 1.6;
             color: #aaa;
         }
-
-        body.light-mode .history-modal-notice {
-            background: rgba(255, 107, 53, 0.08);
-            color: #666;
-        }
-
+ 
+ 
         /* 히스토리 모달 스타일 */
         .history-modal {
             position: fixed;
@@ -761,9 +519,9 @@
             justify-content: center;
             z-index: 2000;
         }
-
+ 
         .history-modal-content {
-            background: #1a1a1a;
+            background: var(--dark-secondary);
             border: 1px solid #333;
             border-radius: 8px;
             padding: 30px;
@@ -772,12 +530,8 @@
             max-height: 80vh;
             overflow-y: auto;
         }
-
-        body.light-mode .history-modal-content {
-            background: #f8f9fa;
-            border: 1px solid #ddd;
-        }
-
+ 
+ 
         .history-modal-header {
             display: flex;
             justify-content: space-between;
@@ -786,18 +540,15 @@
             border-bottom: 1px solid #333;
             padding-bottom: 15px;
         }
-
-        body.light-mode .history-modal-header {
-            border-bottom: 1px solid #ddd;
-        }
-
+ 
+ 
         .history-modal-title {
             font-size: 18px;
             font-weight: 600;
             color: var(--text);
             margin: 0;
         }
-
+ 
         .history-modal-close {
             background: none;
             border: none;
@@ -806,18 +557,18 @@
             cursor: pointer;
             transition: color 0.3s ease;
         }
-
+ 
         .history-modal-close:hover {
             color: var(--text);
         }
-
+ 
         .history-cards {
             display: flex;
             flex-direction: column;
             gap: 15px;
             margin-bottom: 20px;
         }
-
+ 
         .history-card {
             background: #0a0a0a;
             border: 1px solid #333;
@@ -825,22 +576,14 @@
             padding: 15px;
             transition: all 0.3s ease;
         }
-
+ 
         .history-card:hover {
             border-color: var(--accent);
-            background: rgba(255, 107, 53, 0.05);
+            background: rgba(231, 63, 30, 0.05);
         }
-
-        body.light-mode .history-card {
-            background: #fff;
-            border: 1px solid #ddd;
-        }
-
-        body.light-mode .history-card:hover {
-            border-color: var(--accent);
-            background: rgba(255, 107, 53, 0.02);
-        }
-
+ 
+ 
+ 
         .history-card-header {
             display: flex;
             justify-content: space-between;
@@ -849,45 +592,42 @@
             padding-bottom: 8px;
             border-bottom: 1px solid #333;
         }
-
-        body.light-mode .history-card-header {
-            border-bottom: 1px solid #ddd;
-        }
-
+ 
+ 
         .history-card-date {
             font-size: 12px;
             color: var(--accent);
             font-weight: 600;
         }
-
+ 
         .history-card-package {
             font-size: 13px;
             font-weight: 600;
             color: var(--text);
-            background: rgba(255, 107, 53, 0.2);
+            background: rgba(231, 63, 30, 0.2);
             padding: 4px 8px;
             border-radius: 3px;
         }
-
+ 
         .history-card-row {
             display: flex;
             justify-content: space-between;
             margin-bottom: 8px;
             font-size: 13px;
         }
-
+ 
         .history-card-label {
             color: var(--text-muted);
             font-weight: 600;
             min-width: 100px;
         }
-
+ 
         .history-card-value {
             color: var(--text);
             text-align: right;
             flex: 1;
         }
-
+ 
         .history-card-description {
             margin-top: 12px;
             padding-top: 12px;
@@ -898,29 +638,23 @@
             max-height: 100px;
             overflow-y: auto;
         }
-
-        body.light-mode .history-card-description {
-            border-top: 1px solid #ddd;
-        }
-
+ 
+ 
         .history-empty {
             text-align: center;
             padding: 40px 20px;
             color: var(--text-muted);
             font-size: 14px;
         }
-
+ 
         .history-modal-footer {
             display: flex;
             gap: 10px;
             padding-top: 20px;
             border-top: 1px solid #333;
         }
-
-        body.light-mode .history-modal-footer {
-            border-top: 1px solid #ddd;
-        }
-
+ 
+ 
         .history-delete-btn {
             flex: 1;
             padding: 12px;
@@ -933,12 +667,12 @@
             font-size: 13px;
             transition: all 0.3s ease;
         }
-
+ 
         .history-delete-btn:hover {
             background: #ff2222;
             transform: translateY(-2px);
         }
-
+ 
         .history-close-btn {
             flex: 1;
             padding: 12px;
@@ -951,11 +685,11 @@
             font-size: 13px;
             transition: all 0.3s ease;
         }
-
+ 
         .history-close-btn:hover {
             border-color: var(--text);
         }
-
+ 
         /* ===== Work 그리드: 균일한 정규 CSS Grid ===== */
         .masonry-grid {
             display: grid;
@@ -964,7 +698,7 @@
             margin-bottom: 40px;
             align-items: start;
         }
-
+ 
         .masonry-item {
             box-sizing: border-box;
             cursor: pointer;
@@ -972,47 +706,47 @@
             position: relative;
             border-radius: 8px;
         }
-
+ 
         .masonry-item:hover {
             transform: translateY(-6px);
         }
-
+ 
         /* ===== Admin 모드 표시 (레이아웃에 영향 없는 outline 사용) ===== */
         .masonry-item.admin-mode {
-            outline: 2px dashed #ff6b35;
+            outline: 2px dashed #E73F1E;
             outline-offset: 6px;
             border-radius: 8px;
         }
-
+ 
         /* jiggle 중에는 hover 이동 효과 비활성화 (흔들림과 충돌 방지) */
         .masonry-item.jiggle:hover {
             transform: none;
         }
-
+ 
         /* 드래그 중인 카드: jiggle 애니메이션을 멈추고 드래그 상태만 표시 */
         .masonry-item.dragging {
             animation: none !important;
             opacity: 0.5;
-            outline: 2px dashed #ff6b35;
+            outline: 2px dashed #E73F1E;
             outline-offset: 6px;
         }
-
+ 
         /* 드래그 대상 카드 (drop zone 하이라이트) */
         .masonry-item.drag-over .masonry-item-image {
-            outline: 2px solid #ff6b35;
+            outline: 2px solid #E73F1E;
             outline-offset: -2px;
-            box-shadow: 0 0 20px rgba(255, 107, 53, 0.45);
+            box-shadow: 0 0 20px rgba(231, 63, 30, 0.45);
         }
-
+ 
         /* Admin 모드에서 커서 변경 */
         .masonry-item[draggable="true"] {
             cursor: grab;
         }
-
+ 
         .masonry-item[draggable="true"]:active {
             cursor: grabbing;
         }
-
+ 
         /* ===== 16:9 썸네일 컨테이너 (고정 비율, 절대 무너지지 않음) ===== */
         .masonry-item-image {
             width: 100%;
@@ -1024,7 +758,7 @@
             overflow: hidden;
             isolation: isolate;
         }
-
+ 
         .masonry-item-image img,
         .masonry-item-image svg {
             position: absolute;
@@ -1036,13 +770,13 @@
             display: block;
             transition: transform 0.45s ease, filter 0.45s ease;
         }
-
+ 
         .masonry-item:hover .masonry-item-image img,
         .masonry-item:hover .masonry-item-image svg {
             transform: scale(1.05);
             filter: brightness(0.75);
         }
-
+ 
         .masonry-item-overlay {
             position: absolute;
             top: 0;
@@ -1057,15 +791,15 @@
             transition: opacity 0.3s ease;
             border-radius: 6px;
         }
-
+ 
         .masonry-item:hover .masonry-item-overlay {
             opacity: 1;
         }
-
+ 
         .play-button {
             width: 60px;
             height: 60px;
-            background: rgba(255, 107, 53, 0.95);
+            background: rgba(231, 63, 30, 0.95);
             border-radius: 50%;
             display: flex;
             align-items: center;
@@ -1075,12 +809,12 @@
             transition: all 0.3s ease;
             transform: scale(0.9);
         }
-
+ 
         .masonry-item:hover .play-button {
             transform: scale(1);
-            background: rgba(255, 107, 53, 1);
+            background: rgba(231, 63, 30, 1);
         }
-
+ 
         /* 포트폴리오 카드 버튼 스타일 (썸네일 컨테이너 기준 absolute) */
         .portfolio-delete-btn,
         .portfolio-edit-btn {
@@ -1099,78 +833,51 @@
             font-weight: 600;
             box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
         }
-
+ 
         /* 삭제 버튼 - 우측 상단 (Apple 스타일) */
         .portfolio-delete-btn {
             top: 12px;
             right: 12px;
-            background: linear-gradient(135deg, #ff6b35 0%, #ff5520 100%);
+            background: linear-gradient(135deg, #E73F1E 0%, #C73418 100%);
             color: #fff;
-            box-shadow: 0 4px 12px rgba(255, 107, 53, 0.5);
+            box-shadow: 0 4px 12px rgba(231, 63, 30, 0.5);
         }
-
+ 
         .portfolio-delete-btn:hover {
-            background: linear-gradient(135deg, #ff5520 0%, #ff4410 100%);
+            background: linear-gradient(135deg, #C73418 0%, #A82C14 100%);
             transform: scale(1.15);
-            box-shadow: 0 6px 16px rgba(255, 107, 53, 0.6);
+            box-shadow: 0 6px 16px rgba(231, 63, 30, 0.6);
         }
-
+ 
         .portfolio-delete-btn:active {
             transform: scale(0.95);
         }
-
+ 
         /* 수정 버튼 - 우측 하단 (Apple 스타일) */
         .portfolio-edit-btn {
             bottom: 12px;
             right: 12px;
             background: rgba(0, 0, 0, 0.7);
-            color: #ff6b35;
-            border: 2px solid #ff6b35;
-            box-shadow: 0 4px 12px rgba(255, 107, 53, 0.3);
+            color: #E73F1E;
+            border: 2px solid #E73F1E;
+            box-shadow: 0 4px 12px rgba(231, 63, 30, 0.3);
         }
-
+ 
         .portfolio-edit-btn:hover {
-            background: #ff6b35;
+            background: #E73F1E;
             color: #fff;
             transform: scale(1.15);
-            box-shadow: 0 6px 16px rgba(255, 107, 53, 0.5);
+            box-shadow: 0 6px 16px rgba(231, 63, 30, 0.5);
         }
-
+ 
         .portfolio-edit-btn:active {
             transform: scale(0.95);
         }
-
-        /* 라이트 모드 버튼 스타일 */
-        body.light-mode .portfolio-delete-btn {
-            background: linear-gradient(135deg, #ff6b35 0%, #ff5520 100%);
-            color: #fff;
-            box-shadow: 0 4px 12px rgba(255, 107, 53, 0.4);
-        }
-
-        body.light-mode .portfolio-delete-btn:hover {
-            background: linear-gradient(135deg, #ff5520 0%, #ff4410 100%);
-            transform: scale(1.15);
-            box-shadow: 0 6px 16px rgba(255, 107, 53, 0.5);
-        }
-
-        body.light-mode .portfolio-edit-btn {
-            background: rgba(255, 255, 255, 0.95);
-            color: #ff6b35;
-            border: 2px solid #ff6b35;
-            box-shadow: 0 4px 12px rgba(255, 107, 53, 0.3);
-        }
-
-        body.light-mode .portfolio-edit-btn:hover {
-            background: #ff6b35;
-            color: #fff;
-            transform: scale(1.15);
-            box-shadow: 0 6px 16px rgba(255, 107, 53, 0.5);
-        }
-
+ 
         .portfolio-info {
             padding: 16px 0;
         }
-
+ 
         .portfolio-title {
             font-size: 14px;
             font-weight: 600;
@@ -1179,11 +886,11 @@
             letter-spacing: 0.3px;
             transition: color 0.3s ease;
         }
-
+ 
         .masonry-item:hover .portfolio-title {
-            color: #ff6b35;
+            color: #E73F1E;
         }
-
+ 
         .portfolio-meta {
             font-size: 12px;
             color: #aaaaaa;
@@ -1191,23 +898,23 @@
             letter-spacing: 0.2px;
             transition: color 0.3s ease;
         }
-
+ 
         .masonry-item:hover .portfolio-meta {
             color: #cccccc;
         }
-
+ 
         /* About 페이지 */
         #about-page {
             padding-top: 140px;
             padding-bottom: 100px;
         }
-
+ 
         .about-container {
             max-width: 900px;
             margin: 0 auto;
             text-align: center;
         }
-
+ 
         .about-title {
             display: inline-block;
             font-family: 'Black Han Sans', sans-serif;
@@ -1218,23 +925,23 @@
             font-weight: 400;
             letter-spacing: -0.3px;
         }
-
+ 
         .about-content {
             max-width: 800px;
             margin: 0 auto 60px;
         }
-
+ 
         .about-content p {
             font-size: 14px;
             line-height: 1.9;
             color: var(--text);
             margin-bottom: 20px;
         }
-
+ 
         .about-content strong {
             font-weight: 600;
         }
-
+ 
         .about-image {
             width: 120px;
             height: 120px;
@@ -1246,19 +953,19 @@
             align-items: center;
             justify-content: center;
         }
-
+ 
         .about-image img {
             width: 100%;
             height: 100%;
             object-fit: cover;
         }
-
+ 
         /* Pricing 페이지 */
         #pricing-page {
             padding-top: 140px;
             padding-bottom: 100px;
         }
-
+ 
         .pricing-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
@@ -1266,37 +973,37 @@
             max-width: 1400px;
             margin: 0 auto;
         }
-
+ 
         @media (max-width: 1200px) {
             .pricing-grid {
                 grid-template-columns: repeat(2, 1fr);
                 gap: 32px;
             }
         }
-
+ 
         @media (max-width: 768px) {
             .pricing-grid {
                 grid-template-columns: 1fr;
                 gap: 24px;
             }
         }
-
+ 
         .pricing-card {
             border: 1px solid rgba(255, 255, 255, 0.2);
             padding: 48px 36px;
             transition: all 0.3s ease;
         }
-
+ 
         .pricing-card:hover {
             border-color: var(--text);
             transform: translateY(-5px);
         }
-
+ 
         .pricing-card.featured {
             border-color: var(--accent);
-            background: rgba(255, 107, 53, 0.08);
+            background: rgba(231, 63, 30, 0.08);
         }
-
+ 
         .pricing-badge {
             display: inline-block;
             font-size: 11px;
@@ -1306,28 +1013,28 @@
             color: var(--accent);
             margin-bottom: 24px;
         }
-
+ 
         .pricing-card h3 {
             margin-bottom: 24px;
             font-size: 22px;
         }
-
+ 
         .price-amount {
             font-size: 48px;
             font-weight: 800;
             margin-bottom: 8px;
         }
-
+ 
         .price-unit {
             font-size: 13px;
             color: var(--text-muted);
             display: block;
             margin-bottom: 24px;
         }
-
+ 
         .delivery-time {
-            background: rgba(255, 107, 53, 0.1);
-            border: 1px solid rgba(255, 107, 53, 0.3);
+            background: rgba(231, 63, 30, 0.1);
+            border: 1px solid rgba(231, 63, 30, 0.3);
             padding: 14px 16px;
             border-radius: 6px;
             margin-bottom: 24px;
@@ -1337,32 +1044,32 @@
             text-align: center;
             letter-spacing: 0.5px;
         }
-
+ 
         .price-desc {
             font-size: 14px;
             color: var(--text-muted);
             margin-bottom: 32px;
             line-height: 1.6;
         }
-
+ 
         .features-list {
             list-style: none;
             margin-bottom: 32px;
         }
-
+ 
         .features-list li {
             font-size: 14px;
             padding: 12px 0;
             border-bottom: 1px solid rgba(255, 255, 255, 0.05);
             color: var(--text);
         }
-
+ 
         .features-list li:before {
             content: "— ";
             color: var(--accent);
             margin-right: 8px;
         }
-
+ 
         .pricing-card button {
             width: 100%;
             padding: 16px 24px;
@@ -1376,34 +1083,34 @@
             text-transform: uppercase;
             letter-spacing: 1px;
         }
-
+ 
         .pricing-card button:hover {
             background: var(--text);
             color: var(--dark);
         }
-
+ 
         .pricing-card.featured button {
             background: var(--text);
             color: var(--dark);
         }
-
+ 
         .pricing-card.featured button:hover {
             background: transparent;
             color: var(--text);
         }
-
+ 
         /* Add-on 옵션 배너 - Full Width */
         .addon-banner {
             width: 100%;
-            background: rgba(255, 107, 53, 0.08);
-            border: 1px solid rgba(255, 107, 53, 0.3);
+            background: rgba(231, 63, 30, 0.08);
+            border: 1px solid rgba(231, 63, 30, 0.3);
             border-radius: 6px;
             padding: 18px 40px;
             display: flex;
             align-items: center;
             justify-content: center;
         }
-
+ 
         .addon-content {
             display: flex;
             align-items: center;
@@ -1413,83 +1120,83 @@
             font-size: 14px;
             line-height: 1.5;
         }
-
+ 
         .addon-icon {
             font-size: 18px;
             flex-shrink: 0;
         }
-
+ 
         .addon-label {
             font-weight: 600;
             color: var(--accent);
             white-space: nowrap;
             flex-shrink: 0;
         }
-
+ 
         .addon-description {
             color: var(--text-muted);
             font-size: 13px;
             font-weight: 300;
         }
-
+ 
         @media (max-width: 768px) {
             .addon-banner {
                 padding: 16px 20px;
             }
-
+ 
             .addon-content {
                 gap: 10px;
                 font-size: 12px;
             }
-
+ 
             .addon-icon {
                 font-size: 16px;
             }
-
+ 
             .addon-label {
                 font-size: 12px;
             }
-
+ 
             .addon-description {
                 font-size: 11px;
             }
         }
-
+ 
         @media (max-width: 480px) {
             .addon-banner {
                 padding: 14px 16px;
             }
-
+ 
             .addon-content {
                 flex-direction: column;
                 gap: 8px;
                 text-align: center;
             }
-
+ 
             .addon-label {
                 white-space: normal;
             }
         }
-
+ 
         /* Estimate 페이지 */
         #estimate-page {
             padding-top: 140px;
             padding-bottom: 100px;
         }
-
+ 
         .estimate-container {
             max-width: 700px;
             margin: 0 auto;
         }
-
+ 
         .estimate-container h2 {
             margin-bottom: 40px;
         }
-
+ 
         .form-section {
             margin-bottom: 48px;
         }
-
+ 
         .form-section-title {
             font-size: 12px;
             font-weight: 600;
@@ -1498,24 +1205,24 @@
             color: var(--accent);
             margin-bottom: 24px;
             padding-bottom: 12px;
-            border-bottom: 1px solid rgba(255, 107, 53, 0.3);
+            border-bottom: 1px solid rgba(231, 63, 30, 0.3);
         }
-
+ 
         .form-row {
             display: grid;
             grid-template-columns: 1fr 1fr;
             gap: 24px;
             margin-bottom: 24px;
         }
-
+ 
         .form-row.full {
             grid-template-columns: 1fr;
         }
-
+ 
         .form-group {
             margin-bottom: 24px;
         }
-
+ 
         .form-group label {
             display: block;
             font-size: 12px;
@@ -1525,7 +1232,7 @@
             color: var(--text-muted);
             margin-bottom: 12px;
         }
-
+ 
         .form-group input,
         .form-group textarea,
         .form-group select {
@@ -1539,37 +1246,37 @@
             transition: all 0.3s ease;
             border-radius: 4px;
         }
-
+ 
         .form-group input:focus,
         .form-group textarea:focus,
         .form-group select:focus {
             outline: none;
             border-color: var(--accent);
             background: rgba(255, 255, 255, 0.08);
-            box-shadow: 0 0 0 3px rgba(255, 107, 53, 0.1);
+            box-shadow: 0 0 0 3px rgba(231, 63, 30, 0.1);
         }
-
+ 
         .form-group textarea {
             resize: vertical;
             min-height: 150px;
         }
-
+ 
         .form-group select {
             cursor: pointer;
         }
-
+ 
         .form-group input::placeholder,
         .form-group textarea::placeholder {
             color: var(--text-muted);
         }
-
+ 
         .form-hint {
             font-size: 12px;
             color: var(--text-muted);
             margin-top: 8px;
             font-style: italic;
         }
-
+ 
         .submit-btn {
             width: 100%;
             padding: 16px 24px;
@@ -1589,23 +1296,23 @@
             justify-content: center;
             gap: 8px;
         }
-
+ 
         .submit-btn:hover:not(:disabled) {
             background: transparent;
             color: var(--accent);
             transform: translateY(-2px);
         }
-
+ 
         .submit-btn:disabled {
             opacity: 0.7;
             cursor: not-allowed;
             transform: none;
         }
-
+ 
         .submit-btn.loading {
             pointer-events: none;
         }
-
+ 
         .submit-btn .spinner {
             display: inline-block;
             width: 14px;
@@ -1615,11 +1322,11 @@
             border-radius: 50%;
             animation: spin 0.8s linear infinite;
         }
-
+ 
         @keyframes spin {
             to { transform: rotate(360deg); }
         }
-
+ 
         /* 필드 에러 상태 */
         .form-group input.error,
         .form-group textarea.error,
@@ -1627,14 +1334,14 @@
             border-color: #ff4444 !important;
             background-color: rgba(255, 68, 68, 0.05);
         }
-
+ 
         .form-group input.error:focus,
         .form-group textarea.error:focus,
         .form-group select.error:focus {
             border-color: #ff4444 !important;
             box-shadow: 0 0 0 3px rgba(255, 68, 68, 0.1);
         }
-
+ 
         /* 에러 메시지 */
         .form-error-message {
             color: #ff4444;
@@ -1642,11 +1349,11 @@
             margin-top: 6px;
             display: none;
         }
-
+ 
         .form-error-message.show {
             display: block;
         }
-
+ 
         .form-message {
             margin-top: 16px;
             padding: 14px 16px;
@@ -1654,43 +1361,43 @@
             font-size: 13px;
             display: none;
         }
-
+ 
         .form-message.success {
             background: rgba(26, 174, 57, 0.2);
             color: #1aae39;
             display: block;
         }
-
+ 
         .form-message.error {
             background: rgba(226, 75, 74, 0.2);
             color: #e24b4a;
             display: block;
         }
-
+ 
         /* Contact 페이지 */
         #contact-page {
             padding-top: 140px;
             padding-bottom: 100px;
         }
-
+ 
         .contact-container {
             max-width: 600px;
             margin: 0 auto;
             text-align: center;
         }
-
+ 
         .contact-info {
             display: flex;
             flex-direction: column;
             gap: 40px;
             margin-top: 60px;
         }
-
+ 
         .contact-item {
             border-top: 1px solid rgba(255, 255, 255, 0.1);
             padding-top: 40px;
         }
-
+ 
         .contact-label {
             font-size: 11px;
             font-weight: 600;
@@ -1699,12 +1406,12 @@
             color: var(--text-muted);
             margin-bottom: 12px;
         }
-
+ 
         .contact-value {
             font-size: 16px;
             font-weight: 400;
         }
-
+ 
         /* 반응형 */
         @media (max-width: 1200px) {
             .masonry-grid {
@@ -1712,100 +1419,100 @@
                 gap: 28px 20px;
             }
         }
-
+ 
         @media (max-width: 768px) {
             .nav-container {
                 padding: 16px 20px;
             }
-
+ 
             .nav-links {
                 gap: 24px;
             }
-
+ 
             .container {
                 padding: 0 20px;
             }
-
+ 
             .masonry-grid {
                 grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
                 gap: 24px 16px;
             }
-
+ 
             h1 {
                 font-size: 48px;
             }
-
+ 
             h2 {
                 font-size: 32px;
             }
-
+ 
             #work-page {
                 padding-top: 80px;
             }
-
+ 
             #about-page {
                 padding-top: 100px;
             }
-
+ 
             .landing-desc {
                 font-size: 16px;
             }
-
+ 
             .landing-cta {
                 flex-direction: column;
                 gap: 12px;
             }
-
+ 
             .cta-button {
                 width: 100%;
                 padding: 14px 24px;
             }
-
+ 
             .form-row {
                 grid-template-columns: 1fr;
                 gap: 16px;
             }
-
+ 
             .pricing-grid {
                 gap: 24px;
             }
-
+ 
             .pricing-card {
                 padding: 36px 24px;
             }
         }
-
+ 
         @media (max-width: 480px) {
             .masonry-grid {
                 grid-template-columns: 1fr;
                 gap: 20px;
             }
-
+ 
             h1 {
                 font-size: 36px;
             }
-
+ 
             h2 {
                 font-size: 24px;
             }
-
+ 
             .landing-title {
                 font-size: 56px;
             }
-
+ 
             .landing-subtitle {
                 font-size: 16px;
             }
-
+ 
             .nav-links {
                 gap: 12px;
             }
-
+ 
             .nav-links a {
                 font-size: 11px;
             }
         }
-
+ 
         /* 섹션 헤더 */
         .section-title {
             font-size: 14px;
@@ -1814,7 +1521,7 @@
             margin-bottom: 60px;
             text-transform: uppercase;
         }
-
+ 
         /* 유튜브 비디오 라이트박스 모달 */
         .youtube-modal {
             display: none;
@@ -1829,25 +1536,25 @@
             justify-content: center;
             animation: fadeIn 0.3s ease;
         }
-
+ 
         .youtube-modal.active {
             display: flex;
         }
-
+ 
         .youtube-modal-content {
             position: relative;
             width: 90%;
             max-width: 900px;
             aspect-ratio: 16 / 9;
         }
-
+ 
         .youtube-modal iframe {
             width: 100%;
             height: 100%;
             border: none;
             border-radius: 8px;
         }
-
+ 
         .youtube-modal-close {
             position: absolute;
             top: -40px;
@@ -1864,7 +1571,7 @@
             justify-content: center;
             transition: all 0.3s ease;
         }
-
+ 
         /* 포트폴리오 상세 모달 */
         .portfolio-modal {
             display: none;
@@ -1879,11 +1586,11 @@
             justify-content: center;
             animation: fadeIn 0.3s ease;
         }
-
+ 
         .portfolio-modal.active {
             display: flex;
         }
-
+ 
         .portfolio-modal-content {
             position: relative;
             width: 90%;
@@ -1893,7 +1600,7 @@
             overflow: hidden;
             animation: slideUp 0.3s ease;
         }
-
+ 
         @keyframes slideUp {
             from {
                 opacity: 0;
@@ -1904,32 +1611,32 @@
                 transform: translateY(0);
             }
         }
-
+ 
         .portfolio-modal-thumbnail {
             width: 100%;
             height: 300px;
             overflow: hidden;
             background: rgba(0, 0, 0, 0.5);
         }
-
+ 
         .portfolio-modal-thumbnail img {
             width: 100%;
             height: 100%;
             object-fit: cover;
         }
-
+ 
         .portfolio-modal-info {
             padding: 40px;
             color: var(--text);
         }
-
+ 
         .portfolio-modal-title {
             font-size: 28px;
             font-weight: 800;
             margin-bottom: 16px;
             letter-spacing: -0.5px;
         }
-
+ 
         .portfolio-modal-row {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
@@ -1938,13 +1645,13 @@
             padding-top: 24px;
             border-top: 1px solid rgba(255, 255, 255, 0.1);
         }
-
+ 
         .portfolio-modal-item {
             display: flex;
             flex-direction: column;
             gap: 8px;
         }
-
+ 
         .portfolio-modal-label {
             font-size: 11px;
             font-weight: 600;
@@ -1952,19 +1659,19 @@
             text-transform: uppercase;
             color: var(--accent);
         }
-
+ 
         .portfolio-modal-value {
             font-size: 14px;
             font-weight: 400;
             line-height: 1.6;
             color: var(--text-muted);
         }
-
+ 
         .portfolio-modal-cta {
             display: flex;
             gap: 12px;
         }
-
+ 
         .portfolio-modal-btn {
             flex: 1;
             padding: 14px 24px;
@@ -1984,13 +1691,13 @@
             justify-content: center;
             gap: 8px;
         }
-
+ 
         .portfolio-modal-btn:hover {
             background: transparent;
             color: var(--accent);
             border: 1px solid var(--accent);
         }
-
+ 
         .portfolio-modal-close {
             position: absolute;
             top: 20px;
@@ -2009,50 +1716,38 @@
             transition: all 0.3s ease;
             z-index: 10;
         }
-
+ 
         .portfolio-modal-close:hover {
             background: rgba(0, 0, 0, 0.8);
             transform: scale(1.1);
         }
-
-        body.light-mode .portfolio-modal {
-            background: rgba(0, 0, 0, 0.9);
-        }
-
-        body.light-mode .portfolio-modal-content {
-            background: #ffffff;
-        }
-
-        body.light-mode .portfolio-modal-info {
-            color: #111111;
-        }
-
-        body.light-mode .portfolio-modal-value {
-            color: #666666;
-        }
-
+ 
+ 
+ 
+ 
+ 
         @media (max-width: 768px) {
             .portfolio-modal-content {
                 width: 95%;
             }
-
+ 
             .portfolio-modal-thumbnail {
                 height: 200px;
             }
-
+ 
             .portfolio-modal-info {
                 padding: 24px;
             }
-
+ 
             .portfolio-modal-title {
                 font-size: 22px;
             }
-
+ 
             .portfolio-modal-row {
                 grid-template-columns: 1fr;
                 gap: 16px;
             }
-
+ 
             .portfolio-modal-close {
                 top: 12px;
                 right: 12px;
@@ -2061,12 +1756,12 @@
                 height: 36px;
             }
         }
-
+ 
         @media (max-width: 768px) {
             .youtube-modal-content {
                 width: 95%;
             }
-
+ 
             .youtube-modal-close {
                 top: 10px;
                 right: 10px;
@@ -2075,7 +1770,7 @@
                 height: 36px;
             }
         }
-
+ 
     </style>
 </head>
 <body>
@@ -2095,7 +1790,7 @@
             <span>Scroll</span>
         </div>
     </section>
-
+ 
     <!-- 네비게이션 -->
     <nav>
         <div class="nav-container container">
@@ -2106,14 +1801,10 @@
                 <a class="nav-link" data-page="pricing" onclick="showPage('pricing')">pricing</a>
                 <a class="nav-link" data-page="estimate" onclick="showPage('estimate')">estimate</a>
                 <a class="nav-link" data-page="contact" onclick="showPage('contact')">contact</a>
-                <button class="theme-toggle" onclick="toggleTheme()" title="테마 전환">
-                    <span class="theme-icon">🌙</span>
-                    <span class="theme-label">dark</span>
-                </button>
             </div>
         </div>
     </nav>
-
+ 
     <!-- WORK 페이지 -->
     <section id="work-page" class="page active">
         <div class="container">
@@ -2133,7 +1824,7 @@
             </div>
         </div>
     </section>
-
+ 
     <!-- ABOUT 페이지 -->
     <section id="about-page" class="page">
         <div class="about-container">
@@ -2141,22 +1832,22 @@
             
             <div class="about-content">
                 <p><strong>고퀄리티 영화 같은 영상, 마감일 맞춰서 빠르게 받아보세요.</strong></p>
-
+ 
                 <p>안녕하세요, 영상편집자 민지현입니다.</p>
-
+ 
                 <p>유튜브 채널을 운영할 때 가장 답답한 순간은 두 가지입니다.<br>편집이 너무 늦어져서 업로드 일정이 꼬이거나, 반대로 빨리 받아봤더니 영상이 너무 성의 없을 때.</p>
-
+ 
                 <p>저는 이 두 가지 고민을 한 번에 해결해 드립니다.</p>
-
+ 
                 <p style="margin-top: 40px; margin-bottom: 20px;"><strong>지루할 틈 없는 영화 같은 연출</strong></p>
                 <p>단순히 잘라 붙이기만 하는 지루한 편집이 아닙니다. 장면의 흐름과 사운드, 화면 구성을 센스 있게 조율해 시청자가 끝까지 몰입해서 보게 만듭니다. 채널의 분위기 자체를 훨씬 고급스럽게 만들어 드립니다.</p>
-
+ 
                 <p style="margin-top: 40px; margin-bottom: 20px;"><strong>약속을 철저히 지키는 빠른 전달</strong></p>
                 <p>제 가장 큰 장점은 작업 속도가 정말 빠르다는 점입니다. 아무리 퀄리티가 높아도 제때 나오지 않으면 소용없다는 것을 잘 알고 있습니다. 긴급한 프로젝트도, 타이트한 업로드 일정도 차질 없이 딱 맞춰 전달합니다.</p>
-
+ 
                 <p style="margin-top: 40px;">답답한 소통이나 지연 없이, 원하는 느낌의 영상을 가장 빠르게 받아보고 싶으시다면 언제든 편하게 문의해 주세요.<br>영상으로 채널의 스펙을 확실히 올려드리겠습니다.</p>
             </div>
-
+ 
             <div class="about-image">
                 <svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
                     <circle cx="100" cy="100" r="95" fill="none" stroke="rgba(255,255,255,0.3)" stroke-width="1"/>
@@ -2166,7 +1857,7 @@
             </div>
         </div>
     </section>
-
+ 
     <!-- PRICING 페이지 -->
     <section id="pricing-page" class="page">
         <div class="container">
@@ -2189,7 +1880,7 @@
                     </ul>
                     <button onclick="selectPackage('숏폼 편집 (50,000원)', 'shortform')">선택</button>
                 </div>
-
+ 
                 <!-- 2. 단순 컷편집 -->
                 <div class="pricing-card">
                     <div class="pricing-badge">기본</div>
@@ -2206,7 +1897,7 @@
                     </ul>
                     <button onclick="selectPackage('단순 컷편집 (150,000원)', 'cutedit')">선택</button>
                 </div>
-
+ 
                 <!-- 3. 유튜브 일반 (5~20분) -->
                 <div class="pricing-card">
                     <div class="pricing-badge">인기</div>
@@ -2225,7 +1916,7 @@
                     </ul>
                     <button onclick="selectPackage('유튜브 일반 (200,000원)', 'youtube-general')">선택</button>
                 </div>
-
+ 
                 <!-- 4. 유튜브 중장편 (20~30분) -->
                 <div class="pricing-card featured">
                     <div class="pricing-badge">추천</div>
@@ -2244,7 +1935,7 @@
                     </ul>
                     <button onclick="selectPackage('유튜브 중장편 (250,000원)', 'youtube-mid')">추천 선택</button>
                 </div>
-
+ 
                 <!-- 5. 유튜브 롱폼 (1시간) -->
                 <div class="pricing-card">
                     <div class="pricing-badge">프리미엄</div>
@@ -2265,7 +1956,7 @@
                     <button onclick="selectPackage('유튜브 롱폼 (400,000원)', 'youtube-longform')">선택</button>
                 </div>
             </div>
-
+ 
             <!-- Add-on 옵션 배너 -->
             <div class="addon-banner" style="margin-top: 60px;">
                 <div class="addon-content">
@@ -2276,7 +1967,7 @@
             </div>
         </div>
     </section>
-
+ 
     <!-- ESTIMATE 페이지 -->
     <section id="estimate-page" class="page">
         <div class="estimate-container">
@@ -2312,14 +2003,14 @@
                             <div class="form-error-message" id="emailError">올바른 이메일을 입력해주세요</div>
                         </div>
                     </div>
-
+ 
                     <div class="form-group">
                         <label for="phone">연락처 (휴대폰) *</label>
                         <input type="tel" id="phone" name="phone" placeholder="예: 010-1234-5678" required>
                         <div class="form-error-message" id="phoneError">연락처를 입력해주세요</div>
                     </div>
                 </div>
-
+ 
                 <div class="form-section">
                     <div class="form-section-title">프로젝트 정보</div>
                     
@@ -2336,7 +2027,7 @@
                         </select>
                         <div class="form-error-message" id="packageError">패키지를 선택해주세요</div>
                     </div>
-
+ 
                     <div class="form-group">
                         <label for="cameraSetup">카메라 대수 (Camera Setup) *</label>
                         <select id="cameraSetup" name="cameraSetup" required>
@@ -2348,19 +2039,19 @@
                         </select>
                         <div class="form-error-message" id="cameraSetupError">촬영 환경을 선택해주세요</div>
                     </div>
-
+ 
                     <div class="form-group">
                         <label for="deadline">희망 마감일 *</label>
                         <input type="date" id="deadline" name="deadline" required>
                         <div class="form-error-message" id="deadlineError">마감일을 선택해주세요</div>
                     </div>
-
+ 
                     <div class="form-group">
                         <label for="reference">참고 영상 / 기획안 링크</label>
                         <input type="url" id="reference" name="reference" placeholder="유튜브 링크, 드라이브 링크 등을 입력하세요 (선택사항)">
                         <p class="form-hint">기존 영상이나 참고할 자료 링크를 첨부하면 더 정확한 견적을 드릴 수 있습니다.</p>
                     </div>
-
+ 
                     <div class="form-group">
                         <label style="display: flex; align-items: center; gap: 10px; cursor: pointer; font-weight: normal;">
                             <input type="checkbox" id="addon" name="addon" style="width: auto; cursor: pointer;">
@@ -2369,7 +2060,7 @@
                         <p class="form-hint">체크하면 AI를 활용한 추가 영상 소스 생성 옵션이 포함됩니다.</p>
                     </div>
                 </div>
-
+ 
                 <div class="form-section">
                     <div class="form-section-title">프로젝트 상세 설명</div>
                     
@@ -2380,13 +2071,13 @@
                         <p class="form-hint">콘텐츠 분위기, 길이, 특별히 원하는 편집 스타일 등을 자세히 설명해주세요.</p>
                     </div>
                 </div>
-
+ 
                 <button type="submit" class="submit-btn">견적 신청</button>
                 <div class="form-message" id="formMessage"></div>
             </form>
         </div>
     </section>
-
+ 
     <!-- CONTACT 페이지 -->
     <section id="contact-page" class="page">
         <div class="contact-container">
@@ -2397,12 +2088,12 @@
                     <div class="contact-label">이메일</div>
                     <div class="contact-value">purplemint2627@gmail.com</div>
                 </div>
-
+ 
                 <div class="contact-item">
                     <div class="contact-label">연락처</div>
                     <div class="contact-value">010-5248-0797</div>
                 </div>
-
+ 
                 <div class="contact-item">
                     <div class="contact-label">상담 가능 시간</div>
                     <div class="contact-value">24시 연중 무휴</div>
@@ -2410,7 +2101,7 @@
             </div>
         </div>
     </section>
-
+ 
     <!-- Footer -->
     <footer style="background: #0a0a0a; border-top: 1px solid #222; padding: 20px 0; text-align: center; position: relative;">
         <div style="color: #666; font-size: 12px; padding: 20px;">
@@ -2418,7 +2109,7 @@
             <button onclick="toggleAdminMode()" style="position: absolute; bottom: 20px; right: 20px; background: transparent; border: 1px solid #444; color: #666; padding: 4px 8px; border-radius: 3px; cursor: pointer; font-size: 10px; transition: all 0.3s ease;" title="관리자 모드">🔐</button>
         </div>
     </footer>
-
+ 
     <!-- 유튜브 비디오 라이트박스 모달 -->
     <div class="youtube-modal" id="youtubeModal">
         <div class="youtube-modal-content">
@@ -2426,7 +2117,7 @@
             <button class="youtube-modal-close" onclick="closeYoutube()">&times;</button>
         </div>
     </div>
-
+ 
     <!-- 포트폴리오 상세 정보 모달 -->
     <div class="portfolio-modal" id="portfolioModal">
         <div class="portfolio-modal-content">
@@ -2447,7 +2138,7 @@
                         <span class="portfolio-modal-value" id="portfolioModalContribution"></span>
                     </div>
                 </div>
-
+ 
                 <div class="portfolio-modal-row">
                     <div class="portfolio-modal-item">
                         <span class="portfolio-modal-label">영상 길이</span>
@@ -2458,7 +2149,7 @@
                         <span class="portfolio-modal-value" id="portfolioModalViews"></span>
                     </div>
                 </div>
-
+ 
                 <div class="portfolio-modal-cta">
                     <a class="portfolio-modal-btn" id="portfolioModalLink" href="" target="_blank">
                         ↗ 유튜브에서 직접 보기
@@ -2467,7 +2158,7 @@
             </div>
         </div>
     </div>
-
+ 
     <script>
         // ========== 관리자 설정 ==========
         const ADMIN_PASSWORD = "1234";  // ← 여기서 비밀번호 변경 가능
@@ -2475,7 +2166,7 @@
         let portfolioData = [];
         let currentCategory = '전체';  // 현재 필터된 카테고리
         // ================================
-
+ 
         // ======================================
         // 📸 포트폴리오 기본 데이터
         // ======================================
@@ -2557,7 +2248,7 @@
         // ======================================
         // 🔐 Admin 전역 함수들 (최상단)
         // ======================================
-
+ 
         // 비밀번호 모달 표시
         window.showPasswordModal = function() {
             let modal = document.getElementById('passwordModal');
@@ -2566,14 +2257,14 @@
                 modal.id = 'passwordModal';
                 document.body.appendChild(modal);
             }
-
+ 
             modal.innerHTML = `
                 <div style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); display: flex; align-items: center; justify-content: center; z-index: 3000;">
-                    <div style="background: #1a1a1a; border: 2px solid #ff6b35; padding: 40px; border-radius: 8px; max-width: 400px; width: 90%; text-align: center;">
-                        <h2 style="color: #ff6b35; margin: 0 0 20px 0; font-size: 18px;">🔐 관리자 비밀번호</h2>
+                    <div style="background: var(--dark-secondary); border: 2px solid #E73F1E; padding: 40px; border-radius: 8px; max-width: 400px; width: 90%; text-align: center;">
+                        <h2 style="color: #E73F1E; margin: 0 0 20px 0; font-size: 18px;">🔐 관리자 비밀번호</h2>
                         <input type="password" id="adminPasswordInput" placeholder="비밀번호 입력" style="width: 100%; padding: 12px; background: #0a0a0a; border: 1px solid #333; color: #fff; border-radius: 4px; box-sizing: border-box; margin-bottom: 20px; font-size: 14px;" onkeypress="if(event.key==='Enter') window.submitAdminPassword()">
                         <div style="display: flex; gap: 10px;">
-                            <button onclick="window.submitAdminPassword()" style="flex: 1; background: #ff6b35; color: #fff; border: none; padding: 12px; cursor: pointer; border-radius: 4px; font-weight: 600;">확인</button>
+                            <button onclick="window.submitAdminPassword()" style="flex: 1; background: #E73F1E; color: #fff; border: none; padding: 12px; cursor: pointer; border-radius: 4px; font-weight: 600;">확인</button>
                             <button onclick="window.closePasswordModal()" style="flex: 1; background: #333; color: #fff; border: 1px solid #666; padding: 12px; cursor: pointer; border-radius: 4px;">취소</button>
                         </div>
                     </div>
@@ -2585,13 +2276,13 @@
                 if (input) input.focus();
             }, 100);
         };
-
+ 
         // 비밀번호 모달 닫기
         window.closePasswordModal = function() {
             const modal = document.getElementById('passwordModal');
             if (modal) modal.remove();
         };
-
+ 
         // 비밀번호 검증 및 제출
         window.submitAdminPassword = function() {
             const password = document.getElementById('adminPasswordInput').value;
@@ -2599,7 +2290,7 @@
                 alert('비밀번호를 입력하세요.');
                 return;
             }
-
+ 
             if (password === ADMIN_PASSWORD) {
                 isAdminMode = true;
                 window.closePasswordModal();
@@ -2609,17 +2300,17 @@
                 document.getElementById('adminPasswordInput').value = '';
             }
         };
-
+ 
         // 비밀번호 검증
         function verifyAdminPassword(password) {
             return password === ADMIN_PASSWORD;
         }
-
+ 
         // Admin 모드 토글 - 전역 함수
         window.toggleAdminMode = function() {
             const password = prompt('🔐 관리자 비밀번호를 입력하세요:');
             if (password === null) return;
-
+ 
             if (verifyAdminPassword(password)) {
                 isAdminMode = true;
                 window.showAdminPanel();
@@ -2628,7 +2319,7 @@
                 isAdminMode = false;
             }
         };
-
+ 
         // Admin 패널 표시 - 전역 함수
         window.showAdminPanel = function() {
             let adminPanel = document.getElementById('adminPanel');
@@ -2637,12 +2328,12 @@
                 adminPanel.id = 'adminPanel';
                 document.body.insertBefore(adminPanel, document.body.firstChild);
             }
-
+ 
             adminPanel.innerHTML = `
-                <div style="background: #1a1a1a; border-bottom: 2px solid #ff6b35; padding: 20px; position: relative; z-index: 1000;">
+                <div style="background: var(--dark-secondary); border-bottom: 2px solid #E73F1E; padding: 20px; position: relative; z-index: 1000;">
                     <div style="max-width: 1200px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center;">
                         <div>
-                            <h3 style="color: #ff6b35; margin: 0; font-size: 16px;">🔐 관리자 모드 (포트폴리오 편집)</h3>
+                            <h3 style="color: #E73F1E; margin: 0; font-size: 16px;">🔐 관리자 모드 (포트폴리오 편집)</h3>
                             <p style="color: #aaa; margin: 8px 0 0 0; font-size: 13px;">카드가 흔들릴 때 드래그하여 순서를 변경하거나 ✕ 버튼으로 삭제/✏️ 버튼으로 수정할 수 있습니다.</p>
                         </div>
                         <button onclick="window.closeAdminMode()" style="background: #333; color: #fff; border: 1px solid #666; padding: 8px 16px; cursor: pointer; border-radius: 4px;">종료</button>
@@ -2650,12 +2341,12 @@
                 </div>
                 <div style="background: #0a0a0a; padding: 20px; border-bottom: 1px solid #333;">
                     <div style="max-width: 1200px; margin: 0 auto;">
-                        <button onclick="window.showAddPortfolioForm()" style="background: #ff6b35; color: #fff; border: none; padding: 12px 20px; cursor: pointer; border-radius: 4px; font-weight: 600; font-size: 14px;">+ 새 영상 추가</button>
+                        <button onclick="window.showAddPortfolioForm()" style="background: #E73F1E; color: #fff; border: none; padding: 12px 20px; cursor: pointer; border-radius: 4px; font-weight: 600; font-size: 14px;">+ 새 영상 추가</button>
                     </div>
                 </div>
             `;
         };
-
+ 
         // 포트폴리오 삭제 - 전역 함수
         window.deletePortfolioItem = function(index) {
             console.log('🗑️ [deletePortfolioItem] 삭제 시작 - 인덱스:', index);
@@ -2686,7 +2377,7 @@
             
             console.log('✅ 삭제 완료');
         };
-
+ 
         // Admin 모드 종료 - 전역 함수
         window.closeAdminMode = function() {
             isAdminMode = false;
@@ -2700,7 +2391,7 @@
             }
             renderPortfolioGrid();
         };
-
+ 
         // 포트폴리오 카테고리 필터링
         window.filterPortfolio = function(category) {
             currentCategory = category;
@@ -2718,9 +2409,9 @@
             // 포트폴리오 그리드 다시 렌더링
             renderPortfolioGrid();
         };
-
+ 
         // ===== 견적 신청 히스토리 관련 함수 =====
-
+ 
         // LocalStorage에 히스토리 저장
         function saveEstimateHistory(estimateData) {
             let history = localStorage.getItem('estimateHistory');
@@ -2742,13 +2433,13 @@
             // 히스토리 카운트 업데이트
             window.updateHistoryCount();
         }
-
+ 
         // LocalStorage에서 히스토리 로드
         function loadEstimateHistory() {
             let history = localStorage.getItem('estimateHistory');
             return history ? JSON.parse(history) : [];
         }
-
+ 
         // 히스토리 카운트 업데이트
         window.updateHistoryCount = function() {
             const count = loadEstimateHistory().length;
@@ -2757,7 +2448,7 @@
                 countElement.textContent = `(${count})`;
             }
         };
-
+ 
         // 히스토리 모달 표시
         window.showHistoryModal = function() {
             const historyData = loadEstimateHistory();
@@ -2845,7 +2536,7 @@
                 }
             });
         };
-
+ 
         // 히스토리 모달 닫기
         window.closeHistoryModal = function() {
             const modal = document.getElementById('historyModal');
@@ -2853,7 +2544,7 @@
                 modal.remove();
             }
         };
-
+ 
         // 전체 히스토리 삭제
         window.deleteAllHistory = function() {
             localStorage.removeItem('estimateHistory');
@@ -2861,7 +2552,7 @@
             window.closeHistoryModal();
             alert('모든 신청 내역이 삭제되었습니다.');
         };
-
+ 
         // ===== 기타 함수 =====
         window.showAddPortfolioForm = function() {
             let modal = document.getElementById('adminFormModal');
@@ -2870,27 +2561,27 @@
                 modal.id = 'adminFormModal';
                 document.body.appendChild(modal);
             }
-
+ 
             modal.style.cssText = 'position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); display: flex; align-items: center; justify-content: center; z-index: 2000;';
             
             modal.innerHTML = `
-                <div style="background: #1a1a1a; border: 1px solid #ff6b35; padding: 30px; border-radius: 8px; max-width: 600px; width: 90%; max-height: 90vh; overflow-y: auto;">
+                <div style="background: var(--dark-secondary); border: 1px solid #E73F1E; padding: 30px; border-radius: 8px; max-width: 600px; width: 90%; max-height: 90vh; overflow-y: auto;">
                     <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
-                        <h2 style="color: #ff6b35; margin: 0; font-size: 20px;">새 영상 추가</h2>
+                        <h2 style="color: #E73F1E; margin: 0; font-size: 20px;">새 영상 추가</h2>
                         <button onclick="document.getElementById('adminFormModal').remove()" style="background: none; border: none; color: #fff; font-size: 24px; cursor: pointer;">×</button>
                     </div>
-
+ 
                     <form onsubmit="window.handleAddPortfolio(event)" style="display: flex; flex-direction: column; gap: 15px;">
                         <div>
                             <label style="color: #aaa; display: block; margin-bottom: 5px; font-size: 12px;">YouTube URL 또는 ID *</label>
                             <input type="text" id="adminYoutubeId" placeholder="예: https://youtu.be/dQw4w9WgXcQ 또는 dQw4w9WgXcQ" required style="width: 100%; padding: 10px; background: #0a0a0a; border: 1px solid #333; color: #fff; border-radius: 4px; box-sizing: border-box;">
                         </div>
-
+ 
                         <div>
                             <label style="color: #aaa; display: block; margin-bottom: 5px; font-size: 12px;">영상 제목 *</label>
                             <input type="text" id="adminTitle" placeholder="예: Reminder of Spring" required style="width: 100%; padding: 10px; background: #0a0a0a; border: 1px solid #333; color: #fff; border-radius: 4px; box-sizing: border-box;">
                         </div>
-
+ 
                         <div>
                             <label style="color: #aaa; display: block; margin-bottom: 5px; font-size: 12px;">카테고리 *</label>
                             <select id="adminCategory" name="category" required style="width: 100%; padding: 10px; background: #0a0a0a; border: 1px solid #333; color: #fff; border-radius: 4px; box-sizing: border-box;">
@@ -2901,45 +2592,45 @@
                                 <option value="AI 영상">AI 영상</option>
                             </select>
                         </div>
-
+ 
                         <div>
                             <label style="color: #aaa; display: block; margin-bottom: 5px; font-size: 12px;">참여 역할 *</label>
                             <input type="text" id="adminRole" placeholder="예: shot | directed | edited" required style="width: 100%; padding: 10px; background: #0a0a0a; border: 1px solid #333; color: #fff; border-radius: 4px; box-sizing: border-box;">
                         </div>
-
+ 
                         <div>
                             <label style="color: #aaa; display: block; margin-bottom: 5px; font-size: 12px;">작업 범위 및 설명 *</label>
                             <input type="text" id="adminContribution" placeholder="예: 컨셉 기획 100%, 촬영 100%, 편집 100%" required style="width: 100%; padding: 10px; background: #0a0a0a; border: 1px solid #333; color: #fff; border-radius: 4px; box-sizing: border-box;">
                         </div>
-
+ 
                         <div>
                             <label style="color: #aaa; display: block; margin-bottom: 5px; font-size: 12px;">영상 길이</label>
                             <input type="text" id="adminDuration" placeholder="예: 5분 42초" style="width: 100%; padding: 10px; background: #0a0a0a; border: 1px solid #333; color: #fff; border-radius: 4px; box-sizing: border-box;">
                         </div>
-
+ 
                         <div>
                             <label style="color: #aaa; display: block; margin-bottom: 5px; font-size: 12px;">조회수</label>
                             <input type="text" id="adminViews" placeholder="예: 25만 회" style="width: 100%; padding: 10px; background: #0a0a0a; border: 1px solid #333; color: #fff; border-radius: 4px; box-sizing: border-box;">
                         </div>
-
+ 
                         <div style="display: flex; gap: 10px; margin-top: 20px;">
-                            <button type="submit" style="flex: 1; background: #ff6b35; color: #fff; border: none; padding: 12px; cursor: pointer; border-radius: 4px; font-weight: 600;">저장</button>
+                            <button type="submit" style="flex: 1; background: #E73F1E; color: #fff; border: none; padding: 12px; cursor: pointer; border-radius: 4px; font-weight: 600;">저장</button>
                             <button type="button" onclick="document.getElementById('adminFormModal').remove()" style="flex: 1; background: #333; color: #fff; border: 1px solid #666; padding: 12px; cursor: pointer; border-radius: 4px;">취소</button>
                         </div>
                     </form>
                 </div>
             `;
         };
-
+ 
         // 포트폴리오 추가 처리 - 전역 함수
         window.handleAddPortfolio = function(event) {
             event.preventDefault();
             
             console.log('🟢 [handleAddPortfolio] 함수 시작');
-
+ 
             const youtubeInput = document.getElementById('adminYoutubeId').value.trim();
             let youtubeId = youtubeInput;
-
+ 
             // YouTube URL에서 ID 추출
             if (youtubeInput.includes('youtube.com/watch?v=')) {
                 youtubeId = youtubeInput.split('v=')[1];
@@ -2954,9 +2645,9 @@
             if (youtubeId.includes('?')) {
                 youtubeId = youtubeId.split('?')[0];
             }
-
+ 
             console.log('📺 YouTube ID:', youtubeId);
-
+ 
             const newItem = {
                 youtubeId: youtubeId,
                 title: document.getElementById('adminTitle').value.trim(),
@@ -2967,7 +2658,7 @@
                 duration: document.getElementById('adminDuration').value.trim() || '미확인',
                 views: document.getElementById('adminViews').value.trim() || '미확인'
             };
-
+ 
             console.log('📦 새 항목:', newItem);
             
             // 포트폴리오에 추가
@@ -2986,7 +2677,7 @@
             
             alert('✅ 영상이 추가되었습니다!');
         };
-
+ 
         // 새 영상 추가 함수
         function addPortfolioItem(item) {
             console.log('🟡 [addPortfolioItem] 함수 시작');
@@ -3007,7 +2698,7 @@
             savePortfolioData();
             console.log('💾 LocalStorage에 저장 완료');
         }
-
+ 
         // LocalStorage에서 포트폴리오 데이터 로드
         function loadPortfolioData() {
             console.log('📂 portfolioData 로드 중...');
@@ -3030,7 +2721,7 @@
             portfolioData = [...defaultPortfolioData];
             savePortfolioData();
         }
-
+ 
         // 포트폴리오 데이터 저장
         function savePortfolioData() {
             try {
@@ -3041,39 +2732,39 @@
                 alert('⚠️ 데이터 저장에 실패했습니다. 브라우저 저장소를 확인해주세요.');
             }
         }
-
+ 
         // 포트폴리오 수정 모달 표시 - 전역 함수
         window.showPortfolioEditModal = function(index) {
             const item = portfolioData[index];
             if (!item) return;
-
+ 
             let modal = document.getElementById('editPortfolioModal');
             if (!modal) {
                 modal = document.createElement('div');
                 modal.id = 'editPortfolioModal';
                 document.body.appendChild(modal);
             }
-
+ 
             modal.style.cssText = 'position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); display: flex; align-items: center; justify-content: center; z-index: 2000;';
             
             modal.innerHTML = `
-                <div style="background: #1a1a1a; border: 1px solid #ff6b35; padding: 30px; border-radius: 8px; max-width: 600px; width: 90%; max-height: 90vh; overflow-y: auto;">
+                <div style="background: var(--dark-secondary); border: 1px solid #E73F1E; padding: 30px; border-radius: 8px; max-width: 600px; width: 90%; max-height: 90vh; overflow-y: auto;">
                     <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
-                        <h2 style="color: #ff6b35; margin: 0; font-size: 20px;">포트폴리오 수정</h2>
+                        <h2 style="color: #E73F1E; margin: 0; font-size: 20px;">포트폴리오 수정</h2>
                         <button onclick="document.getElementById('editPortfolioModal').remove()" style="background: none; border: none; color: #fff; font-size: 24px; cursor: pointer;">×</button>
                     </div>
-
+ 
                     <form onsubmit="window.handleEditPortfolio(event, ${index})" style="display: flex; flex-direction: column; gap: 15px;">
                         <div>
                             <label style="color: #aaa; display: block; margin-bottom: 5px; font-size: 12px;">YouTube URL 또는 ID</label>
                             <input type="text" id="editYoutubeId" value="${item.youtubeId}" placeholder="예: dQw4w9WgXcQ" style="width: 100%; padding: 10px; background: #0a0a0a; border: 1px solid #333; color: #fff; border-radius: 4px; box-sizing: border-box;">
                         </div>
-
+ 
                         <div>
                             <label style="color: #aaa; display: block; margin-bottom: 5px; font-size: 12px;">영상 제목</label>
                             <input type="text" id="editTitle" value="${item.title}" placeholder="예: Reminder of Spring" style="width: 100%; padding: 10px; background: #0a0a0a; border: 1px solid #333; color: #fff; border-radius: 4px; box-sizing: border-box;">
                         </div>
-
+ 
                         <div>
                             <label style="color: #aaa; display: block; margin-bottom: 5px; font-size: 12px;">카테고리</label>
                             <select id="editCategory" style="width: 100%; padding: 10px; background: #0a0a0a; border: 1px solid #333; color: #fff; border-radius: 4px; box-sizing: border-box;">
@@ -3083,50 +2774,50 @@
                                 <option value="AI 영상" ${item.category === 'AI 영상' ? 'selected' : ''}>AI 영상</option>
                             </select>
                         </div>
-
+ 
                         <div>
                             <label style="color: #aaa; display: block; margin-bottom: 5px; font-size: 12px;">참여 역할</label>
                             <input type="text" id="editRole" value="${item.role}" placeholder="예: shot | directed | edited" style="width: 100%; padding: 10px; background: #0a0a0a; border: 1px solid #333; color: #fff; border-radius: 4px; box-sizing: border-box;">
                         </div>
-
+ 
                         <div>
                             <label style="color: #aaa; display: block; margin-bottom: 5px; font-size: 12px;">작업 범위 및 설명</label>
                             <input type="text" id="editContribution" value="${item.contribution}" placeholder="예: 컨셉 기획 100%, 촬영 100%, 편집 100%" style="width: 100%; padding: 10px; background: #0a0a0a; border: 1px solid #333; color: #fff; border-radius: 4px; box-sizing: border-box;">
                         </div>
-
+ 
                         <div>
                             <label style="color: #aaa; display: block; margin-bottom: 5px; font-size: 12px;">영상 길이</label>
                             <input type="text" id="editDuration" value="${item.duration || ''}" placeholder="예: 5분 42초" style="width: 100%; padding: 10px; background: #0a0a0a; border: 1px solid #333; color: #fff; border-radius: 4px; box-sizing: border-box;">
                         </div>
-
+ 
                         <div>
                             <label style="color: #aaa; display: block; margin-bottom: 5px; font-size: 12px;">조회수</label>
                             <input type="text" id="editViews" value="${item.views || ''}" placeholder="예: 25만 회" style="width: 100%; padding: 10px; background: #0a0a0a; border: 1px solid #333; color: #fff; border-radius: 4px; box-sizing: border-box;">
                         </div>
-
+ 
                         <div style="display: flex; gap: 10px; margin-top: 20px;">
-                            <button type="submit" style="flex: 1; background: #ff6b35; color: #fff; border: none; padding: 12px; cursor: pointer; border-radius: 4px; font-weight: 600;">수정 완료</button>
+                            <button type="submit" style="flex: 1; background: #E73F1E; color: #fff; border: none; padding: 12px; cursor: pointer; border-radius: 4px; font-weight: 600;">수정 완료</button>
                             <button type="button" onclick="document.getElementById('editPortfolioModal').remove()" style="flex: 1; background: #333; color: #fff; border: 1px solid #666; padding: 12px; cursor: pointer; border-radius: 4px;">취소</button>
                         </div>
                     </form>
                 </div>
             `;
         };
-
+ 
         // 포트폴리오 수정 처리 - 전역 함수
         window.handleEditPortfolio = function(event, index) {
             event.preventDefault();
-
+ 
             const youtubeInput = document.getElementById('editYoutubeId').value;
             let youtubeId = youtubeInput;
-
+ 
             // YouTube URL에서 ID 추출
             if (youtubeInput.includes('youtube.com/watch?v=')) {
                 youtubeId = youtubeInput.split('v=')[1];
             } else if (youtubeInput.includes('youtu.be/')) {
                 youtubeId = youtubeInput.split('youtu.be/')[1];
             }
-
+ 
             // portfolioData 업데이트
             portfolioData[index] = {
                 youtubeId: youtubeId,
@@ -3138,7 +2829,7 @@
                 duration: document.getElementById('editDuration').value || '미확인',
                 views: document.getElementById('editViews').value || '미확인'
             };
-
+ 
             // LocalStorage 저장
             savePortfolioData();
             
@@ -3150,29 +2841,29 @@
             
             alert('✅ 영상이 수정되었습니다!');
         };
-
+ 
         function showPage(pageName) {
             // 모든 페이지 숨기기
             document.querySelectorAll('.page').forEach(page => {
                 page.classList.remove('active');
             });
-
+ 
             // 선택된 페이지 표시
             const targetPage = document.getElementById(pageName + '-page');
             targetPage.classList.add('active');
-
+ 
             // 네비게이션 활성 상태 업데이트
             document.querySelectorAll('.nav-link').forEach(link => {
                 link.classList.remove('active');
             });
             document.querySelector(`[data-page="${pageName}"]`).classList.add('active');
-
+ 
             // 해당 페이지로 부드럽게 스크롤
             setTimeout(() => {
                 targetPage.scrollIntoView({ behavior: 'smooth', block: 'start' });
             }, 50);
         }
-
+ 
         // 브랜드 이름(민지현) 클릭 시 랜딩 페이지 최상단으로 이동
         // portfolioData로 마소닉 그리드 동적 생성
         function renderPortfolioGrid() {
@@ -3402,7 +3093,7 @@
             // 스크롤 방지
             document.body.style.overflow = 'hidden';
         }
-
+ 
         // 유튜브 영상 닫기 함수
         function closeYoutube() {
             const modal = document.getElementById('youtubeModal');
@@ -3417,7 +3108,7 @@
             // 스크롤 복원
             document.body.style.overflow = 'auto';
         }
-
+ 
         // 모달 외부 영역 클릭 시 닫기
         document.addEventListener('DOMContentLoaded', function() {
             const modal = document.getElementById('youtubeModal');
@@ -3429,7 +3120,7 @@
                 }
             });
         });
-
+ 
         // Escape 키로 모달 닫기
         document.addEventListener('keydown', function(event) {
             if (event.key === 'Escape') {
@@ -3443,7 +3134,7 @@
                 }
             }
         });
-
+ 
         // 포트폴리오 상세 모달 열기
         function openPortfolioModal(index) {
             const portfolio = portfolioData[index];
@@ -3462,14 +3153,14 @@
             modal.classList.add('active');
             document.body.style.overflow = 'hidden';
         }
-
+ 
         // 포트폴리오 상세 모달 닫기
         function closePortfolioModal() {
             const modal = document.getElementById('portfolioModal');
             modal.classList.remove('active');
             document.body.style.overflow = 'auto';
         }
-
+ 
         // 포트폴리오 모달 외부 클릭 시 닫기
         document.addEventListener('DOMContentLoaded', function() {
             const modal = document.getElementById('portfolioModal');
@@ -3480,47 +3171,14 @@
                 }
             });
         });
-        function toggleTheme() {
-            const isDarkMode = document.body.classList.toggle('light-mode');
-            const themeIcon = document.querySelector('.theme-icon');
-            const themeLabel = document.querySelector('.theme-label');
-            
-            // localStorage에 설정값 저장
-            if (isDarkMode) {
-                localStorage.setItem('theme', 'light');
-                themeIcon.textContent = '☀️';
-                themeLabel.textContent = 'light';
-            } else {
-                localStorage.setItem('theme', 'dark');
-                themeIcon.textContent = '🌙';
-                themeLabel.textContent = 'dark';
-            }
-        }
-
-        // 페이지 로드 시 저장된 테마 복원
-        function initializeTheme() {
-            const savedTheme = localStorage.getItem('theme') || 'dark';
-            const themeIcon = document.querySelector('.theme-icon');
-            const themeLabel = document.querySelector('.theme-label');
-            
-            if (savedTheme === 'light') {
-                document.body.classList.add('light-mode');
-                themeIcon.textContent = '☀️';
-                themeLabel.textContent = 'light';
-            } else {
-                document.body.classList.remove('light-mode');
-                themeIcon.textContent = '🌙';
-                themeLabel.textContent = 'dark';
-            }
-        }
-
+ 
         function selectPackage(packageName, packageType) {
             showPage('estimate');
             setTimeout(() => {
                 document.getElementById('package').value = packageName;
             }, 100);
         }
-
+ 
         window.addEventListener('load', function() {
             console.log('🚀 [페이지 로드 시작]');
             
@@ -3533,11 +3191,7 @@
             currentCategory = '전체';
             console.log('🏷️ currentCategory 초기화:', currentCategory);
             
-            // 3. 페이지 테마 초기화 (DOM 요소가 준비되어야 함)
-            console.log('🎨 테마 초기화 중...');
-            initializeTheme();
-            
-            // 4. 포트폴리오 그리드 렌더링
+            // 3. 포트폴리오 그리드 렌더링
             console.log('🎬 포트폴리오 그리드 렌더링 중...');
             const masonryGrid = document.getElementById('masonryGrid');
             if (masonryGrid) {
@@ -3575,7 +3229,7 @@
             });
             
             console.log('🎉 [페이지 로드 완료]');
-
+ 
             // ===== Estimate 폼 제출 이벤트 핸들러 =====
             const estimateForm = document.getElementById('estimateForm');
             if (estimateForm) {
@@ -3588,7 +3242,7 @@
             } else {
                 console.error('❌ Estimate 폼을 찾을 수 없습니다! ID="estimateForm"');
             }
-
+ 
             // ===== 제출 버튼 별도 클릭 이벤트도 추가 (안전장치) =====
             const submitBtn = document.querySelector('.submit-btn');
             if (submitBtn) {
@@ -3602,7 +3256,7 @@
                 console.error('❌ 제출 버튼을 찾을 수 없습니다! class="submit-btn"');
             }
         });
-
+ 
         function sendEmail() {
             console.log('🔵 [sendEmail] 함수 시작');
             
@@ -3612,21 +3266,21 @@
                 alert('폼을 찾을 수 없습니다. 페이지를 새로고침해주세요.');
                 return;
             }
-
+ 
             const submitBtn = form.querySelector('.submit-btn');
             if (!submitBtn) {
                 console.error('❌ 제출 버튼을 찾을 수 없습니다.');
                 alert('제출 버튼을 찾을 수 없습니다.');
                 return;
             }
-
+ 
             const messageDiv = document.getElementById('formMessage');
             if (!messageDiv) {
                 console.error('❌ 메시지 표시 요소를 찾을 수 없습니다.');
                 alert('메시지 표시 요소를 찾을 수 없습니다.');
                 return;
             }
-
+ 
             console.log('✅ 필요한 DOM 요소들 확인 완료');
             
             // 모든 에러 메시지 초기화
@@ -3641,7 +3295,7 @@
                 const date = new Date(dateString);
                 return date.toLocaleDateString('ko-KR', { year: 'numeric', month: 'long', day: 'numeric' });
             }
-
+ 
             // 모든 폼 데이터 수집
             console.log('📋 폼 데이터 수집 중...');
             const formData = {
@@ -3655,9 +3309,9 @@
                 description: document.getElementById('description').value.trim(),
                 addon: document.getElementById('addon').checked ? 'yes' : 'no'
             };
-
+ 
             console.log('📦 수집된 폼 데이터:', formData);
-
+ 
             // 필드별 검증
             let hasError = false;
             
@@ -3718,7 +3372,7 @@
                 messageDiv.textContent = '❌ 필수 입력 필드를 작성해주세요.';
                 return;
             }
-
+ 
             if (!formData.email) {
                 const errorMsg = '이메일을 입력해주세요.';
                 console.warn('⚠️ ' + errorMsg);
@@ -3728,7 +3382,7 @@
                 alert(errorMsg);
                 return;
             }
-
+ 
             if (!formData.phone) {
                 const errorMsg = '연락처를 입력해주세요.';
                 console.warn('⚠️ ' + errorMsg);
@@ -3738,7 +3392,7 @@
                 alert(errorMsg);
                 return;
             }
-
+ 
             if (!formData.package) {
                 const errorMsg = '패키지를 선택해주세요.';
                 console.warn('⚠️ ' + errorMsg);
@@ -3748,7 +3402,7 @@
                 alert(errorMsg);
                 return;
             }
-
+ 
             if (!formData.cameraSetup) {
                 const errorMsg = '카메라 대수를 선택해주세요.';
                 console.warn('⚠️ ' + errorMsg);
@@ -3758,7 +3412,7 @@
                 alert(errorMsg);
                 return;
             }
-
+ 
             if (!formData.deadline) {
                 const errorMsg = '희망 마감일을 선택해주세요.';
                 console.warn('⚠️ ' + errorMsg);
@@ -3768,7 +3422,7 @@
                 alert(errorMsg);
                 return;
             }
-
+ 
             if (!formData.description) {
                 const errorMsg = '프로젝트 상세 설명을 입력해주세요.';
                 console.warn('⚠️ ' + errorMsg);
@@ -3778,21 +3432,21 @@
                 alert(errorMsg);
                 return;
             }
-
+ 
             console.log('✅ 모든 필수 필드 검증 완료');
-
+ 
             // UI 업데이트 (전송 중 상태)
             submitBtn.disabled = true;
             submitBtn.innerHTML = '<span class="spinner"></span> 전송 중...';
             submitBtn.classList.add('loading');
             messageDiv.classList.remove('success', 'error');
             messageDiv.textContent = '';
-
+ 
             console.log('⏳ EmailJS 설정 확인 중...');
             console.log('PUBLIC_KEY:', EMAILJS_PUBLIC_KEY);
             console.log('SERVICE_ID:', EMAILJS_SERVICE_ID);
             console.log('TEMPLATE_ID:', EMAILJS_TEMPLATE_ID);
-
+ 
             // EmailJS 설정 확인
             if (EMAILJS_PUBLIC_KEY === "YOUR_PUBLIC_KEY" || EMAILJS_SERVICE_ID === "YOUR_SERVICE_ID" || EMAILJS_TEMPLATE_ID === "YOUR_TEMPLATE_ID") {
                 // EmailJS 미설정 상태 - 개발 모드
@@ -3809,14 +3463,14 @@
                 console.log('프로젝트 설명:', formData.description);
                 console.log('AI Add-on:', formData.addon === 'yes' ? '필요' : '불필요');
                 console.log('=====================================');
-
+ 
                 alert('📧 [테스트 모드]\n\n다음 데이터가 준비되었습니다:\n\n' +
                       '이름: ' + formData.name + '\n' +
                       '이메일: ' + formData.email + '\n' +
                       '연락처: ' + formData.phone + '\n' +
                       '패키지: ' + formData.package + '\n\n' +
                       '(EmailJS가 완전히 설정되면 실제 이메일이 전송됩니다)');
-
+ 
                 messageDiv.classList.add('success');
                 messageDiv.textContent = '✓ 견적 신청이 성공적으로 접수되었습니다. 빠르게 확인 후 연락드리겠습니다.';
                 
@@ -3841,14 +3495,14 @@
                 // 에러 메시지 초기화
                 errorMessages.forEach(msg => msg.classList.remove('show'));
                 inputFields.forEach(field => field.classList.remove('error'));
-
+ 
                 setTimeout(function() {
                     messageDiv.classList.remove('success');
                 }, 5000);
                 
                 return;
             }
-
+ 
             console.log('🚀 EmailJS 실제 전송 시작...');
             console.log('전송 데이터:', {
                 from_name: formData.name,
@@ -3860,7 +3514,7 @@
                 reference_link: formData.reference || '(없음)',
                 add_on: formData.addon === 'yes' ? '필요' : '불필요'
             });
-
+ 
             // EmailJS 실제 전송
             emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, {
                 from_name: formData.name,
@@ -3907,19 +3561,19 @@
                 // 에러 메시지 초기화
                 errorMessages.forEach(msg => msg.classList.remove('show'));
                 inputFields.forEach(field => field.classList.remove('error'));
-
+ 
                 // 5초 후 메시지 숨김
                 setTimeout(function() {
                     messageDiv.classList.remove('success');
                 }, 5000);
-
+ 
             }).catch(function(error) {
                 // 전송 실패
                 console.error('❌ [실패] 이메일 전송 실패');
                 console.error('에러 상세:', error);
                 console.error('에러 코드:', error.status);
                 console.error('에러 메시지:', error.text);
-
+ 
                 let errorDetailMsg = '전송에 실패했습니다. ';
                 
                 if (error.status === 400) {
@@ -3933,7 +3587,7 @@
                 } else if (error.text) {
                     errorDetailMsg = '오류: ' + error.text + ' ';
                 }
-
+ 
                 const finalErrorMsg = errorDetailMsg + 'purplemint2627@gmail.com 으로 직접 문의 부탁드립니다.';
                 
                 messageDiv.classList.remove('success');
@@ -3946,7 +3600,7 @@
                 submitBtn.disabled = false;
                 submitBtn.innerHTML = '견적 신청';
                 submitBtn.classList.remove('loading');
-
+ 
                 // 5초 후 메시지 숨김
                 setTimeout(function() {
                     messageDiv.classList.remove('error');
