@@ -2428,6 +2428,52 @@
             border-radius: 10px 10px 0 0;
         }
 
+        /* 플랜별 필터 버튼 */
+        .kanban-plan-filter {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+            padding: 16px 28px;
+            background: #FFFFFF;
+            border-bottom: 1px solid var(--line);
+        }
+
+        .kanban-plan-filter-btn {
+            padding: 7px 14px;
+            border: 1px solid var(--line);
+            background: transparent;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+            color: #777777;
+            cursor: pointer;
+            transition: all 0.15s ease;
+        }
+
+        .kanban-plan-filter-btn:hover {
+            border-color: #111111;
+            color: #111111;
+        }
+
+        .kanban-plan-filter-btn.active {
+            background: #111111;
+            border-color: #111111;
+            color: #F5F5F3;
+        }
+
+        /* 카드 상단 플랜 칩 */
+        .kanban-card-plan-chip {
+            display: inline-block;
+            font-size: 10px;
+            font-weight: 700;
+            color: #666666;
+            background: #EFEFEC;
+            padding: 3px 8px;
+            border-radius: 3px;
+            margin-bottom: 6px;
+            letter-spacing: -0.01em;
+        }
+
         .kanban-title {
             font-family: 'Pretendard', 'Inter', sans-serif;
             font-size: 18px;
@@ -2779,6 +2825,13 @@
                 <button class="kanban-close-btn" onclick="window.closeKanbanAdmin()" aria-label="닫기">
                     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
                 </button>
+            </div>
+            <div class="kanban-plan-filter" id="kanbanPlanFilter">
+                <button type="button" class="kanban-plan-filter-btn active" data-plan="전체" onclick="window.filterKanbanByPlan('전체')">전체</button>
+                <button type="button" class="kanban-plan-filter-btn" data-plan="단순 컷편집" onclick="window.filterKanbanByPlan('단순 컷편집')">단순 컷편집</button>
+                <button type="button" class="kanban-plan-filter-btn" data-plan="유튜브 종편" onclick="window.filterKanbanByPlan('유튜브 종편')">유튜브 종편</button>
+                <button type="button" class="kanban-plan-filter-btn" data-plan="유튜브 중·장편" onclick="window.filterKanbanByPlan('유튜브 중·장편')">유튜브 중·장편</button>
+                <button type="button" class="kanban-plan-filter-btn" data-plan="AI 영상" onclick="window.filterKanbanByPlan('AI 영상')">AI 영상</button>
             </div>
             <div class="kanban-board" id="kanbanBoard">
                 <!-- JS가 6개 칼럼과 카드들을 동적으로 렌더링합니다 -->
@@ -3803,9 +3856,11 @@
                 const stepIndex = Math.min(Math.max(parseInt(project.status_step, 10) - 1, 0), WORKFLOW_STEPS.length - 1);
                 const stepLabel = WORKFLOW_STEPS[stepIndex] || `${project.status_step}단계`;
                 const projectTitle = project.project_title ? `「${project.project_title}」 ` : '';
+                const planLine = project.plan_type ? `<div style="margin-bottom: 6px;"><strong>신청 플랜:</strong> ${escapeHTML(project.plan_type)}</div>` : '';
 
                 resultBox.classList.add('show');
                 resultBox.innerHTML =
+                    planLine +
                     name + '님, ' + projectTitle + '프로젝트는 현재 <strong>[' + stepLabel + ']</strong> 단계 진행 중입니다.<br>' +
                     '예상 마무리: ' + (project.deadline_info || '협의 중') +
                     '<span class="status-result-note">최종 업데이트: ' + (project.updated_at ? new Date(project.updated_at).toLocaleString('ko-KR') : '-') + '</span>';
@@ -3870,15 +3925,42 @@
                     return;
                 }
 
-                renderKanbanBoard(data || []);
+                renderKanbanBoard(data || [], true);
+
+                // 이전에 선택돼있던 플랜 필터가 있으면 새로고침 후에도 유지
+                if (currentKanbanPlanFilter && currentKanbanPlanFilter !== '전체') {
+                    window.filterKanbanByPlan(currentKanbanPlanFilter);
+                }
             } catch (err) {
                 console.error('❌ [loadKanbanData] 예외 발생:', err);
                 board.innerHTML = '<p style="padding: 20px; color: #999;">데이터를 불러오지 못했습니다.</p>';
             }
         }
 
+        // 서비스 플랜(프로젝트 유형) 목록
+        const PLAN_TYPES = ['단순 컷편집', '유튜브 종편', '유튜브 중·장편', 'AI 영상', '기타'];
+
+        let allKanbanProjects = [];        // 마지막으로 불러온 전체 프로젝트 (플랜 필터용 캐시)
+        let currentKanbanPlanFilter = '전체';
+
+        // ===== 플랜별 필터 버튼 클릭 처리 =====
+        window.filterKanbanByPlan = function(plan) {
+            currentKanbanPlanFilter = plan;
+            document.querySelectorAll('.kanban-plan-filter-btn').forEach(btn => {
+                btn.classList.toggle('active', btn.getAttribute('data-plan') === plan);
+            });
+            const filtered = plan === '전체'
+                ? allKanbanProjects
+                : allKanbanProjects.filter(p => (p.plan_type || '기타') === plan);
+            renderKanbanBoard(filtered);
+        };
         // ===== 칸반 보드 렌더링 (6개 칼럼) =====
-        function renderKanbanBoard(projects) {
+        // isFullDataset=true이면 전체 데이터로 간주해 allKanbanProjects 캐시를 갱신함
+        function renderKanbanBoard(projects, isFullDataset) {
+            if (isFullDataset) {
+                allKanbanProjects = projects;
+            }
+
             const board = document.getElementById('kanbanBoard');
             if (!board) return;
 
@@ -3894,8 +3976,11 @@
                         return `<option value="${stepNum}" ${stepNum === step ? 'selected' : ''}>${label}</option>`;
                     }).join('');
 
+                    const planLabel = p.plan_type || '기타';
+
                     cardsHTML += `
                         <div class="kanban-card">
+                            <span class="kanban-card-plan-chip">${escapeHTML(planLabel)}</span>
                             <div class="kanban-card-title">${escapeHTML(p.project_title || '(제목 없음)')}</div>
                             <div class="kanban-card-meta">
                                 ${escapeHTML(p.client_name || '')} · ${escapeHTML(p.phone || '')}<br>
@@ -3941,6 +4026,8 @@
                 return `<option value="${stepNum}" ${stepNum === step ? 'selected' : ''}>${label}</option>`;
             }).join('');
 
+            const planOptionsHTML = PLAN_TYPES.map(plan => `<option value="${plan}">${plan}</option>`).join('');
+
             const formHTML = `
                 <div class="kanban-form-overlay" id="kanbanFormOverlay">
                     <div class="kanban-form-box">
@@ -3956,6 +4043,10 @@
                         <div class="form-group">
                             <label for="kfProjectTitle">프로젝트명</label>
                             <input type="text" id="kfProjectTitle" placeholder="예: 브랜드 홍보 영상">
+                        </div>
+                        <div class="form-group">
+                            <label for="kfPlanType">서비스 플랜</label>
+                            <select id="kfPlanType">${planOptionsHTML}</select>
                         </div>
                         <div class="form-group">
                             <label for="kfDeadline">예상 마감일 (D-day)</label>
@@ -3989,6 +4080,8 @@
                 return `<option value="${stepNum}" ${stepNum === parseInt(data.status_step, 10) ? 'selected' : ''}>${label}</option>`;
             }).join('');
 
+            const planOptionsHTML = PLAN_TYPES.map(plan => `<option value="${plan}" ${plan === data.plan_type ? 'selected' : ''}>${plan}</option>`).join('');
+
             const formHTML = `
                 <div class="kanban-form-overlay" id="kanbanFormOverlay">
                     <div class="kanban-form-box">
@@ -4004,6 +4097,10 @@
                         <div class="form-group">
                             <label for="kfProjectTitle">프로젝트명</label>
                             <input type="text" id="kfProjectTitle" value="${escapeHTML(data.project_title || '')}">
+                        </div>
+                        <div class="form-group">
+                            <label for="kfPlanType">서비스 플랜</label>
+                            <select id="kfPlanType">${planOptionsHTML}</select>
                         </div>
                         <div class="form-group">
                             <label for="kfDeadline">예상 마감일 (D-day)</label>
@@ -4038,6 +4135,7 @@
             const clientName = document.getElementById('kfClientName').value.trim();
             const phone = document.getElementById('kfPhone').value.trim();
             const projectTitle = document.getElementById('kfProjectTitle').value.trim();
+            const planType = document.getElementById('kfPlanType').value;
             const deadlineInfo = document.getElementById('kfDeadline').value.trim();
             const statusStep = parseInt(document.getElementById('kfStatusStep').value, 10);
 
@@ -4050,6 +4148,7 @@
                 client_name: clientName,
                 phone: phone,
                 project_title: projectTitle,
+                plan_type: planType,
                 deadline_info: deadlineInfo,
                 status_step: statusStep,
                 updated_at: new Date().toISOString()
