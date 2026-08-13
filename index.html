@@ -4,18 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <!-- ===== EmailJS 설정 (REST API 직접 호출 방식 — 외부 SDK/CDN 의존성 없음) ===== -->
-    <script type="text/javascript">
-        // ========================================
-        // 📧 EmailJS 설정 상수 (sendEmail()에서 fetch()로 REST API 직접 호출)
-        // ========================================
-        const EMAILJS_PUBLIC_KEY = "IsvZNVNiPaTSihvTR4SXv";   // REST API body에는 'public_key' 키로 전달
-        const EMAILJS_SERVICE_ID = "youtube editing_web";   // ⚠️ EmailJS 대시보드 설정값과 동일하게 공백 포함 (Service ID: "youtube editing_web")
-        const EMAILJS_TEMPLATE_ID = "template_9ge8ik3";
-        const EMAILJS_API_URL = "https://api.emailjs.com/api/v1.0/email/send";
-        // ========================================
-    </script>
-
     <title>EGG Studio | 영상편집자 · PD 민지현</title>
     
     <!-- ===== SEO 메타 태그 ===== -->
@@ -3720,8 +3708,14 @@
             }
         });
  
+        // ========================================
+        // 📧 Formspree 설정 (EmailJS 완전 대체)
+        // ========================================
+        const FORMSPREE_ENDPOINT = "https://formspree.io/f/xdendnbn";
+        // ========================================
+
         function sendEmail() {
-            console.log('🔵 [sendEmail] 함수 시작 (fetch 기반 EmailJS REST API 직접 호출)');
+            console.log('🔵 [sendEmail] 함수 시작 (Formspree 기반 전송)');
             
             const form = document.getElementById('estimateForm');
             if (!form) {
@@ -3758,16 +3752,9 @@
             const inputFields = form.querySelectorAll('input, textarea, select');
             errorMessages.forEach(msg => msg.classList.remove('show'));
             inputFields.forEach(field => field.classList.remove('error'));
-            
-            // 날짜 포맷팅 함수
-            function formatDeadline(dateString) {
-                if (!dateString) return '';
-                const date = new Date(dateString);
-                return date.toLocaleDateString('ko-KR', { year: 'numeric', month: 'long', day: 'numeric' });
-            }
  
-            // 모든 폼 데이터 수집
-            console.log('📋 폼 데이터 수집 중...');
+            // 모든 폼 데이터 수집 (검증용 — 실제 전송은 FormData로 별도 처리)
+            console.log('📋 폼 데이터 검증 중...');
             const formData = {
                 name: document.getElementById('name').value.trim(),
                 email: document.getElementById('email').value.trim(),
@@ -3852,61 +3839,39 @@
             messageDiv.classList.remove('success', 'error');
             messageDiv.textContent = '';
  
-            console.log('🚀 EmailJS REST API 전송 시작 (fetch, 외부 SDK 미사용)...');
-            console.log('요청 URL:', EMAILJS_API_URL);
-            console.log('Service ID:', EMAILJS_SERVICE_ID, '/ Template ID:', EMAILJS_TEMPLATE_ID);
+            console.log('🚀 Formspree 전송 시작...');
+            console.log('요청 URL:', FORMSPREE_ENDPOINT);
  
             // ===== 7초 타임아웃 안전장치 (fetch는 자체 타임아웃이 없으므로 AbortController로 구현) =====
-            const EMAILJS_TIMEOUT_MS = 7000;
+            const FORMSPREE_TIMEOUT_MS = 7000;
             const abortController = new AbortController();
             const timeoutId = setTimeout(function() {
                 abortController.abort();
-            }, EMAILJS_TIMEOUT_MS);
+            }, FORMSPREE_TIMEOUT_MS);
  
-            // ===== EmailJS REST API로 보낼 요청 본문 구성 =====
-            const requestBody = {
-                service_id: EMAILJS_SERVICE_ID,
-                template_id: EMAILJS_TEMPLATE_ID,
-                public_key: EMAILJS_PUBLIC_KEY,
-                template_params: {
-                    from_name: formData.name,
-                    from_email: formData.email,
-                    phone: formData.phone,
-                    package: formData.package,
-                    camera: formData.cameraSetup,
-                    deadline: formData.deadline,
-                    reference_link: formData.reference || '(없음)',
-                    description: formData.description,
-                    add_on: formData.addon === 'yes' ? '필요' : '불필요',
-                    reply_to: formData.email
-                }
-            };
- 
-            console.log('📨 전송 요청 본문:', requestBody);
- 
-            // ===== fetch()로 EmailJS REST API 직접 호출 (외부 SDK/CDN 의존성 없음) =====
-            fetch(EMAILJS_API_URL, {
-                method: 'POST',
+            // ===== Formspree로 폼 데이터 그대로 전송 (FormData 사용) =====
+            fetch(FORMSPREE_ENDPOINT, {
+                method: "POST",
+                body: new FormData(form),
                 headers: {
-                    'Content-Type': 'application/json'
+                    'Accept': 'application/json'
                 },
-                body: JSON.stringify(requestBody),
                 signal: abortController.signal
             })
             .then(function(response) {
                 clearTimeout(timeoutId);
                 console.log('📮 [fetch 응답 수신] status:', response.status, '/ ok:', response.ok);
-
+ 
                 if (response.ok) {
                     // ===== 전송 성공 =====
-                    console.log('✅ [성공] 이메일 전송 성공!');
-
+                    console.log('✅ [성공] Formspree 전송 성공!');
+ 
                     messageDiv.classList.remove('error');
                     messageDiv.classList.add('success');
                     messageDiv.textContent = '✓ 견적 신청이 성공적으로 접수되었습니다. 빠르게 확인 후 연락드리겠습니다.';
-
+ 
                     alert('✅ 견적 신청이 성공적으로 접수되었습니다!');
-
+ 
                     // 히스토리에 저장
                     saveEstimateHistory({
                         name: formData.name,
@@ -3919,29 +3884,31 @@
                         description: formData.description,
                         addon: formData.addon
                     });
-
+ 
                     // 폼 초기화
                     form.reset();
-
+ 
                     // 에러 메시지 초기화
                     errorMessages.forEach(msg => msg.classList.remove('show'));
                     inputFields.forEach(field => field.classList.remove('error'));
-
+ 
                     // 5초 후 메시지 숨김
                     setTimeout(function() {
                         messageDiv.classList.remove('success');
                     }, 5000);
                 } else {
-                    // ===== 전송 실패 (EmailJS API가 에러 상태 코드로 응답) =====
+                    // ===== 전송 실패 (Formspree가 에러 상태 코드로 응답) =====
                     return response.text().then(function(errText) {
-                        console.error('❌ [실패] EmailJS API 오류 응답 (status ' + response.status + '):', errText);
-
+                        console.error('❌ [실패] Formspree 오류 응답 (status ' + response.status + '):', errText);
+ 
+                        const failMsg = '전송 실패: 이메일(purplemint2627@gmail.com)로 직접 문의 부탁드립니다.';
+ 
                         messageDiv.classList.remove('success');
                         messageDiv.classList.add('error');
-                        messageDiv.textContent = '❌ 전송 실패: ' + errText;
-
-                        alert('❌ 전송 실패: ' + errText);
-
+                        messageDiv.textContent = '❌ ' + failMsg;
+ 
+                        alert('❌ ' + failMsg);
+ 
                         // 5초 후 메시지 숨김
                         setTimeout(function() {
                             messageDiv.classList.remove('error');
@@ -3958,18 +3925,13 @@
                 console.error('에러 이름:', error && error.name);
                 console.error('에러 메시지:', error && error.message);
  
-                const isTimeout = error && error.name === 'AbortError';
-                const failMsg = '전송에 실패했습니다. 이메일(purplemint2627@gmail.com)로 문의해 주세요.';
+                const failMsg = '전송 실패: 이메일(purplemint2627@gmail.com)로 직접 문의 부탁드립니다.';
  
                 messageDiv.classList.remove('success');
                 messageDiv.classList.add('error');
-                messageDiv.textContent = isTimeout
-                    ? '응답 시간이 초과되었습니다. 잠시 후 다시 시도해 주세요.'
-                    : failMsg;
+                messageDiv.textContent = '❌ ' + failMsg;
  
-                alert(isTimeout
-                    ? '응답 시간이 초과되었습니다. 잠시 후 다시 시도해 주세요.'
-                    : failMsg);
+                alert('❌ ' + failMsg);
  
                 // 5초 후 메시지 숨김
                 setTimeout(function() {
