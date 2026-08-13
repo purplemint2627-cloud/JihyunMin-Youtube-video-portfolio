@@ -31,20 +31,27 @@
     <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/index.min.js"></script>
     <script type="text/javascript">
         // ========================================
-        // 📧 EmailJS 설정
+        // 📧 EmailJS 설정 (SDK 로드 → init)
         // ========================================
         const EMAILJS_PUBLIC_KEY = "IsvZNVNiPaTSihvTR4SXv";
         const EMAILJS_SERVICE_ID = "youtube_editing_web";
         const EMAILJS_TEMPLATE_ID = "template_9ge8ik3";
         // ========================================
-        
+
         (function(){
             try {
-                if (typeof emailjs !== 'undefined' && EMAILJS_PUBLIC_KEY !== "YOUR_PUBLIC_KEY") {
-                    emailjs.init(EMAILJS_PUBLIC_KEY);
+                if (typeof emailjs === 'undefined') {
+                    // CDN 차단, 네트워크 오류 등으로 SDK 자체가 로드되지 않은 상태
+                    console.error('❌ [EmailJS SDK 로드 실패] emailjs 객체가 정의되지 않았습니다. CDN 스크립트가 차단되었거나 로드되지 않았을 수 있습니다.');
+                    window.__emailjsLoaded = false;
+                    return;
                 }
-            } catch(e) {
-                console.log('EmailJS 설정이 아직 완료되지 않았습니다.');
+                emailjs.init(EMAILJS_PUBLIC_KEY);
+                window.__emailjsLoaded = true;
+                console.log('✅ [EmailJS 초기화 완료] Public Key:', EMAILJS_PUBLIC_KEY);
+            } catch (initError) {
+                console.error('❌ [EmailJS 초기화 오류]', initError);
+                window.__emailjsLoaded = false;
             }
         })();
     </script>
@@ -150,7 +157,7 @@
             background: var(--dark);
             position: relative;
             overflow: hidden;
-            padding: 130px 32px 32px;
+            padding: 140px 32px 32px;
         }
  
         .landing-content {
@@ -409,11 +416,12 @@
         .nav-container {
             max-width: 1400px;
             margin: 0 auto;
-            padding: 28px 40px;
+            padding: 22px 40px;
             display: flex;
+            flex-wrap: wrap;
             justify-content: space-between;
             align-items: center;
-            gap: 40px;
+            gap: 12px 40px;
         }
  
         .nav-brand {
@@ -427,20 +435,22 @@
  
         .nav-links {
             display: flex;
-            gap: 44px;
+            gap: 28px;
             align-items: center;
             flex-wrap: wrap;
+            row-gap: 8px;
         }
  
         .nav-links a {
             font-family: 'Pretendard', 'Inter', sans-serif;
-            font-size: clamp(20px, 1.7vw, 1.8rem);
+            font-size: clamp(16px, 1.3vw, 1.4rem);
             color: var(--text-muted);
             transition: color 0.25s ease, opacity 0.25s ease;
             text-transform: uppercase;
             font-weight: 900;
             letter-spacing: -0.3px;
             cursor: pointer;
+            line-height: 1;
         }
  
         .nav-links a:hover,
@@ -459,7 +469,7 @@
         .page {
             display: none;
             min-height: 100vh;
-            padding-top: 100px;
+            padding-top: 130px;
         }
  
         .page.active {
@@ -467,7 +477,7 @@
         }
  
         #work-page {
-            padding-top: 120px;
+            padding-top: 150px;
             padding-bottom: 80px;
             background: var(--dark);
         }
@@ -1091,7 +1101,7 @@
  
         /* About 페이지 */
         #about-page {
-            padding-top: 140px;
+            padding-top: 160px;
             padding-bottom: 100px;
         }
  
@@ -1167,7 +1177,7 @@
  
         /* Pricing 페이지 */
         #pricing-page {
-            padding-top: 140px;
+            padding-top: 160px;
             padding-bottom: 100px;
         }
  
@@ -1385,7 +1395,7 @@
  
         /* Estimate 페이지 */
         #estimate-page {
-            padding-top: 140px;
+            padding-top: 160px;
             padding-bottom: 100px;
         }
  
@@ -1581,7 +1591,7 @@
  
         /* Contact 페이지 */
         #contact-page {
-            padding-top: 140px;
+            padding-top: 160px;
             padding-bottom: 100px;
         }
  
@@ -1660,11 +1670,11 @@
             }
  
             #work-page {
-                padding-top: 80px;
+                padding-top: 110px;
             }
  
             #about-page {
-                padding-top: 100px;
+                padding-top: 120px;
             }
  
             .form-row {
@@ -3274,6 +3284,28 @@
             }
         }
 
+        // 페이지 활성화(표시) 로직만 수행 — 스크롤은 이동시키지 않음
+        // (최초 페이지 로드 시 히어로 위에서 시작하도록, work-page를 "활성 페이지"로만
+        //  설정하고 화면을 강제로 스크롤시키지 않기 위해 showPage()에서 분리함)
+        function activatePageWithoutScroll(pageName) {
+            document.querySelectorAll('.page').forEach(page => {
+                page.classList.remove('active');
+            });
+ 
+            const targetPage = document.getElementById(pageName + '-page');
+            if (targetPage) {
+                targetPage.classList.add('active');
+            }
+ 
+            document.querySelectorAll('.nav-link').forEach(link => {
+                link.classList.remove('active');
+            });
+            const navLink = document.querySelector(`[data-page="${pageName}"]`);
+            if (navLink) {
+                navLink.classList.add('active');
+            }
+        }
+
         function showPage(pageName) {
             // 모든 페이지 숨기기
             document.querySelectorAll('.page').forEach(page => {
@@ -3290,7 +3322,7 @@
             });
             document.querySelector(`[data-page="${pageName}"]`).classList.add('active');
  
-            // 해당 페이지로 부드럽게 스크롤
+            // 해당 페이지로 부드럽게 스크롤 (사용자가 메뉴를 직접 클릭했을 때만 호출됨)
             setTimeout(() => {
                 targetPage.scrollIntoView({ behavior: 'smooth', block: 'start' });
             }, 50);
@@ -3648,9 +3680,12 @@
             console.log('📊 히스토리 카운트 업데이트 중...');
             window.updateHistoryCount();
             
-            // 6. WORK 페이지로 이동
-            console.log('📄 WORK 페이지로 전환 중...');
-            showPage('work');
+            // 6. WORK 페이지를 활성 페이지로 설정 (스크롤 이동 없이) — 히어로가 최상단에 먼저 보이도록 함
+            console.log('📄 WORK 페이지 활성화 (스크롤 없음, 히어로가 최상단에 유지됨)');
+            activatePageWithoutScroll('work');
+            
+            // 최초 진입 시 항상 최상단(히어로)에서 시작하도록 스크롤 위치 보정
+            window.scrollTo(0, 0);
             
             // 7. URL 파라미터 확인 (?admin)
             const urlParams = new URLSearchParams(window.location.search);
@@ -3720,6 +3755,22 @@
             if (!messageDiv) {
                 console.error('❌ 메시지 표시 요소를 찾을 수 없습니다.');
                 alert('메시지 표시 요소를 찾을 수 없습니다.');
+                return;
+            }
+
+            // 버튼/메시지 상태를 항상 원래대로 복구하는 헬퍼 (어디서든 재사용)
+            function resetSubmitUI() {
+                submitBtn.disabled = false;
+                submitBtn.innerHTML = '견적 신청';
+                submitBtn.classList.remove('loading');
+            }
+
+            // ===== EmailJS SDK(모듈) 로드 여부 최우선 확인 =====
+            // CDN 차단/네트워크 오류로 emailjs 객체 자체가 없으면 전송을 시도조차 하지 않고 즉시 안내
+            if (typeof emailjs === 'undefined') {
+                console.error('❌ [emailjs 미정의] EmailJS SDK가 로드되지 않았습니다.');
+                resetSubmitUI();
+                alert('이메일 모듈을 불러오지 못했습니다. 페이지를 새로고침 해주세요.');
                 return;
             }
  
@@ -3947,43 +3998,64 @@
  
             console.log('🚀 EmailJS 실제 전송 시작...');
 
-            // ===== EmailJS 템플릿으로 전달할 파라미터 =====
-            // 키 이름은 EmailJS 대시보드 → Email Templates 안의 {{변수명}}과
-            // 반드시 1:1로 일치해야 합니다. (아래 3번 안내 참고)
-            // 일부 템플릿은 개별 필드 대신 {{message}} 하나로 본문 전체를
-            // 구성하는 경우가 많아, 통합 메시지도 함께 전달합니다.
-            const deadlineFormatted = formatDeadline(formData.deadline);
-            const referenceLink = formData.reference || '(없음)';
-            const addOnLabel = formData.addon === 'yes' ? '필요' : '불필요';
+            // ===== emailParams 생성 및 emailjs.send() 호출을 안전하게 감싸기 =====
+            // (동기적으로 발생할 수 있는 모든 예외를 잡아, 어떤 경우든 버튼이 멈추지 않도록 함)
+            let sendPromise;
+            try {
+                // ===== EmailJS 템플릿으로 전달할 파라미터 =====
+                // 키 이름은 EmailJS 대시보드 → Email Templates 안의 {{변수명}}과
+                // 반드시 1:1로 일치해야 합니다. (아래 3번 안내 참고)
+                // 일부 템플릿은 개별 필드 대신 {{message}} 하나로 본문 전체를
+                // 구성하는 경우가 많아, 통합 메시지도 함께 전달합니다.
+                const deadlineFormatted = formatDeadline(formData.deadline);
+                const referenceLink = formData.reference || '(없음)';
+                const addOnLabel = formData.addon === 'yes' ? '필요' : '불필요';
 
-            const emailParams = {
-                from_name: formData.name,
-                from_email: formData.email,
-                phone: formData.phone,
-                package: formData.package,
-                camera: formData.cameraSetup,
-                deadline: deadlineFormatted,
-                reference_link: referenceLink,
-                description: formData.description,
-                add_on: addOnLabel,
-                reply_to: formData.email,
-                // {{message}} 변수를 쓰는 템플릿을 위한 통합 본문
-                message: [
-                    '이름: ' + formData.name,
-                    '이메일: ' + formData.email,
-                    '연락처: ' + formData.phone,
-                    '패키지: ' + formData.package,
-                    '카메라 대수: ' + formData.cameraSetup,
-                    '희망 마감일: ' + deadlineFormatted,
-                    '참고 링크: ' + referenceLink,
-                    'AI Add-on: ' + addOnLabel,
-                    '',
-                    '[프로젝트 상세 설명]',
-                    formData.description
-                ].join('\n')
-            };
+                const emailParams = {
+                    from_name: formData.name,
+                    from_email: formData.email,
+                    phone: formData.phone,
+                    package: formData.package,
+                    camera: formData.cameraSetup,
+                    deadline: deadlineFormatted,
+                    reference_link: referenceLink,
+                    description: formData.description,
+                    add_on: addOnLabel,
+                    reply_to: formData.email,
+                    // {{message}} 변수를 쓰는 템플릿을 위한 통합 본문
+                    message: [
+                        '이름: ' + formData.name,
+                        '이메일: ' + formData.email,
+                        '연락처: ' + formData.phone,
+                        '패키지: ' + formData.package,
+                        '카메라 대수: ' + formData.cameraSetup,
+                        '희망 마감일: ' + deadlineFormatted,
+                        '참고 링크: ' + referenceLink,
+                        'AI Add-on: ' + addOnLabel,
+                        '',
+                        '[프로젝트 상세 설명]',
+                        formData.description
+                    ].join('\n')
+                };
 
-            console.log('📨 전송 파라미터 (EmailJS 템플릿 변수와 이름이 일치해야 합니다):', emailParams);
+                console.log('📨 전송 파라미터 (EmailJS 템플릿 변수와 이름이 일치해야 합니다):', emailParams);
+
+                // emailjs.send() 호출 직전 로그 — 콘솔에서 정확히 어디까지 진행됐는지 확인 가능
+                console.log('📮 [emailjs.send() 호출 직전] Service:', EMAILJS_SERVICE_ID, '/ Template:', EMAILJS_TEMPLATE_ID);
+                sendPromise = emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, emailParams);
+                console.log('📮 [emailjs.send() 호출 완료] Promise 생성됨 — EmailJS 서버 응답 대기 중...');
+            } catch (syncError) {
+                // emailParams 생성 또는 emailjs.send() 호출 자체가 동기적으로 실패한 경우
+                // (예: SDK 손상, 예상치 못한 데이터 오류 등) — 여기서 반드시 버튼을 복구해야
+                // 뒤의 Promise.race/.finally()가 아예 실행되지 않는 상황을 막을 수 있음
+                console.error('❌ [동기 오류] emailParams 생성 또는 emailjs.send() 호출 중 예외 발생:', syncError);
+                resetSubmitUI();
+                messageDiv.classList.remove('success');
+                messageDiv.classList.add('error');
+                messageDiv.textContent = '전송 요청을 생성하는 중 오류가 발생했습니다. 콘솔을 확인해주세요.';
+                alert('전송 준비 중 오류가 발생했습니다. 페이지를 새로고침 후 다시 시도해주세요.');
+                return;
+            }
 
             // ===== 무한 대기 방지용 타임아웃 안전장치 (7초) =====
             const EMAILJS_TIMEOUT_MS = 7000;
@@ -3996,16 +4068,6 @@
                     }, ms);
                 });
             }
-
-            // 버튼/에러메시지 상태를 항상 원래대로 복구하는 헬퍼
-            function resetSubmitUI() {
-                submitBtn.disabled = false;
-                submitBtn.innerHTML = '견적 신청';
-                submitBtn.classList.remove('loading');
-            }
-
-            // EmailJS 실제 전송 (7초 타임아웃과 Promise.race로 경쟁시킴)
-            const sendPromise = emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, emailParams);
 
             // 타임아웃으로 이미 버튼이 복구된 후 실제 응답이 뒤늦게 도착해도
             // "Uncaught (in promise)" 경고 없이 콘솔에서 확인할 수 있도록 별도 로깅
