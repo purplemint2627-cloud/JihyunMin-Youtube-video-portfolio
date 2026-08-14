@@ -482,123 +482,99 @@
             color: var(--text);
         }
 
-        /* ===== 사이드바 토글 버튼 (좌측 슬라이딩 Drawer) ===== */
-        .sidebar-toggle-btn {
-            background: transparent;
-            border: none;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 6px;
-            color: var(--text);
-            flex-shrink: 0;
-            transition: opacity 0.2s ease;
+        /* ===== 상시 노출 Hub 패널 (Workflow + Client Hub) — 드로어 폐지, 항상 표시 ===== */
+        .hub-panel-section {
+            background: var(--dark);
+            padding: 24px 0 8px 0;
         }
 
-        .sidebar-toggle-btn:hover {
-            opacity: 0.6;
-        }
-
-        /* ===== 좌측 슬라이딩 Drawer (사이드바) ===== */
-        .drawer-overlay {
-            position: fixed;
-            inset: 0;
-            background: rgba(17, 17, 17, 0.4);
-            opacity: 0;
-            pointer-events: none;
-            transition: opacity 0.35s ease;
-            z-index: 2900;
-        }
-
-        .drawer-overlay.active {
-            opacity: 1;
-            pointer-events: auto;
-        }
-
-        .side-drawer {
-            position: fixed;
-            top: 0;
-            left: -400px;
-            width: 380px;
-            max-width: 88vw;
-            height: 100%;
+        .hub-panel-inner {
             background: #FFFFFF;
-            box-shadow: 4px 0 30px rgba(0, 0, 0, 0.12);
-            z-index: 2950;
-            transition: left 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+            border: 1px solid var(--line);
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        .hub-tabs {
             display: flex;
-            flex-direction: column;
-        }
-
-        .side-drawer.open {
-            left: 0;
-        }
-
-        .side-drawer-header {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 26px 24px 0 24px;
-        }
-
-        .side-drawer-brand {
-            font-family: 'Pretendard', 'Inter', sans-serif;
-            font-size: 16px;
-            font-weight: 900;
-            letter-spacing: -0.3px;
-            text-transform: uppercase;
-            color: #111111;
-        }
-
-        .side-drawer-close {
-            background: none;
-            border: none;
-            cursor: pointer;
-            color: #111111;
-            display: flex;
-            align-items: center;
-            padding: 4px;
-        }
-
-        .drawer-tabs {
-            display: flex;
-            gap: 4px;
-            padding: 20px 24px 0 24px;
             border-bottom: 1px solid var(--line);
         }
 
-        .drawer-tab-btn {
+        .hub-tab-btn {
             flex: 1;
             background: none;
             border: none;
             cursor: pointer;
-            padding: 12px 4px;
-            font-size: 12px;
-            font-weight: 700;
-            letter-spacing: 0.02em;
+            padding: 16px 4px;
+            font-size: 13px;
+            font-weight: 800;
+            letter-spacing: 0.01em;
             color: #999999;
             border-bottom: 2px solid transparent;
             transition: color 0.2s ease, border-color 0.2s ease;
         }
 
-        .drawer-tab-btn.active {
+        .hub-tab-btn.active {
             color: #111111;
             border-bottom-color: #111111;
         }
 
-        .drawer-panel {
+        .hub-panel-content {
             display: none;
-            padding: 26px 24px 32px 24px;
-            overflow-y: auto;
-            flex: 1;
+            padding: 24px 26px 28px 26px;
         }
 
-        .drawer-panel.active {
+        .hub-panel-content.active {
             display: block;
         }
 
-        .drawer-panel-title {
+        .hub-panel-content-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 32px;
+        }
+
+        /* Workflow 트랙 탭 (AI 영상 / 유튜브 영상) */
+        .workflow-track-tabs {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 18px;
+        }
+
+        .workflow-track-btn {
+            flex: 1;
+            padding: 10px 8px;
+            border: 1px solid var(--line);
+            background: transparent;
+            border-radius: 6px;
+            font-size: 12px;
+            font-weight: 700;
+            color: #777777;
+            cursor: pointer;
+            transition: all 0.15s ease;
+        }
+
+        .workflow-track-btn:hover {
+            border-color: #111111;
+            color: #111111;
+        }
+
+        .workflow-track-btn.active {
+            background: #111111;
+            border-color: #111111;
+            color: #F5F5F3;
+        }
+
+        .workflow-track-note {
+            font-size: 11.5px;
+            color: #999999;
+            line-height: 1.6;
+            margin-top: 14px;
+            padding-top: 14px;
+            border-top: 1px solid var(--line);
+        }
+
+        .hub-panel-title {
             font-size: 11px;
             font-weight: 700;
             letter-spacing: 0.08em;
@@ -1676,6 +1652,11 @@
             .addon-description {
                 font-size: 11px;
             }
+
+            .hub-panel-content-grid {
+                grid-template-columns: 1fr;
+                gap: 28px;
+            }
         }
  
         @media (max-width: 480px) {
@@ -2474,6 +2455,32 @@
             letter-spacing: -0.01em;
         }
 
+        .kanban-card-revision-badge {
+            display: inline-block;
+            font-size: 10px;
+            font-weight: 700;
+            color: #666666;
+            background: #F0F0EE;
+            border: 1px solid var(--line);
+            padding: 3px 8px;
+            border-radius: 3px;
+            margin-bottom: 8px;
+        }
+
+        .kanban-card-revision-badge.over {
+            color: #B33333;
+            background: #FBEAEA;
+            border-color: #F0C6C6;
+        }
+
+        .kf-revision-fee-preview {
+            font-size: 11px;
+            color: #B33333;
+            font-weight: 700;
+            margin-top: 6px;
+            display: none;
+        }
+
         .kanban-title {
             font-family: 'Pretendard', 'Inter', sans-serif;
             font-size: 18px;
@@ -2724,12 +2731,7 @@
     <!-- 네비게이션 -->
     <nav>
         <div class="nav-container container">
-            <div style="display: flex; align-items: center; gap: 16px;">
-                <button class="sidebar-toggle-btn" onclick="window.openSidebar()" title="워크플로우 & 클라이언트 허브" aria-label="사이드바 메뉴 열기">
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
-                </button>
-                <div class="nav-brand" onclick="scrollToLanding()" style="cursor: pointer;">EGG!</div>
-            </div>
+            <div class="nav-brand" onclick="scrollToLanding()" style="cursor: pointer;">EGG!</div>
             <div class="nav-links">
                 <a class="nav-link active" data-page="work" onclick="showPage('work')">work</a>
                 <a class="nav-link" data-page="about" onclick="showPage('about')">about</a>
@@ -2740,82 +2742,65 @@
         </div>
     </nav>
 
-    <!-- 좌측 슬라이딩 사이드바 (Drawer) -->
-    <div class="drawer-overlay" id="drawerOverlay" onclick="window.closeSidebar()"></div>
-    <aside class="side-drawer" id="sideDrawer">
-        <div class="side-drawer-header">
-            <div class="side-drawer-brand">EGG Studio</div>
-            <button class="side-drawer-close" onclick="window.closeSidebar()" aria-label="사이드바 닫기">
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
-            </button>
-        </div>
-
-        <div class="drawer-tabs">
-            <button class="drawer-tab-btn active" data-tab="workflow" onclick="window.switchDrawerTab('workflow')">Workflow</button>
-            <button class="drawer-tab-btn" data-tab="clienthub" onclick="window.switchDrawerTab('clienthub')">Client Hub</button>
-        </div>
-
-        <!-- A. Production Workflow -->
-        <div class="drawer-panel active" id="drawerPanel-workflow">
-            <div class="drawer-panel-title">EGG Studio Production Workflow</div>
-            <ol class="workflow-list">
-                <li class="workflow-step">
-                    <span class="workflow-step-num">01</span>
-                    <span class="workflow-step-text">기획 &amp; 컨셉 연출</span>
-                </li>
-                <li class="workflow-step">
-                    <span class="workflow-step-num">02</span>
-                    <span class="workflow-step-text">대본 &amp; 비주얼 콘티 (AI 시안)</span>
-                </li>
-                <li class="workflow-step">
-                    <span class="workflow-step-num">03</span>
-                    <span class="workflow-step-text">현장 촬영 / 촬영 영상 제출 / AI 소스 생성</span>
-                </li>
-                <li class="workflow-step">
-                    <span class="workflow-step-num">04</span>
-                    <span class="workflow-step-text">종합 편집 (컷편집 &amp; 롱폼)</span>
-                </li>
-                <li class="workflow-step">
-                    <span class="workflow-step-num">05</span>
-                    <span class="workflow-step-text">정밀 색보정 &amp; 사운드 디자인</span>
-                </li>
-                <li class="workflow-step">
-                    <span class="workflow-step-num">06</span>
-                    <span class="workflow-step-text">최종 검수 / 마감 납품</span>
-                </li>
-            </ol>
-        </div>
-
-        <!-- B. Client Hub -->
-        <div class="drawer-panel" id="drawerPanel-clienthub">
-            <div class="drawer-panel-title">Client Hub</div>
-            <div class="client-hub-list">
-                <button class="client-hub-item" onclick="window.closeSidebar(); window.showHistoryModal();">
-                    나의 견적 문의 내역 보기
-                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
-                </button>
-            </div>
-
-            <div class="drawer-panel-title">작업 진행 현황 확인</div>
-            <div class="status-check-box">
-                <div class="form-group">
-                    <label for="statusCheckName">이름</label>
-                    <input type="text" id="statusCheckName" placeholder="예: 홍길동">
+    <!-- ===== Workflow + Client Hub 상시 노출 패널 (드로어 폐지, 항상 표시) ===== -->
+    <section class="hub-panel-section">
+        <div class="container">
+            <div class="hub-panel-inner">
+                <div class="hub-tabs">
+                    <button class="hub-tab-btn active" data-tab="workflow" onclick="window.switchHubTab('workflow')">Workflow</button>
+                    <button class="hub-tab-btn" data-tab="clienthub" onclick="window.switchHubTab('clienthub')">Client Hub</button>
                 </div>
-                <div class="form-group" style="margin-bottom: 0;">
-                    <label for="statusCheckPhone">연락처</label>
-                    <input type="tel" id="statusCheckPhone" placeholder="예: 010-1234-5678">
+
+                <!-- A. Production Workflow (2트랙) -->
+                <div class="hub-panel-content active" id="hubPanel-workflow">
+                    <div class="workflow-track-tabs">
+                        <button class="workflow-track-btn active" data-track="ai" onclick="window.switchWorkflowTrack('ai')">AI 영상 제작</button>
+                        <button class="workflow-track-btn" data-track="youtube" onclick="window.switchWorkflowTrack('youtube')">유튜브 영상 제작</button>
+                    </div>
+                    <ol class="workflow-list" id="workflowStepList">
+                        <!-- JS가 선택된 트랙의 단계를 렌더링합니다 -->
+                    </ol>
+                    <div class="workflow-track-note" id="workflowTrackNote"></div>
                 </div>
-                <button class="status-check-btn" onclick="window.checkProjectStatus()">진행 현황 확인</button>
 
-                <div class="status-result" id="statusResult"></div>
-            </div>
+                <!-- B. Client Hub -->
+                <div class="hub-panel-content" id="hubPanel-clienthub">
+                    <div class="hub-panel-content-grid">
+                        <div>
+                            <div class="hub-panel-title">내 신청 내역</div>
+                            <div class="client-hub-list">
+                                <button class="client-hub-item" onclick="window.showHistoryModal();">
+                                    나의 견적 문의 내역 보기
+                                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
+                                </button>
+                            </div>
 
-            <div style="text-align: center; margin-top: 40px;">
-                <span onclick="window.handleAdminHiddenTrigger()" style="font-size: 10px; color: #DDDDDD; cursor: default; letter-spacing: 2px; user-select: none;">· · ·</span>
+                            <div style="text-align: left; margin-top: 40px;">
+                                <span onclick="window.handleAdminHiddenTrigger()" style="font-size: 10px; color: #DDDDDD; cursor: default; letter-spacing: 2px; user-select: none;">· · ·</span>
+                            </div>
+                        </div>
+
+                        <div>
+                            <div class="hub-panel-title">작업 진행 현황 확인</div>
+                            <div class="status-check-box">
+                                <div class="form-group">
+                                    <label for="statusCheckName">이름</label>
+                                    <input type="text" id="statusCheckName" placeholder="예: 홍길동">
+                                </div>
+                                <div class="form-group" style="margin-bottom: 0;">
+                                    <label for="statusCheckPhone">연락처</label>
+                                    <input type="tel" id="statusCheckPhone" placeholder="예: 010-1234-5678">
+                                </div>
+                                <button class="status-check-btn" onclick="window.checkProjectStatus()">진행 현황 확인</button>
+
+                                <div class="status-result" id="statusResult"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
-    </aside>
+    </section>
 
     <!-- Admin 칸반 보드 (Trello 스타일) -->
     <div class="kanban-overlay" id="kanbanOverlay">
@@ -2826,15 +2811,12 @@
                     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
                 </button>
             </div>
-            <div class="kanban-plan-filter" id="kanbanPlanFilter">
-                <button type="button" class="kanban-plan-filter-btn active" data-plan="전체" onclick="window.filterKanbanByPlan('전체')">전체</button>
-                <button type="button" class="kanban-plan-filter-btn" data-plan="단순 컷편집" onclick="window.filterKanbanByPlan('단순 컷편집')">단순 컷편집</button>
-                <button type="button" class="kanban-plan-filter-btn" data-plan="유튜브 종편" onclick="window.filterKanbanByPlan('유튜브 종편')">유튜브 종편</button>
-                <button type="button" class="kanban-plan-filter-btn" data-plan="유튜브 중·장편" onclick="window.filterKanbanByPlan('유튜브 중·장편')">유튜브 중·장편</button>
-                <button type="button" class="kanban-plan-filter-btn" data-plan="AI 영상" onclick="window.filterKanbanByPlan('AI 영상')">AI 영상</button>
+            <div class="kanban-plan-filter" id="kanbanTrackTabs">
+                <button type="button" class="kanban-plan-filter-btn active" data-track="ai" onclick="window.switchKanbanTrack('ai')">AI 영상 트랙</button>
+                <button type="button" class="kanban-plan-filter-btn" data-track="youtube" onclick="window.switchKanbanTrack('youtube')">유튜브 영상 트랙</button>
             </div>
             <div class="kanban-board" id="kanbanBoard">
-                <!-- JS가 6개 칼럼과 카드들을 동적으로 렌더링합니다 -->
+                <!-- JS가 선택된 트랙의 칼럼과 카드들을 동적으로 렌더링합니다 -->
             </div>
         </div>
     </div>
@@ -3764,39 +3746,76 @@
             alert('모든 신청 내역이 삭제되었습니다.');
         };
 
-        // ===== 좌측 슬라이딩 사이드바 (Drawer) =====
-        window.openSidebar = function() {
-            const drawer = document.getElementById('sideDrawer');
-            const overlay = document.getElementById('drawerOverlay');
-            if (drawer) drawer.classList.add('open');
-            if (overlay) overlay.classList.add('active');
-        };
-
-        window.closeSidebar = function() {
-            const drawer = document.getElementById('sideDrawer');
-            const overlay = document.getElementById('drawerOverlay');
-            if (drawer) drawer.classList.remove('open');
-            if (overlay) overlay.classList.remove('active');
-        };
-
-        window.switchDrawerTab = function(tabName) {
-            document.querySelectorAll('.drawer-tab-btn').forEach(btn => {
+        // ===== 상시 노출 Hub 패널 (Workflow / Client Hub 탭 전환) =====
+        window.switchHubTab = function(tabName) {
+            document.querySelectorAll('.hub-tab-btn').forEach(btn => {
                 btn.classList.toggle('active', btn.getAttribute('data-tab') === tabName);
             });
-            document.querySelectorAll('.drawer-panel').forEach(panel => {
-                panel.classList.toggle('active', panel.id === 'drawerPanel-' + tabName);
+            document.querySelectorAll('.hub-panel-content').forEach(panel => {
+                panel.classList.toggle('active', panel.id === 'hubPanel-' + tabName);
             });
         };
 
-        // 6단계 워크플로우 이름 (Client Hub 조회 결과 표시 및 칸반 칼럼 제목에 공통 사용)
-        const WORKFLOW_STEPS = [
-            '01. 기획 & 컨셉 연출',
-            '02. 대본 & 비주얼 콘티 (AI 시안)',
-            '03. 현장 촬영 / 촬영 영상 제출 / AI 소스 생성',
-            '04. 종합 편집 (컷편집 & 롱폼)',
-            '05. 정밀 색보정 & 사운드 디자인',
-            '06. 최종 검수 / 마감 납품'
+        // ===== 이원화된 워크플로우: AI 영상 제작 (6단계) / 유튜브 영상 제작 (5단계) =====
+        const WORKFLOW_STEPS_AI = [
+            '01. 기획안 검토',
+            '02. 비주얼 콘티 제작',
+            '03. AI 영상 소스 생성',
+            '04. 종합 편집 & 믹싱',
+            '05. 1차 피드백 & 수정',
+            '06. 2차 피드백 & 최종 납품'
         ];
+
+        const WORKFLOW_STEPS_YOUTUBE = [
+            '01. 소스 전수 & 검토',
+            '02. 1차 컷편집 착수',
+            '03. 1차 피드백',
+            '04. 피드백 수정 작업',
+            '05. 최종 마감 & 납품'
+        ];
+
+        const WORKFLOW_TRACK_NOTES = {
+            ai: '콘티를 이미 보유하고 계신 경우 02단계(비주얼 콘티 제작)는 생략하고 바로 03단계로 진행됩니다.',
+            youtube: '기본 무상 수정은 3회까지 제공되며, 4회차부터는 회당 20,000원의 추가 비용이 발생합니다.'
+        };
+
+        let currentWorkflowTrack = 'ai';
+
+        function renderWorkflowSteps(track) {
+            const listEl = document.getElementById('workflowStepList');
+            const noteEl = document.getElementById('workflowTrackNote');
+            if (!listEl) return;
+
+            const steps = track === 'youtube' ? WORKFLOW_STEPS_YOUTUBE : WORKFLOW_STEPS_AI;
+
+            listEl.innerHTML = steps.map(label => {
+                const num = label.slice(0, 2);
+                const text = label.slice(4);
+                return `
+                    <li class="workflow-step">
+                        <span class="workflow-step-num">${num}</span>
+                        <span class="workflow-step-text">${text}</span>
+                    </li>
+                `;
+            }).join('');
+
+            if (noteEl) {
+                noteEl.textContent = WORKFLOW_TRACK_NOTES[track] || '';
+            }
+        }
+
+        window.switchWorkflowTrack = function(track) {
+            currentWorkflowTrack = track;
+            document.querySelectorAll('.workflow-track-btn').forEach(btn => {
+                btn.classList.toggle('active', btn.getAttribute('data-track') === track);
+            });
+            renderWorkflowSteps(track);
+        };
+
+        // 카테고리(AI 영상 / 유튜브 영상)에 맞는 단계 배열을 반환하는 헬퍼
+        function getStepsByCategory(category) {
+            return category === '유튜브 영상' ? WORKFLOW_STEPS_YOUTUBE : WORKFLOW_STEPS_AI;
+        }
 
         // ===== Client Hub: 작업 진행 현황 확인 (Supabase 실시간 연동) =====
         window.checkProjectStatus = async function() {
@@ -3853,14 +3872,33 @@
                 }
 
                 const project = data[0];
-                const stepIndex = Math.min(Math.max(parseInt(project.status_step, 10) - 1, 0), WORKFLOW_STEPS.length - 1);
-                const stepLabel = WORKFLOW_STEPS[stepIndex] || `${project.status_step}단계`;
+                const category = project.category || 'AI 영상';
+                const steps = getStepsByCategory(category);
+                const stepIndex = Math.min(Math.max(parseInt(project.status_step, 10) - 1, 0), steps.length - 1);
+                const stepLabel = steps[stepIndex] || `${project.status_step}단계`;
                 const projectTitle = project.project_title ? `「${project.project_title}」 ` : '';
+                const categoryLine = `<div style="margin-bottom: 6px;"><strong>진행 트랙:</strong> ${escapeHTML(category)}</div>`;
                 const planLine = project.plan_type ? `<div style="margin-bottom: 6px;"><strong>신청 플랜:</strong> ${escapeHTML(project.plan_type)}</div>` : '';
+
+                // 유튜브 영상 프로젝트일 경우 수정 횟수 안내 표시
+                let revisionLine = '';
+                if (category === '유튜브 영상') {
+                    const revisionCount = parseInt(project.revision_count, 10) || 0;
+                    const freeLimit = 3;
+                    const extraFeePerRound = 20000;
+                    if (revisionCount > freeLimit) {
+                        const extraRounds = revisionCount - freeLimit;
+                        const extraFee = extraRounds * extraFeePerRound;
+                        revisionLine = `<div style="margin-bottom: 6px;"><strong>현재 수정 진행 횟수:</strong> ${revisionCount} / ${freeLimit}회 무상 ` +
+                            `<span style="color:#B33; font-weight:700;">(추가요금 발생: ${(extraFee / 10000).toLocaleString('ko-KR')}만원)</span></div>`;
+                    } else {
+                        revisionLine = `<div style="margin-bottom: 6px;"><strong>현재 수정 진행 횟수:</strong> ${revisionCount} / ${freeLimit}회 무상 (3회 초과 시 회당 +2만원)</div>`;
+                    }
+                }
 
                 resultBox.classList.add('show');
                 resultBox.innerHTML =
-                    planLine +
+                    categoryLine + planLine + revisionLine +
                     name + '님, ' + projectTitle + '프로젝트는 현재 <strong>[' + stepLabel + ']</strong> 단계 진행 중입니다.<br>' +
                     '예상 마무리: ' + (project.deadline_info || '협의 중') +
                     '<span class="status-result-note">최종 업데이트: ' + (project.updated_at ? new Date(project.updated_at).toLocaleString('ko-KR') : '-') + '</span>';
@@ -3889,9 +3927,12 @@
 
         // ===== Admin 칸반 보드 열기/닫기 =====
         window.openKanbanAdmin = function() {
-            window.closeSidebar();
             const overlay = document.getElementById('kanbanOverlay');
             if (overlay) overlay.classList.add('active');
+            currentKanbanTrack = 'ai';
+            document.querySelectorAll('#kanbanTrackTabs .kanban-plan-filter-btn').forEach(btn => {
+                btn.classList.toggle('active', btn.getAttribute('data-track') === 'ai');
+            });
             loadKanbanData();
         };
 
@@ -3925,58 +3966,68 @@
                     return;
                 }
 
-                renderKanbanBoard(data || [], true);
-
-                // 이전에 선택돼있던 플랜 필터가 있으면 새로고침 후에도 유지
-                if (currentKanbanPlanFilter && currentKanbanPlanFilter !== '전체') {
-                    window.filterKanbanByPlan(currentKanbanPlanFilter);
-                }
+                allKanbanProjects = data || [];
+                renderKanbanBoardForTrack(currentKanbanTrack);
             } catch (err) {
                 console.error('❌ [loadKanbanData] 예외 발생:', err);
                 board.innerHTML = '<p style="padding: 20px; color: #999;">데이터를 불러오지 못했습니다.</p>';
             }
         }
 
-        // 서비스 플랜(프로젝트 유형) 목록
-        const PLAN_TYPES = ['단순 컷편집', '유튜브 종편', '유튜브 중·장편', 'AI 영상', '기타'];
+        let allKanbanProjects = [];       // 마지막으로 불러온 전체 프로젝트 (트랙 전환 시 재사용)
+        let currentKanbanTrack = 'ai';    // 'ai' | 'youtube'
 
-        let allKanbanProjects = [];        // 마지막으로 불러온 전체 프로젝트 (플랜 필터용 캐시)
-        let currentKanbanPlanFilter = '전체';
-
-        // ===== 플랜별 필터 버튼 클릭 처리 =====
-        window.filterKanbanByPlan = function(plan) {
-            currentKanbanPlanFilter = plan;
-            document.querySelectorAll('.kanban-plan-filter-btn').forEach(btn => {
-                btn.classList.toggle('active', btn.getAttribute('data-plan') === plan);
+        // ===== Admin 칸반: AI 영상 트랙 / 유튜브 영상 트랙 전환 =====
+        window.switchKanbanTrack = function(track) {
+            currentKanbanTrack = track;
+            document.querySelectorAll('#kanbanTrackTabs .kanban-plan-filter-btn').forEach(btn => {
+                btn.classList.toggle('active', btn.getAttribute('data-track') === track);
             });
-            const filtered = plan === '전체'
-                ? allKanbanProjects
-                : allKanbanProjects.filter(p => (p.plan_type || '기타') === plan);
-            renderKanbanBoard(filtered);
+            renderKanbanBoardForTrack(track);
         };
-        // ===== 칸반 보드 렌더링 (6개 칼럼) =====
-        // isFullDataset=true이면 전체 데이터로 간주해 allKanbanProjects 캐시를 갱신함
-        function renderKanbanBoard(projects, isFullDataset) {
-            if (isFullDataset) {
-                allKanbanProjects = projects;
-            }
 
+        // ===== 선택된 트랙(AI/유튜브)에 해당하는 프로젝트만 걸러 칸반 렌더링 =====
+        function renderKanbanBoardForTrack(track) {
+            const categoryLabel = track === 'youtube' ? '유튜브 영상' : 'AI 영상';
+            const filtered = allKanbanProjects.filter(p => (p.category || 'AI 영상') === categoryLabel);
+            renderKanbanBoard(filtered, track);
+        }
+
+        // ===== 칸반 보드 렌더링 (선택된 트랙의 단계 수만큼 칼럼 생성) =====
+        function renderKanbanBoard(projects, track) {
             const board = document.getElementById('kanbanBoard');
             if (!board) return;
 
+            const steps = track === 'youtube' ? WORKFLOW_STEPS_YOUTUBE : WORKFLOW_STEPS_AI;
+            const categoryLabel = track === 'youtube' ? '유튜브 영상' : 'AI 영상';
+            const totalSteps = steps.length;
+
             let html = '';
-            for (let step = 1; step <= 6; step++) {
+            for (let step = 1; step <= totalSteps; step++) {
                 const columnProjects = projects.filter(p => parseInt(p.status_step, 10) === step);
-                const stepLabel = WORKFLOW_STEPS[step - 1];
+                const stepLabel = steps[step - 1];
 
                 let cardsHTML = '';
                 columnProjects.forEach(p => {
-                    const optionsHTML = WORKFLOW_STEPS.map((label, idx) => {
+                    const optionsHTML = steps.map((label, idx) => {
                         const stepNum = idx + 1;
                         return `<option value="${stepNum}" ${stepNum === step ? 'selected' : ''}>${label}</option>`;
                     }).join('');
 
-                    const planLabel = p.plan_type || '기타';
+                    const planLabel = p.plan_type || categoryLabel;
+
+                    // 유튜브 영상 카드에는 수정 횟수 뱃지도 함께 표시
+                    let revisionBadgeHTML = '';
+                    if (categoryLabel === '유튜브 영상') {
+                        const revisionCount = parseInt(p.revision_count, 10) || 0;
+                        const freeLimit = 3;
+                        if (revisionCount > freeLimit) {
+                            const extraFee = (revisionCount - freeLimit) * 20000;
+                            revisionBadgeHTML = `<div class="kanban-card-revision-badge over">수정 ${revisionCount}회 · 추가요금 ${(extraFee / 10000)}만원</div>`;
+                        } else {
+                            revisionBadgeHTML = `<div class="kanban-card-revision-badge">수정 ${revisionCount} / ${freeLimit}회 무상</div>`;
+                        }
+                    }
 
                     cardsHTML += `
                         <div class="kanban-card">
@@ -3986,6 +4037,7 @@
                                 ${escapeHTML(p.client_name || '')} · ${escapeHTML(p.phone || '')}<br>
                                 마감: ${escapeHTML(p.deadline_info || '-')}
                             </div>
+                            ${revisionBadgeHTML}
                             <select class="kanban-card-select" onchange="window.updateCardStatus('${p.id}', this.value)">
                                 ${optionsHTML}
                             </select>
@@ -4004,7 +4056,7 @@
                             <span class="kanban-column-count">${columnProjects.length}</span>
                         </div>
                         <div class="kanban-cards">${cardsHTML}</div>
-                        <button class="kanban-add-card-btn" onclick="window.showAddCardForm(${step})">+ 새 클라이언트 추가</button>
+                        <button class="kanban-add-card-btn" onclick="window.showAddCardForm(${step}, '${categoryLabel}')">+ 새 클라이언트 추가</button>
                     </div>
                 `;
             }
@@ -4020,12 +4072,50 @@
         }
 
         // ===== 카드 추가 폼 =====
-        window.showAddCardForm = function(step) {
-            const optionsHTML = WORKFLOW_STEPS.map((label, idx) => {
+        // 진행 단계 <select> 옵션 HTML을 카테고리에 맞게 생성
+        function buildStepOptionsHTML(category, selectedStep) {
+            const steps = getStepsByCategory(category);
+            return steps.map((label, idx) => {
                 const stepNum = idx + 1;
-                return `<option value="${stepNum}" ${stepNum === step ? 'selected' : ''}>${label}</option>`;
+                return `<option value="${stepNum}" ${stepNum === selectedStep ? 'selected' : ''}>${label}</option>`;
             }).join('');
+        }
 
+        // 카테고리 변경 시 진행 단계 목록 & 수정 횟수 필드 표시 여부 갱신
+        window.onKanbanFormCategoryChange = function() {
+            const category = document.getElementById('kfCategory').value;
+            const stepSelect = document.getElementById('kfStatusStep');
+            const revisionGroup = document.getElementById('kfRevisionGroup');
+            if (stepSelect) {
+                stepSelect.innerHTML = buildStepOptionsHTML(category, 1);
+            }
+            if (revisionGroup) {
+                revisionGroup.style.display = category === '유튜브 영상' ? 'block' : 'none';
+            }
+            window.onKanbanFormRevisionChange();
+        };
+
+        // 수정 횟수 입력 시 추가요금 미리보기 갱신
+        window.onKanbanFormRevisionChange = function() {
+            const revisionInput = document.getElementById('kfRevisionCount');
+            const preview = document.getElementById('kfRevisionFeePreview');
+            if (!revisionInput || !preview) return;
+
+            const count = parseInt(revisionInput.value, 10) || 0;
+            const freeLimit = 3;
+            if (count > freeLimit) {
+                const extraFee = (count - freeLimit) * 20000;
+                preview.style.display = 'block';
+                preview.textContent = `추가요금 발생: ${(extraFee / 10000)}만원 (무상 ${freeLimit}회 초과 ${count - freeLimit}회 × 2만원)`;
+            } else {
+                preview.style.display = 'none';
+                preview.textContent = '';
+            }
+        };
+
+        window.showAddCardForm = function(step, category) {
+            const initialCategory = category || 'AI 영상';
+            const optionsHTML = buildStepOptionsHTML(initialCategory, step);
             const planOptionsHTML = PLAN_TYPES.map(plan => `<option value="${plan}">${plan}</option>`).join('');
 
             const formHTML = `
@@ -4045,8 +4135,20 @@
                             <input type="text" id="kfProjectTitle" placeholder="예: 브랜드 홍보 영상">
                         </div>
                         <div class="form-group">
+                            <label for="kfCategory">카테고리</label>
+                            <select id="kfCategory" onchange="window.onKanbanFormCategoryChange()">
+                                <option value="AI 영상" ${initialCategory === 'AI 영상' ? 'selected' : ''}>AI 영상</option>
+                                <option value="유튜브 영상" ${initialCategory === '유튜브 영상' ? 'selected' : ''}>유튜브 영상</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
                             <label for="kfPlanType">서비스 플랜</label>
                             <select id="kfPlanType">${planOptionsHTML}</select>
+                        </div>
+                        <div class="form-group" id="kfRevisionGroup" style="display: ${initialCategory === '유튜브 영상' ? 'block' : 'none'};">
+                            <label for="kfRevisionCount">수정 진행 횟수 (무상 3회)</label>
+                            <input type="number" id="kfRevisionCount" min="0" value="0" oninput="window.onKanbanFormRevisionChange()">
+                            <div class="kf-revision-fee-preview" id="kfRevisionFeePreview"></div>
                         </div>
                         <div class="form-group">
                             <label for="kfDeadline">예상 마감일 (D-day)</label>
@@ -4075,12 +4177,10 @@
                 return;
             }
 
-            const optionsHTML = WORKFLOW_STEPS.map((label, idx) => {
-                const stepNum = idx + 1;
-                return `<option value="${stepNum}" ${stepNum === parseInt(data.status_step, 10) ? 'selected' : ''}>${label}</option>`;
-            }).join('');
-
+            const category = data.category || 'AI 영상';
+            const optionsHTML = buildStepOptionsHTML(category, parseInt(data.status_step, 10));
             const planOptionsHTML = PLAN_TYPES.map(plan => `<option value="${plan}" ${plan === data.plan_type ? 'selected' : ''}>${plan}</option>`).join('');
+            const revisionCount = parseInt(data.revision_count, 10) || 0;
 
             const formHTML = `
                 <div class="kanban-form-overlay" id="kanbanFormOverlay">
@@ -4099,8 +4199,20 @@
                             <input type="text" id="kfProjectTitle" value="${escapeHTML(data.project_title || '')}">
                         </div>
                         <div class="form-group">
+                            <label for="kfCategory">카테고리</label>
+                            <select id="kfCategory" onchange="window.onKanbanFormCategoryChange()">
+                                <option value="AI 영상" ${category === 'AI 영상' ? 'selected' : ''}>AI 영상</option>
+                                <option value="유튜브 영상" ${category === '유튜브 영상' ? 'selected' : ''}>유튜브 영상</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
                             <label for="kfPlanType">서비스 플랜</label>
                             <select id="kfPlanType">${planOptionsHTML}</select>
+                        </div>
+                        <div class="form-group" id="kfRevisionGroup" style="display: ${category === '유튜브 영상' ? 'block' : 'none'};">
+                            <label for="kfRevisionCount">수정 진행 횟수 (무상 3회)</label>
+                            <input type="number" id="kfRevisionCount" min="0" value="${revisionCount}" oninput="window.onKanbanFormRevisionChange()">
+                            <div class="kf-revision-fee-preview" id="kfRevisionFeePreview"></div>
                         </div>
                         <div class="form-group">
                             <label for="kfDeadline">예상 마감일 (D-day)</label>
@@ -4135,9 +4247,12 @@
             const clientName = document.getElementById('kfClientName').value.trim();
             const phone = document.getElementById('kfPhone').value.trim();
             const projectTitle = document.getElementById('kfProjectTitle').value.trim();
+            const category = document.getElementById('kfCategory').value;
             const planType = document.getElementById('kfPlanType').value;
             const deadlineInfo = document.getElementById('kfDeadline').value.trim();
             const statusStep = parseInt(document.getElementById('kfStatusStep').value, 10);
+            const revisionInput = document.getElementById('kfRevisionCount');
+            const revisionCount = (category === '유튜브 영상' && revisionInput) ? (parseInt(revisionInput.value, 10) || 0) : 0;
 
             if (!clientName || !phone || !projectTitle) {
                 alert('클라이언트 이름, 연락처, 프로젝트명은 필수 입력입니다.');
@@ -4148,7 +4263,9 @@
                 client_name: clientName,
                 phone: phone,
                 project_title: projectTitle,
+                category: category,
                 plan_type: planType,
+                revision_count: revisionCount,
                 deadline_info: deadlineInfo,
                 status_step: statusStep,
                 updated_at: new Date().toISOString()
@@ -5070,6 +5187,9 @@
             console.log('📦 portfolioData 로드 중...');
             loadPortfolioData();
             console.log('✅ portfolioData 로드 완료:', portfolioData.length, '개');
+            
+            // 1-1. 상시 노출 Workflow 패널 초기 렌더링 (기본: AI 영상 트랙)
+            renderWorkflowSteps('ai');
             
             // 2. activeFilters 초기값 설정 (빈 Set = 전체 노출)
             activeFilters = new Set();
