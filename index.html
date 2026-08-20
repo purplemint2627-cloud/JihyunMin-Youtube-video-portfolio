@@ -62,14 +62,16 @@
         }
  
         :root {
-            /* ===== EGG Studio · 오프화이트/라이트 테마 ===== */
-            --dark: #F5F5F3;            /* 페이지 배경 (미세한 미색이 도는 오프화이트) */
-            --dark-secondary: #FFFFFF;  /* 카드/모달 배경 (화이트) */
-            --text: #111111;            /* 본문/타이틀 텍스트 (선명한 블랙) */
-            --text-muted: #666666;      /* 보조 텍스트 (차분한 다크 그레이) */
-            --text-faint: #888888;      /* 더 옅은 보조 텍스트 */
-            --line: #DADAD6;            /* 헤어라인 구분선 */
-            --accent: #111111;          /* 포인트 컬러 (모노크롬 블랙) */
+            /* ===== EGG Studio · A24 Dark Editorial 테마 ===== */
+            --dark: #0A0A0A;             /* 페이지 배경 (딥 블랙) */
+            --dark-secondary: #141416;   /* 카드/모달 배경 (시네마 다크 그레이) */
+            --dark-tertiary: #1C1C1F;    /* 한 단계 밝은 카드/입력창 배경 */
+            --text: #FFFFFF;             /* 본문/타이틀 텍스트 (선명한 화이트) */
+            --text-muted: #A0A0A5;       /* 보조 메타데이터 텍스트 */
+            --text-faint: #D1D1D6;       /* 설명 텍스트 */
+            --line: rgba(255, 255, 255, 0.08);  /* 헤어라인 구분선 */
+            --accent: #D4FF00;           /* 브랜드 포인트 컬러 (애시드 라임) */
+            --accent-text: #0A0A0A;      /* 라임 배경 위에 올라가는 텍스트(항상 블랙) */
         }
  
         html {
@@ -136,7 +138,7 @@
             font-size: 15px;
             font-weight: 400;
             line-height: 1.65;
-            color: #111111;
+            color: #FFFFFF;
         }
  
         .caption {
@@ -204,6 +206,102 @@
             width: 100%;
             animation: fadeInDown 1s ease-out;
         }
+
+        /* ===== A24 에디토리얼 히어로: 대표 프로젝트 리스트 + 호버 프리뷰 ===== */
+        /* ===== A24 에디토리얼 히어로: 대표 프로젝트 리스트 (좌측 하단 정렬, 보더 라인 없음) ===== */
+        .hero-editorial {
+            align-items: flex-start !important;
+            justify-content: flex-end !important;
+            text-align: left !important;
+            max-width: 760px;
+            width: 100%;
+        }
+
+        .hero-eyebrow {
+            font-size: 11px;
+            font-weight: 800;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            color: var(--accent);
+            margin-bottom: 20px;
+        }
+
+        .hero-project-list {
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+            gap: 12px;
+            width: 100%;
+        }
+
+        .hero-project-item {
+            display: block;
+            cursor: pointer;
+            opacity: 0.9;
+            transition: opacity 0.25s ease;
+        }
+
+        .hero-project-item:hover {
+            opacity: 1;
+        }
+
+        .hero-project-list:hover .hero-project-item {
+            opacity: 0.35;
+        }
+
+        .hero-project-list:hover .hero-project-item:hover {
+            opacity: 1;
+        }
+
+        .hero-project-title {
+            display: inline-block;
+            font-family: 'Inter', 'Helvetica Neue', 'Pretendard', sans-serif;
+            font-size: clamp(32px, 5vw, 64px);
+            font-weight: 800;
+            line-height: 1.1;
+            letter-spacing: -0.02em;
+            color: #FFFFFF;
+        }
+
+        .hero-project-title sup {
+            font-size: 0.28em;
+            font-weight: 700;
+            color: var(--accent);
+            margin-left: 6px;
+            top: -0.9em;
+        }
+
+        .hero-hover-image {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-size: cover;
+            background-position: center;
+            opacity: 0;
+            transition: opacity 0.45s ease;
+            z-index: 1;
+        }
+
+        .hero-hover-image.show {
+            opacity: 0.55;
+        }
+
+        .hero-scroll-cue {
+            margin-top: 28px;
+            font-size: 12px;
+            font-weight: 700;
+            letter-spacing: 0.05em;
+            color: var(--text-muted);
+            cursor: pointer;
+            transition: color 0.2s ease;
+        }
+
+        .hero-scroll-cue:hover {
+            color: var(--accent);
+        }
+
  
         /* 서브 슬로건 — 어떤 스튜디오인지 한눈에 알 수 있는 소개 문구 */
         .landing-subtitle {
@@ -432,31 +530,233 @@
         nav {
             position: fixed;
             top: 0;
+            left: 0;
             width: 100%;
             background: var(--dark);
-            z-index: 100;
+            z-index: 500;
         }
  
         .nav-container {
             max-width: 1400px;
             margin: 0 auto;
-            padding: 22px 40px;
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: space-between;
+            padding: 20px 40px;
+            display: grid;
+            grid-template-columns: 1fr auto 1fr;
             align-items: center;
-            gap: 12px 40px;
+            gap: 16px;
         }
- 
+
         .nav-brand {
             font-family: 'Pretendard', 'Inter', sans-serif;
-            font-size: 22px;
+            font-size: 20px;
             font-weight: 900;
-            letter-spacing: -0.5px;
+            letter-spacing: -0.02em;
             text-transform: uppercase;
             color: var(--text);
+            text-align: center;
+            justify-self: center;
         }
- 
+
+        .nav-menu-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: transparent;
+            border: none;
+            color: var(--text);
+            cursor: pointer;
+            font-size: 11px;
+            font-weight: 800;
+            letter-spacing: 0.1em;
+            justify-self: start;
+            padding: 6px 4px;
+            transition: opacity 0.2s ease;
+        }
+
+        .nav-menu-btn:hover {
+            opacity: 0.6;
+        }
+
+        .nav-quick-estimate-btn {
+            justify-self: end;
+            background: var(--accent);
+            color: var(--accent-text);
+            border: none;
+            padding: 10px 20px;
+            border-radius: 30px;
+            font-size: 12px;
+            font-weight: 800;
+            cursor: pointer;
+            white-space: nowrap;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .nav-quick-estimate-btn:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 6px 18px rgba(212, 255, 0, 0.25);
+        }
+
+        /* ===== 좌측 슬라이드 드로어 ===== */
+        .drawer-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.6);
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.35s ease;
+            z-index: 999;
+        }
+
+        .drawer-overlay.active {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .side-drawer {
+            position: fixed;
+            top: 0;
+            left: -360px;
+            width: 340px;
+            max-width: 85vw;
+            height: 100vh;
+            overflow-x: hidden;
+            overflow-y: auto;
+            background: #0D0D0D;
+            border-right: 1px solid var(--line);
+            box-shadow: 4px 0 24px rgba(0, 0, 0, 0.8);
+            z-index: 1000;
+            transition: left 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+            display: flex;
+            flex-direction: column;
+        }
+
+        .side-drawer.open {
+            left: 0;
+        }
+
+        .side-drawer-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 26px 24px 22px 24px;
+            border-bottom: 1px solid var(--line);
+        }
+
+        .side-drawer-brand {
+            font-family: 'Pretendard', 'Inter', sans-serif;
+            font-size: 15px;
+            font-weight: 900;
+            letter-spacing: -0.02em;
+            text-transform: uppercase;
+            color: #FFFFFF;
+        }
+
+        .side-drawer-close {
+            background: none;
+            border: none;
+            cursor: pointer;
+            color: #FFFFFF;
+            display: flex;
+            align-items: center;
+            padding: 4px;
+        }
+
+        .drawer-nav-list {
+            display: flex;
+            flex-direction: column;
+            width: 100%;
+            padding: 40px 28px;
+            box-sizing: border-box;
+        }
+
+        .drawer-nav-link {
+            display: flex;
+            align-items: baseline;
+            gap: 10px;
+            padding: 14px 2px;
+            border-bottom: 1px solid var(--line);
+            font-family: 'Pretendard', 'Inter', sans-serif;
+            font-size: 18px;
+            font-weight: 800;
+            color: #FFFFFF;
+            cursor: pointer;
+            transition: color 0.2s ease;
+        }
+
+        .drawer-nav-link span {
+            font-size: 11px;
+            font-weight: 500;
+            color: #A0A0A5;
+        }
+
+        .drawer-nav-link:hover,
+        .drawer-nav-link.active {
+            color: var(--accent);
+        }
+
+        .drawer-contact-block {
+            padding: 20px 24px;
+            margin-top: auto;
+        }
+
+        .drawer-contact-label {
+            font-size: 10.5px;
+            font-weight: 800;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            color: #A0A0A5;
+            margin-bottom: 12px;
+        }
+
+        .drawer-contact-chips {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .drawer-contact-chip {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 14px;
+            border: 1px solid var(--line);
+            border-radius: 30px;
+            background: transparent;
+            color: #FFFFFF;
+            font-size: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: border-color 0.2s ease, background 0.2s ease;
+        }
+
+        .drawer-contact-chip:hover {
+            border-color: var(--accent);
+            background: rgba(212, 255, 0, 0.06);
+        }
+
+        .drawer-admin-trigger {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            width: calc(100% - 48px);
+            margin: 0 24px 24px 24px;
+            padding: 10px;
+            background: transparent;
+            border: 1px solid var(--line);
+            border-radius: 6px;
+            color: #A0A0A5;
+            font-size: 11px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .drawer-admin-trigger:hover {
+            border-color: #A0A0A5;
+            color: #FFFFFF;
+        }
+
         .nav-links {
             display: flex;
             gap: 28px;
@@ -489,12 +789,13 @@
         }
 
         .hub-panel-inner {
-            background: #FFFFFF;
+            background: #141416;
             border: 1px solid var(--line);
             border-radius: 10px;
             overflow: hidden;
         }
 
+        /* 드로어 내부에 삽입된 Workflow/Client Hub 패널 */
         .hub-tabs {
             display: flex;
             border-bottom: 1px solid var(--line);
@@ -509,14 +810,14 @@
             font-size: 13px;
             font-weight: 800;
             letter-spacing: 0.01em;
-            color: #999999;
+            color: #A0A0A5;
             border-bottom: 2px solid transparent;
             transition: color 0.2s ease, border-color 0.2s ease;
         }
 
         .hub-tab-btn.active {
-            color: #111111;
-            border-bottom-color: #111111;
+            color: #FFFFFF;
+            border-bottom-color: #FFFFFF;
         }
 
         .hub-panel-content {
@@ -549,25 +850,25 @@
             border-radius: 6px;
             font-size: 12px;
             font-weight: 700;
-            color: #777777;
+            color: #A0A0A5;
             cursor: pointer;
             transition: all 0.15s ease;
         }
 
         .workflow-track-btn:hover {
-            border-color: #111111;
-            color: #111111;
+            border-color: #FFFFFF;
+            color: #FFFFFF;
         }
 
         .workflow-track-btn.active {
-            background: #111111;
-            border-color: #111111;
-            color: #F5F5F3;
+            background: #FFFFFF;
+            border-color: #FFFFFF;
+            color: #0A0A0A;
         }
 
         .workflow-track-note {
             font-size: 11.5px;
-            color: #999999;
+            color: #A0A0A5;
             line-height: 1.6;
             margin-top: 14px;
             padding-top: 14px;
@@ -579,7 +880,7 @@
             font-weight: 700;
             letter-spacing: 0.08em;
             text-transform: uppercase;
-            color: #999999;
+            color: #A0A0A5;
             margin-bottom: 18px;
         }
 
@@ -604,7 +905,7 @@
             font-family: 'Pretendard', 'Inter', sans-serif;
             font-size: 13px;
             font-weight: 800;
-            color: #CCCCCC;
+            color: rgba(255,255,255,0.16);
             flex-shrink: 0;
             min-width: 22px;
         }
@@ -612,7 +913,7 @@
         .workflow-step-text {
             font-size: 13px;
             font-weight: 600;
-            color: #111111;
+            color: #FFFFFF;
             letter-spacing: -0.01em;
             line-height: 1.5;
         }
@@ -638,7 +939,7 @@
             justify-content: space-between;
             font-size: 13px;
             font-weight: 600;
-            color: #111111;
+            color: #FFFFFF;
             transition: opacity 0.2s ease;
         }
 
@@ -659,7 +960,7 @@
         .status-check-box label {
             font-size: 11px;
             font-weight: 700;
-            color: #999999;
+            color: #A0A0A5;
             margin-bottom: 6px;
             display: block;
         }
@@ -671,14 +972,14 @@
             border-radius: 4px;
             font-size: 13px;
             font-family: 'Pretendard', 'Inter', sans-serif;
-            color: #111111;
+            color: #FFFFFF;
         }
 
         .status-check-btn {
             width: 100%;
             padding: 11px;
-            background: #111111;
-            color: #F5F5F3;
+            background: var(--accent);
+            color: var(--accent-text);
             border: none;
             border-radius: 4px;
             font-size: 12px;
@@ -695,11 +996,11 @@
         .status-result {
             margin-top: 16px;
             padding: 14px;
-            background: #F5F5F3;
+            background: #1C1C1F;
             border-radius: 6px;
             font-size: 12.5px;
             line-height: 1.6;
-            color: #111111;
+            color: #FFFFFF;
             display: none;
         }
 
@@ -711,7 +1012,7 @@
             display: block;
             margin-top: 8px;
             font-size: 10.5px;
-            color: #999999;
+            color: #A0A0A5;
         }
 
         /* 컨테이너 */
@@ -769,7 +1070,7 @@
             font-size: 14px;
             font-weight: 800;
             letter-spacing: -0.1px;
-            color: #000000;
+            color: #FFFFFF;
         }
 
         .filter-tag-list {
@@ -781,22 +1082,22 @@
         .filter-tag-text {
             font-size: 13px;
             font-weight: 500;
-            color: #999999;
+            color: #A0A0A5;
             cursor: pointer;
             transition: color 0.2s ease;
             white-space: nowrap;
         }
 
         .filter-tag-text:hover {
-            color: #555555;
+            color: #D1D1D6;
         }
 
         .filter-tag-text.active {
-            color: #000000;
+            color: var(--accent);
             font-weight: 800;
         }
 
-        /* 선택된 필터 태그 칩 */
+        /* 선택된 필터 태그 칩 — 라임 뱃지로 강조 */
         .active-filter-chip-row {
             display: flex;
             flex-wrap: wrap;
@@ -808,12 +1109,12 @@
             display: inline-flex;
             align-items: center;
             gap: 8px;
-            background: #EAEAEA;
-            color: #111111;
+            background: var(--accent);
+            color: var(--accent-text);
             padding: 6px 12px;
             border-radius: 4px;
             font-size: 12px;
-            font-weight: 600;
+            font-weight: 700;
             animation: fadeIn 0.2s ease;
         }
 
@@ -823,15 +1124,16 @@
             cursor: pointer;
             font-size: 14px;
             line-height: 1;
-            color: #777777;
+            color: var(--accent-text);
+            opacity: 0.6;
             padding: 0;
             display: flex;
             align-items: center;
-            transition: color 0.2s ease;
+            transition: opacity 0.2s ease;
         }
 
         .filter-chip button:hover {
-            color: #000000;
+            opacity: 1;
         }
  
  
@@ -895,7 +1197,7 @@
             transform: translateX(-50%) translateY(-8px);
             background: var(--dark-secondary);
             border: 1px solid var(--accent);
-            color: #666666;
+            color: #A0A0A5;
             padding: 10px 14px;
             border-radius: 6px;
             font-size: 12px;
@@ -936,7 +1238,7 @@
             border-radius: 4px;
             font-size: 13px;
             line-height: 1.6;
-            color: #666666;
+            color: #A0A0A5;
         }
  
  
@@ -956,7 +1258,7 @@
  
         .history-modal-content {
             background: var(--dark-secondary);
-            border: 1px solid #DADAD6;
+            border: 1px solid rgba(255,255,255,0.14);
             border-radius: 8px;
             padding: 30px;
             max-width: 600px;
@@ -971,7 +1273,7 @@
             justify-content: space-between;
             align-items: center;
             margin-bottom: 20px;
-            border-bottom: 1px solid #DADAD6;
+            border-bottom: 1px solid rgba(255,255,255,0.14);
             padding-bottom: 15px;
         }
  
@@ -1004,8 +1306,8 @@
         }
  
         .history-card {
-            background: #F5F5F3;
-            border: 1px solid #DADAD6;
+            background: #1C1C1F;
+            border: 1px solid rgba(255,255,255,0.14);
             border-radius: 6px;
             padding: 15px;
             transition: all 0.3s ease;
@@ -1024,7 +1326,7 @@
             align-items: center;
             margin-bottom: 12px;
             padding-bottom: 8px;
-            border-bottom: 1px solid #DADAD6;
+            border-bottom: 1px solid rgba(255,255,255,0.14);
         }
  
  
@@ -1065,7 +1367,7 @@
         .history-card-description {
             margin-top: 12px;
             padding-top: 12px;
-            border-top: 1px solid #DADAD6;
+            border-top: 1px solid rgba(255,255,255,0.14);
             font-size: 12px;
             color: var(--text-muted);
             line-height: 1.5;
@@ -1085,7 +1387,7 @@
             display: flex;
             gap: 10px;
             padding-top: 20px;
-            border-top: 1px solid #DADAD6;
+            border-top: 1px solid rgba(255,255,255,0.14);
         }
  
  
@@ -1112,7 +1414,7 @@
             padding: 12px;
             background: transparent;
             color: var(--text);
-            border: 1px solid #CCCCCC;
+            border: 1px solid rgba(255,255,255,0.16);
             border-radius: 4px;
             cursor: pointer;
             font-weight: 600;
@@ -1147,7 +1449,7 @@
  
         /* ===== Admin 모드 표시 (레이아웃에 영향 없는 outline 사용) ===== */
         .masonry-item.admin-mode {
-            outline: 2px dashed #111111;
+            outline: 2px dashed rgba(255,255,255,0.5);
             outline-offset: 6px;
             border-radius: 2px;
         }
@@ -1161,13 +1463,13 @@
         .masonry-item.dragging {
             animation: none !important;
             opacity: 0.5;
-            outline: 2px dashed #111111;
+            outline: 2px dashed rgba(255,255,255,0.5);
             outline-offset: 6px;
         }
  
         /* 드래그 대상 카드 (drop zone 하이라이트) */
         .masonry-item.drag-over .masonry-item-image {
-            outline: 2px solid #111111;
+            outline: 2px solid rgba(255,255,255,0.5);
             outline-offset: -2px;
             box-shadow: 0 0 20px rgba(17, 17, 17, 0.45);
         }
@@ -1251,21 +1553,51 @@
         .play-button {
             width: 60px;
             height: 60px;
-            background: rgba(17, 17, 17, 0.95);
+            background: var(--accent);
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
-            color: white;
+            color: var(--accent-text);
             font-size: 24px;
             transition: all 0.3s ease;
             transform: scale(0.9);
         }
- 
+
         .masonry-item:hover .play-button {
             transform: scale(1);
-            background: rgba(17, 17, 17, 1);
+            background: var(--accent);
         }
+
+        /* 썸네일 위 오버레이 뱃지: 러닝타임 / 주요 작업 태그 */
+        .thumb-badge {
+            position: absolute;
+            z-index: 15;
+            font-size: 11px;
+            font-weight: 700;
+            padding: 4px 8px;
+            border-radius: 4px;
+            background: rgba(10, 10, 10, 0.75);
+            color: #FFFFFF;
+            backdrop-filter: blur(4px);
+            letter-spacing: -0.01em;
+        }
+
+        .thumb-badge-duration {
+            bottom: 10px;
+            right: 10px;
+        }
+
+        .thumb-badge-tags {
+            top: 10px;
+            left: 10px;
+            color: var(--accent);
+            max-width: calc(100% - 20px);
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
  
         /* 포트폴리오 카드 버튼 스타일 (썸네일 컨테이너 기준 absolute) */
         .portfolio-delete-btn,
@@ -1310,14 +1642,14 @@
             bottom: 12px;
             right: 12px;
             background: rgba(0, 0, 0, 0.7);
-            color: #111111;
+            color: #FFFFFF;
             border: 2px solid #111111;
             box-shadow: 0 4px 12px rgba(17, 17, 17, 0.3);
         }
  
         .portfolio-edit-btn:hover {
-            background: #111111;
-            color: #fff;
+            background: #FFFFFF;
+            color: #0A0A0A;
             transform: scale(1.15);
             box-shadow: 0 6px 16px rgba(17, 17, 17, 0.5);
         }
@@ -1335,20 +1667,20 @@
             font-size: 15px;
             font-weight: 700;
             margin-bottom: 6px;
-            color: #111111;
+            color: #FFFFFF;
             letter-spacing: -0.03em;
             line-height: 1.4;
             transition: color 0.3s ease;
         }
  
         .masonry-item:hover .portfolio-title {
-            color: #111111;
+            color: #FFFFFF;
         }
  
         .portfolio-meta {
             font-family: 'Pretendard', 'Inter', sans-serif;
             font-size: 12px;
-            color: #666666;
+            color: #A0A0A5;
             font-weight: 400;
             letter-spacing: -0.01em;
             line-height: 1.5;
@@ -1356,7 +1688,7 @@
         }
  
         .masonry-item:hover .portfolio-meta {
-            color: #555555;
+            color: #D1D1D6;
         }
 
         /* 카드 하단 태그 칩 */
@@ -1371,8 +1703,8 @@
             font-family: 'Pretendard', 'Inter', sans-serif;
             font-size: 11px;
             font-weight: 600;
-            color: #777777;
-            background: #EFEFEC;
+            color: #A0A0A5;
+            background: #1C1C1F;
             padding: 3px 9px;
             border-radius: 3px;
             letter-spacing: -0.02em;
@@ -1411,7 +1743,7 @@
             font-size: 15px;
             font-weight: 400;
             line-height: 1.95;
-            color: #111111;
+            color: #FFFFFF;
             margin-bottom: 22px;
         }
  
@@ -1421,7 +1753,7 @@
         }
 
         .about-content strong.highlight {
-            color: #111111;
+            color: #FFFFFF;
             font-weight: 800;
         }
 
@@ -1431,7 +1763,7 @@
             font-size: 19px;
             font-weight: 700;
             letter-spacing: -0.2px;
-            color: #111111;
+            color: #FFFFFF;
             margin-top: 44px;
             margin-bottom: 18px;
         }
@@ -1484,20 +1816,22 @@
  
         .pricing-card {
             border: 1px solid var(--line);
+            border-radius: 12px;
+            background: var(--dark-secondary);
             padding: 48px 36px;
             transition: all 0.3s ease;
         }
- 
+
         .pricing-card:hover {
             border-color: var(--text);
             transform: translateY(-5px);
         }
- 
+
         .pricing-card.featured {
             border-color: var(--accent);
-            background: rgba(17, 17, 17, 0.08);
+            background: linear-gradient(180deg, rgba(212, 255, 0, 0.07) 0%, var(--dark-secondary) 100%);
         }
- 
+
         .pricing-badge {
             display: inline-block;
             font-size: 11px;
@@ -1758,18 +2092,18 @@
             gap: 8px;
             padding: 10px 18px;
             border: 1px solid var(--line);
-            background: #FFFFFF;
+            background: #141416;
             border-radius: 30px;
             font-size: 12.5px;
             font-weight: 600;
-            color: #111111;
+            color: #FFFFFF;
             cursor: pointer;
             transition: border-color 0.2s ease, background 0.2s ease, transform 0.2s ease;
         }
 
         .quick-chip:hover {
-            border-color: #111111;
-            background: #F5F5F3;
+            border-color: #FFFFFF;
+            background: #1C1C1F;
             transform: translateY(-1px);
         }
 
@@ -1779,8 +2113,8 @@
             left: 50%;
             bottom: 40px;
             transform: translateX(-50%) translateY(20px);
-            background: #111111;
-            color: #F5F5F3;
+            background: #FFFFFF;
+            color: #0A0A0A;
             padding: 13px 22px;
             border-radius: 30px;
             font-size: 13px;
@@ -1841,7 +2175,7 @@
         .form-group textarea,
         .form-group select {
             width: 100%;
-            background: #FFFFFF;
+            background: #141416;
             border: 1px solid var(--line);
             color: var(--text);
             padding: 14px 16px;
@@ -1856,7 +2190,7 @@
         .form-group select:focus {
             outline: none;
             border-color: var(--accent);
-            background: #FFFFFF;
+            background: #141416;
             box-shadow: 0 0 0 3px rgba(17, 17, 17, 0.08);
         }
  
@@ -1921,8 +2255,8 @@
             display: inline-block;
             width: 14px;
             height: 14px;
-            border: 2px solid rgba(245, 245, 243, 0.35);
-            border-top: 2px solid #F5F5F3;
+            border: 2px solid rgba(10, 10, 10, 0.35);
+            border-top: 2px solid #0A0A0A;
             border-radius: 50%;
             animation: spin 0.8s linear infinite;
         }
@@ -2238,43 +2572,61 @@
             letter-spacing: -0.5px;
         }
  
-        .portfolio-modal-row {
+        .portfolio-credit-board {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            grid-template-columns: repeat(3, 1fr);
             gap: 24px;
             margin-bottom: 32px;
             padding-top: 24px;
             border-top: 1px solid var(--line);
         }
- 
-        .portfolio-modal-item {
-            display: flex;
-            flex-direction: column;
-            gap: 8px;
-        }
- 
-        .portfolio-modal-label {
-            font-size: 11px;
-            font-weight: 600;
-            letter-spacing: 1.5px;
+
+        .portfolio-credit-col-title {
+            font-size: 10.5px;
+            font-weight: 800;
+            letter-spacing: 0.12em;
             text-transform: uppercase;
             color: var(--accent);
+            margin-bottom: 14px;
         }
- 
-        .portfolio-modal-value {
-            font-size: 14px;
-            font-weight: 400;
-            line-height: 1.6;
+
+        .portfolio-credit-line {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+            margin-bottom: 14px;
+        }
+
+        .portfolio-credit-label {
+            font-size: 10.5px;
+            font-weight: 600;
+            letter-spacing: 0.04em;
+            text-transform: uppercase;
             color: var(--text-muted);
         }
- 
+
+        .portfolio-credit-value {
+            font-size: 14px;
+            font-weight: 500;
+            line-height: 1.6;
+            color: #FFFFFF;
+        }
+
+        .portfolio-credit-concept {
+            font-size: 13px;
+            line-height: 1.8;
+            color: var(--text-faint);
+        }
+
         .portfolio-modal-cta {
             display: flex;
             gap: 12px;
+            flex-wrap: wrap;
         }
- 
+
         .portfolio-modal-btn {
             flex: 1;
+            min-width: 200px;
             padding: 14px 24px;
             background: var(--accent);
             color: var(--dark);
@@ -2297,6 +2649,17 @@
             background: transparent;
             color: var(--accent);
             border: 1px solid var(--accent);
+        }
+
+        .portfolio-modal-btn-outline {
+            background: transparent;
+            color: var(--accent);
+            border: 1px solid var(--accent);
+        }
+
+        .portfolio-modal-btn-outline:hover {
+            background: var(--accent);
+            color: var(--dark);
         }
  
         .portfolio-modal-close {
@@ -2344,7 +2707,7 @@
                 font-size: 22px;
             }
  
-            .portfolio-modal-row {
+            .portfolio-credit-board {
                 grid-template-columns: 1fr;
                 gap: 16px;
             }
@@ -2390,7 +2753,7 @@
         }
 
         .kanban-modal {
-            background: #F5F5F3;
+            background: #1C1C1F;
             border-radius: 10px;
             width: 100%;
             max-width: 1500px;
@@ -2405,7 +2768,7 @@
             justify-content: space-between;
             padding: 22px 28px;
             border-bottom: 1px solid var(--line);
-            background: #FFFFFF;
+            background: #141416;
             border-radius: 10px 10px 0 0;
         }
 
@@ -2415,7 +2778,7 @@
             gap: 8px;
             flex-wrap: wrap;
             padding: 16px 28px;
-            background: #FFFFFF;
+            background: #141416;
             border-bottom: 1px solid var(--line);
         }
 
@@ -2426,20 +2789,20 @@
             border-radius: 20px;
             font-size: 12px;
             font-weight: 600;
-            color: #777777;
+            color: #A0A0A5;
             cursor: pointer;
             transition: all 0.15s ease;
         }
 
         .kanban-plan-filter-btn:hover {
-            border-color: #111111;
-            color: #111111;
+            border-color: #FFFFFF;
+            color: #FFFFFF;
         }
 
         .kanban-plan-filter-btn.active {
-            background: #111111;
-            border-color: #111111;
-            color: #F5F5F3;
+            background: #FFFFFF;
+            border-color: #FFFFFF;
+            color: #0A0A0A;
         }
 
         /* 카드 상단 플랜 칩 */
@@ -2447,8 +2810,8 @@
             display: inline-block;
             font-size: 10px;
             font-weight: 700;
-            color: #666666;
-            background: #EFEFEC;
+            color: #A0A0A5;
+            background: #1C1C1F;
             padding: 3px 8px;
             border-radius: 3px;
             margin-bottom: 6px;
@@ -2459,8 +2822,8 @@
             display: inline-block;
             font-size: 10px;
             font-weight: 700;
-            color: #666666;
-            background: #F0F0EE;
+            color: #A0A0A5;
+            background: #1C1C1F;
             border: 1px solid var(--line);
             padding: 3px 8px;
             border-radius: 3px;
@@ -2485,14 +2848,14 @@
             font-family: 'Pretendard', 'Inter', sans-serif;
             font-size: 18px;
             font-weight: 800;
-            color: #111111;
+            color: #FFFFFF;
         }
 
         .kanban-close-btn {
             background: none;
             border: none;
             cursor: pointer;
-            color: #111111;
+            color: #FFFFFF;
             display: flex;
             align-items: center;
             padding: 6px;
@@ -2508,7 +2871,7 @@
 
         .kanban-column {
             flex: 0 0 260px;
-            background: #EFEFEC;
+            background: #1C1C1F;
             border-radius: 8px;
             display: flex;
             flex-direction: column;
@@ -2519,7 +2882,7 @@
             padding: 14px 14px 10px 14px;
             font-size: 12.5px;
             font-weight: 800;
-            color: #111111;
+            color: #FFFFFF;
             display: flex;
             align-items: center;
             justify-content: space-between;
@@ -2528,8 +2891,8 @@
         .kanban-column-count {
             font-size: 11px;
             font-weight: 700;
-            color: #999999;
-            background: #FFFFFF;
+            color: #A0A0A5;
+            background: #141416;
             padding: 1px 8px;
             border-radius: 10px;
         }
@@ -2544,7 +2907,7 @@
         }
 
         .kanban-card {
-            background: #FFFFFF;
+            background: #141416;
             border-radius: 6px;
             padding: 12px 14px;
             box-shadow: 0 1px 3px rgba(0,0,0,0.08);
@@ -2553,14 +2916,14 @@
         .kanban-card-title {
             font-size: 13px;
             font-weight: 700;
-            color: #111111;
+            color: #FFFFFF;
             margin-bottom: 4px;
             letter-spacing: -0.02em;
         }
 
         .kanban-card-meta {
             font-size: 11.5px;
-            color: #777777;
+            color: #A0A0A5;
             line-height: 1.6;
             margin-bottom: 8px;
         }
@@ -2571,9 +2934,9 @@
             padding: 6px 8px;
             border: 1px solid var(--line);
             border-radius: 4px;
-            color: #111111;
+            color: #FFFFFF;
             margin-bottom: 8px;
-            background: #FAFAF8;
+            background: #1C1C1F;
         }
 
         .kanban-card-actions {
@@ -2587,33 +2950,33 @@
             font-weight: 600;
             padding: 6px 0;
             border: 1px solid var(--line);
-            background: #FFFFFF;
-            color: #111111;
+            background: #141416;
+            color: #FFFFFF;
             border-radius: 4px;
             cursor: pointer;
             transition: background 0.15s ease;
         }
 
         .kanban-card-actions button:hover {
-            background: #F0F0EE;
+            background: #1C1C1F;
         }
 
         .kanban-add-card-btn {
             margin: 0 10px 12px 10px;
             padding: 9px;
-            border: 1px dashed #CCCCCC;
+            border: 1px dashed rgba(255,255,255,0.16);
             background: transparent;
             border-radius: 6px;
             font-size: 12px;
             font-weight: 600;
-            color: #777777;
+            color: #A0A0A5;
             cursor: pointer;
             transition: all 0.15s ease;
         }
 
         .kanban-add-card-btn:hover {
-            border-color: #111111;
-            color: #111111;
+            border-color: #FFFFFF;
+            color: #FFFFFF;
         }
 
         /* 카드 추가/수정용 폼 모달 */
@@ -2629,7 +2992,7 @@
         }
 
         .kanban-form-box {
-            background: #FFFFFF;
+            background: #141416;
             border-radius: 8px;
             padding: 28px;
             width: 100%;
@@ -2640,7 +3003,7 @@
             font-size: 16px;
             font-weight: 800;
             margin-bottom: 20px;
-            color: #111111;
+            color: #FFFFFF;
         }
 
         .kanban-form-box .form-group {
@@ -2650,7 +3013,7 @@
         .kanban-form-box label {
             font-size: 11px;
             font-weight: 700;
-            color: #999999;
+            color: #A0A0A5;
             display: block;
             margin-bottom: 6px;
         }
@@ -2663,7 +3026,7 @@
             border-radius: 4px;
             font-size: 13px;
             font-family: 'Pretendard', 'Inter', sans-serif;
-            color: #111111;
+            color: #FFFFFF;
         }
 
         .kanban-form-actions {
@@ -2683,14 +3046,270 @@
         }
 
         .kanban-form-save {
-            background: #111111;
-            color: #F5F5F3;
+            background: var(--accent);
+            color: var(--accent-text);
         }
 
         .kanban-form-cancel {
             background: transparent;
             border: 1px solid var(--line) !important;
-            color: #111111;
+            color: #FFFFFF;
+        }
+
+        /* ===== [운영] 페이지 (Operation Hub) ===== */
+        .ops-container {
+            padding: 40px 0 100px 0;
+        }
+
+        .ops-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+            flex-wrap: wrap;
+            gap: 20px;
+            margin-bottom: 32px;
+            padding-bottom: 24px;
+            border-bottom: 1px solid var(--line);
+        }
+
+        .ops-eyebrow {
+            font-size: 11px;
+            font-weight: 800;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            color: #A0A0A5;
+            margin-bottom: 8px;
+        }
+
+        .ops-title {
+            font-family: 'Pretendard', 'Inter', sans-serif;
+            font-size: 36px;
+            font-weight: 900;
+            color: #FFFFFF;
+            letter-spacing: -0.02em;
+        }
+
+        .ops-tab-switcher {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        .ops-tab-switch-btn {
+            padding: 10px 16px;
+            border: 1px solid var(--line);
+            background: #141416;
+            border-radius: 6px;
+            font-size: 12.5px;
+            font-weight: 700;
+            color: #A0A0A5;
+            cursor: pointer;
+            transition: all 0.15s ease;
+        }
+
+        .ops-tab-switch-btn:hover {
+            border-color: #FFFFFF;
+            color: #FFFFFF;
+        }
+
+        .ops-tab-switch-btn.active {
+            background: #FFFFFF;
+            border-color: #FFFFFF;
+            color: #0A0A0A;
+        }
+
+        .ops-logout-btn {
+            color: #B33333 !important;
+        }
+
+        .ops-logout-btn:hover {
+            border-color: #B33333 !important;
+        }
+
+        .ops-summary-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 14px;
+            margin-bottom: 36px;
+        }
+
+        .ops-summary-card {
+            background: #141416;
+            border: 1px solid var(--line);
+            border-radius: 8px;
+            padding: 20px;
+        }
+
+        .ops-summary-label {
+            font-size: 11px;
+            font-weight: 700;
+            color: #A0A0A5;
+            margin-bottom: 10px;
+            letter-spacing: 0.02em;
+        }
+
+        .ops-summary-value {
+            font-family: 'Pretendard', 'Inter', sans-serif;
+            font-size: 28px;
+            font-weight: 900;
+            color: #FFFFFF;
+        }
+
+        .ops-tab-content {
+            display: none;
+        }
+
+        .ops-tab-content.active {
+            display: block;
+        }
+
+        .ops-kanban-board {
+            border: 1px solid var(--line);
+            border-radius: 10px;
+            background: #1C1C1F;
+            padding: 20px;
+        }
+
+        .ops-kanban-board .kanban-column {
+            max-height: 65vh;
+        }
+
+        .ops-portfolio-toolbar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 16px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+
+        .ops-add-btn {
+            background: var(--accent);
+            color: var(--accent-text);
+            border: none;
+            padding: 12px 20px;
+            border-radius: 6px;
+            font-weight: 700;
+            font-size: 13px;
+            cursor: pointer;
+        }
+
+        .ops-portfolio-hint {
+            font-size: 12px;
+            color: #A0A0A5;
+        }
+
+        .ops-portfolio-list {
+            display: flex;
+            flex-direction: column;
+            gap: 1px;
+            background: var(--line);
+            border: 1px solid var(--line);
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        .ops-portfolio-row {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            background: #141416;
+            padding: 12px 16px;
+            cursor: grab;
+            transition: background 0.15s ease;
+        }
+
+        .ops-portfolio-row.dragging {
+            opacity: 0.4;
+        }
+
+        .ops-portfolio-row.drag-over {
+            background: #1C1C1F;
+        }
+
+        .ops-row-drag-handle {
+            color: rgba(255,255,255,0.16);
+            flex-shrink: 0;
+            display: flex;
+        }
+
+        .ops-row-thumb {
+            width: 64px;
+            height: 36px;
+            object-fit: cover;
+            border-radius: 4px;
+            flex-shrink: 0;
+            background: #1C1C1F;
+        }
+
+        .ops-row-info {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .ops-row-title {
+            font-size: 13.5px;
+            font-weight: 700;
+            color: #FFFFFF;
+            margin-bottom: 3px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .ops-row-meta {
+            font-size: 11.5px;
+            color: #A0A0A5;
+        }
+
+        .ops-row-tags {
+            display: flex;
+            gap: 4px;
+            margin-top: 4px;
+            flex-wrap: wrap;
+        }
+
+        .ops-row-tag {
+            font-size: 10px;
+            color: #A0A0A5;
+            background: #1C1C1F;
+            padding: 2px 6px;
+            border-radius: 3px;
+        }
+
+        .ops-row-actions {
+            display: flex;
+            gap: 6px;
+            flex-shrink: 0;
+        }
+
+        .ops-row-actions button {
+            font-size: 11px;
+            font-weight: 600;
+            padding: 6px 10px;
+            border: 1px solid var(--line);
+            background: #141416;
+            border-radius: 4px;
+            cursor: pointer;
+            color: #FFFFFF;
+        }
+
+        .ops-row-actions button:hover {
+            background: #1C1C1F;
+        }
+
+        @media (max-width: 768px) {
+            .ops-summary-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .ops-title {
+                font-size: 28px;
+            }
+
+            .ops-row-tags {
+                display: none;
+            }
         }
 
         @media (max-width: 768px) {
@@ -2708,19 +3327,18 @@
 <body>
     <!-- 랜딩 페이지 -->
     <section class="landing-page" id="landing">
-        <!-- 배경 쇼릴 (무음 자동 재생 · 루프) — 아래 <source> 경로를 실제 쇼릴 파일로 교체해주세요 -->
-        <video class="landing-video-bg" autoplay muted loop playsinline preload="auto">
-            <source src="assets/showreel.mp4" type="video/mp4">
-            <source src="assets/showreel.webm" type="video/webm">
-        </video>
-        <div class="landing-video-overlay"></div>
-        <div class="landing-content">
-            <h1 class="landing-title">EGG<br>STUDIO</h1>
+        <div class="hero-hover-image" id="heroHoverImage"></div>
+        <div class="landing-content hero-editorial">
+            <div class="hero-eyebrow">EGG STUDIO — SELECTED WORKS</div>
+            <div class="hero-project-list" id="heroProjectList">
+                <!-- JS가 portfolioData 상위 항목을 A24 스타일 리스트로 렌더링합니다 -->
+            </div>
             <p class="landing-subtitle"><strong class="landing-subtitle-lead">1인 영상 제작사 Egg Studio를 운영하고 있는 민지현입니다.</strong><br>유튜브 콘텐츠부터 브랜디드 필름, AI 영상 연출까지. 몰입감 있는 서사로 브랜드의 가치를 높이는 영상 프로젝트를 만듭니다.</p>
             <div class="landing-cta-row">
                 <button class="landing-cta-btn solid" onclick="showPage('work')">포트폴리오 보기</button>
                 <button class="landing-cta-btn outline" onclick="showPage('estimate')">빠른 견적 문의</button>
             </div>
+            <div class="hero-scroll-cue" onclick="showPage('work')">↓ Explore Works</div>
         </div>
         <div class="landing-footer-row">
             <span class="landing-year">©2026</span>
@@ -2731,20 +3349,57 @@
     <!-- 네비게이션 -->
     <nav>
         <div class="nav-container container">
-            <div class="nav-brand" onclick="scrollToLanding()" style="cursor: pointer;">EGG!</div>
-            <div class="nav-links">
-                <a class="nav-link active" data-page="work" onclick="showPage('work')">work</a>
-                <a class="nav-link" data-page="about" onclick="showPage('about')">about</a>
-                <a class="nav-link" data-page="pricing" onclick="showPage('pricing')">pricing</a>
-                <a class="nav-link" data-page="estimate" onclick="showPage('estimate')">estimate</a>
-                <a class="nav-link" data-page="contact" onclick="showPage('contact')">contact</a>
-            </div>
+            <button class="nav-menu-btn" onclick="window.openDrawer()" aria-label="메뉴 열기">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
+                <span>MENU</span>
+            </button>
+            <div class="nav-brand" onclick="scrollToLanding()" style="cursor: pointer;">EGG STUDIO</div>
+            <button class="nav-quick-estimate-btn" onclick="showPage('estimate')">빠른 견적 문의</button>
         </div>
     </nav>
 
-    <!-- ===== Workflow + Client Hub 상시 노출 패널 (드로어 폐지, 항상 표시) ===== -->
-    <section class="hub-panel-section">
-        <div class="container">
+    <!-- 좌측 슬라이드 드로어 -->
+    <div class="drawer-overlay" id="drawerOverlay" onclick="window.closeDrawer()"></div>
+    <aside class="side-drawer" id="sideDrawer">
+        <div class="side-drawer-header">
+            <div class="side-drawer-brand">EGG Studio</div>
+            <button class="side-drawer-close" onclick="window.closeDrawer()" aria-label="메뉴 닫기">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+            </button>
+        </div>
+
+        <div class="drawer-nav-list">
+            <a class="drawer-nav-link" data-page="work" onclick="showPage('work'); window.closeDrawer();">Work <span>포트폴리오</span></a>
+            <a class="drawer-nav-link" data-page="about" onclick="showPage('about'); window.closeDrawer();">About <span>소개 및 장비</span></a>
+            <a class="drawer-nav-link" data-page="pricing" onclick="showPage('pricing'); window.closeDrawer();">Pricing <span>단가표</span></a>
+            <a class="drawer-nav-link" data-page="estimate" onclick="showPage('estimate'); window.closeDrawer();">Estimate <span>견적 신청</span></a>
+            <a class="drawer-nav-link" data-page="clienthub" onclick="showPage('clienthub'); window.closeDrawer();">Client Hub <span>진행 현황 조회</span></a>
+            <a class="drawer-nav-link" data-page="contact" onclick="showPage('contact'); window.closeDrawer();">Contact <span>연락처</span></a>
+        </div>
+
+        <div class="drawer-contact-block">
+            <div class="drawer-contact-label">Direct Contact</div>
+            <div class="drawer-contact-chips">
+                <button type="button" class="drawer-contact-chip" onclick="window.copyEmailChip()">
+                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+                    이메일 복사
+                </button>
+                <a class="drawer-contact-chip" href="sms:01052480797" onclick="window.handleSmsChip(event)">
+                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>
+                    24시간 문자 문의
+                </a>
+            </div>
+        </div>
+
+        <button class="drawer-admin-trigger" onclick="window.enterOpsMode()">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="11" width="14" height="10" rx="2"></rect><path d="M8 11V7a4 4 0 0 1 8 0v4"></path></svg>
+            Internal Admin
+        </button>
+    </aside>
+
+    <!-- ===== Workflow + Client Hub 페이지 (드로어 "Client Hub" 링크로 진입) ===== -->
+    <section id="clienthub-page" class="page">
+        <div class="container" style="padding-top: 140px; padding-bottom: 100px;">
             <div class="hub-panel-inner">
                 <div class="hub-tabs">
                     <button class="hub-tab-btn active" data-tab="workflow" onclick="window.switchHubTab('workflow')">Workflow</button>
@@ -2774,10 +3429,6 @@
                                     <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
                                 </button>
                             </div>
-
-                            <div style="text-align: left; margin-top: 40px;">
-                                <span onclick="window.handleAdminHiddenTrigger()" style="font-size: 10px; color: #DDDDDD; cursor: default; letter-spacing: 2px; user-select: none;">· · ·</span>
-                            </div>
                         </div>
 
                         <div>
@@ -2802,25 +3453,64 @@
         </div>
     </section>
 
-    <!-- Admin 칸반 보드 (Trello 스타일) -->
-    <div class="kanban-overlay" id="kanbanOverlay">
-        <div class="kanban-modal">
-            <div class="kanban-header">
-                <div class="kanban-title">Project Kanban — 클라이언트 진행 현황 관리</div>
-                <button class="kanban-close-btn" onclick="window.closeKanbanAdmin()" aria-label="닫기">
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
-                </button>
+    <!-- [운영] 페이지 (Operation Hub) — 클라이언트 진행 현황 Kanban + 포트폴리오 관리를 통합한 독립 관리자 페이지 -->
+    <section id="ops-page" class="page">
+        <div class="container ops-container">
+            <div class="ops-header">
+                <div>
+                    <div class="ops-eyebrow">INTERNAL</div>
+                    <h1 class="ops-title">운영</h1>
+                </div>
+                <div class="ops-tab-switcher">
+                    <button class="ops-tab-switch-btn active" data-ops-tab="kanban" onclick="window.switchOpsTab('kanban')">클라이언트 진행 현황 (Kanban)</button>
+                    <button class="ops-tab-switch-btn" data-ops-tab="portfolio" onclick="window.switchOpsTab('portfolio')">포트폴리오 관리</button>
+                    <button class="ops-tab-switch-btn ops-logout-btn" onclick="window.logoutOpsMode()">로그아웃</button>
+                </div>
             </div>
-            <div class="kanban-plan-filter" id="kanbanTrackTabs">
-                <button type="button" class="kanban-plan-filter-btn active" data-track="ai" onclick="window.switchKanbanTrack('ai')">AI 영상 트랙</button>
-                <button type="button" class="kanban-plan-filter-btn" data-track="youtube" onclick="window.switchKanbanTrack('youtube')">유튜브 영상 트랙</button>
+
+            <div class="ops-summary-grid">
+                <div class="ops-summary-card">
+                    <div class="ops-summary-label">총 진행 프로젝트</div>
+                    <div class="ops-summary-value" id="opsSummaryTotal">-</div>
+                </div>
+                <div class="ops-summary-card">
+                    <div class="ops-summary-label">최근 7일 활동</div>
+                    <div class="ops-summary-value" id="opsSummaryRecent">-</div>
+                </div>
+                <div class="ops-summary-card">
+                    <div class="ops-summary-label">AI 영상 프로젝트</div>
+                    <div class="ops-summary-value" id="opsSummaryAI">-</div>
+                </div>
+                <div class="ops-summary-card">
+                    <div class="ops-summary-label">유튜브 영상 프로젝트</div>
+                    <div class="ops-summary-value" id="opsSummaryYoutube">-</div>
+                </div>
             </div>
-            <div class="kanban-board" id="kanbanBoard">
-                <!-- JS가 선택된 트랙의 칼럼과 카드들을 동적으로 렌더링합니다 -->
+
+            <!-- 탭 1: 클라이언트 진행 현황 (Kanban) -->
+            <div class="ops-tab-content active" id="opsTab-kanban">
+                <div class="kanban-plan-filter" id="kanbanTrackTabs" style="padding: 0 0 16px 0; border-bottom: none;">
+                    <button type="button" class="kanban-plan-filter-btn active" data-track="ai" onclick="window.switchKanbanTrack('ai')">AI 영상 트랙</button>
+                    <button type="button" class="kanban-plan-filter-btn" data-track="youtube" onclick="window.switchKanbanTrack('youtube')">유튜브 영상 트랙</button>
+                </div>
+                <div class="kanban-board ops-kanban-board" id="kanbanBoard">
+                    <!-- JS가 선택된 트랙의 칼럼과 카드들을 동적으로 렌더링합니다 -->
+                </div>
+            </div>
+
+            <!-- 탭 2: 포트폴리오 관리 (Admin CMS) -->
+            <div class="ops-tab-content" id="opsTab-portfolio">
+                <div class="ops-portfolio-toolbar">
+                    <button class="ops-add-btn" onclick="window.showAddPortfolioForm()">+ 새 영상 추가</button>
+                    <span class="ops-portfolio-hint">행을 드래그하여 순서를 변경할 수 있습니다.</span>
+                </div>
+                <div class="ops-portfolio-list" id="opsPortfolioList">
+                    <!-- JS가 portfolioData를 렌더링합니다 -->
+                </div>
             </div>
         </div>
-    </div>
- 
+    </section>
+
     <!-- WORK 페이지 -->
     <section id="work-page" class="page active">
         <div class="container">
@@ -2837,6 +3527,7 @@
                             <span class="filter-tag-text" data-filter="숏폼" onclick="window.filterPortfolio('숏폼')">숏폼</span>
                             <span class="filter-tag-text" data-filter="단편 영화" onclick="window.filterPortfolio('단편 영화')">단편 영화</span>
                             <span class="filter-tag-text" data-filter="AI 영상" onclick="window.filterPortfolio('AI 영상')">AI 영상</span>
+                            <span class="filter-tag-text" data-filter="정밀색보정" onclick="window.filterPortfolio('정밀색보정')">정밀색보정</span>
                         </div>
                     </div>
                     <div class="filter-group">
@@ -2902,7 +3593,7 @@
             <div class="pricing-grid">
                 <!-- 1. 숏폼 편집 -->
                 <div class="pricing-card">
-                    <div class="pricing-badge">기본</div>
+                    <div class="pricing-badge">숏폼 입문용</div>
                     <h3>숏폼 편집</h3>
                     <div class="price-amount">50,000</div>
                     <span class="price-unit">원 / 건</span>
@@ -2919,7 +3610,7 @@
  
                 <!-- 2. 단순 컷편집 -->
                 <div class="pricing-card">
-                    <div class="pricing-badge">기본</div>
+                    <div class="pricing-badge">빠른 마감용</div>
                     <h3>단순 컷편집</h3>
                     <div class="price-amount">150,000</div>
                     <span class="price-unit">원 / 건</span>
@@ -2936,7 +3627,7 @@
  
                 <!-- 3. 유튜브 일반 (5~20분) -->
                 <div class="pricing-card">
-                    <div class="pricing-badge">인기</div>
+                    <div class="pricing-badge">유튜브 시작용</div>
                     <h3>유튜브 일반</h3>
                     <div class="price-amount">200,000</div>
                     <span class="price-unit">원 / 건</span>
@@ -2955,7 +3646,7 @@
  
                 <!-- 4. 유튜브 중장편 (20~30분) -->
                 <div class="pricing-card featured">
-                    <div class="pricing-badge">추천</div>
+                    <div class="pricing-badge">브랜드 채널 추천</div>
                     <h3>유튜브 중장편</h3>
                     <div class="price-amount">250,000</div>
                     <span class="price-unit">원 / 건</span>
@@ -2974,7 +3665,7 @@
  
                 <!-- 5. 유튜브 롱폼 (1시간) -->
                 <div class="pricing-card">
-                    <div class="pricing-badge">프리미엄</div>
+                    <div class="pricing-badge">고퀄리티 종합편집</div>
                     <h3>유튜브 롱폼</h3>
                     <div class="price-amount">400,000</div>
                     <span class="price-unit">원 / 건</span>
@@ -3190,11 +3881,8 @@
  
     <!-- Footer -->
     <footer style="background: var(--dark); border-top: 1px solid var(--line); padding: 20px 0; text-align: center; position: relative;">
-        <div style="color: #666666; font-size: 12px; padding: 20px;">
+        <div style="color: #A0A0A5; font-size: 12px; padding: 20px;">
             <p style="margin: 0;">© 2026 EGG Studio. All rights reserved.</p>
-            <button onclick="toggleAdminMode()" style="position: absolute; bottom: 20px; right: 20px; background: transparent; border: 1px solid #CCCCCC; color: #666666; padding: 5px; border-radius: 3px; cursor: pointer; display: inline-flex; align-items: center; justify-content: center; transition: all 0.3s ease;" title="관리자 모드">
-                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="11" width="14" height="10" rx="2"></rect><path d="M8 11V7a4 4 0 0 1 8 0v4"></path></svg>
-            </button>
         </div>
     </footer>
  
@@ -3215,42 +3903,57 @@
             </div>
             <div class="portfolio-modal-info">
                 <h2 class="portfolio-modal-title" id="portfolioModalTitle"></h2>
-                
-                <div class="portfolio-modal-row">
-                    <div class="portfolio-modal-item">
-                        <span class="portfolio-modal-label">참여 역할</span>
-                        <span class="portfolio-modal-value" id="portfolioModalRole"></span>
+
+                <div class="portfolio-credit-board">
+                    <div class="portfolio-credit-col">
+                        <div class="portfolio-credit-col-title">ROLE / SCOPE</div>
+                        <div class="portfolio-credit-line">
+                            <span class="portfolio-credit-label">참여 역할</span>
+                            <span class="portfolio-credit-value" id="portfolioModalRole"></span>
+                        </div>
+                        <div class="portfolio-credit-line">
+                            <span class="portfolio-credit-label">작업 개입 범위</span>
+                            <span class="portfolio-credit-value" id="portfolioModalContribution"></span>
+                        </div>
                     </div>
-                    <div class="portfolio-modal-item">
-                        <span class="portfolio-modal-label">작업 개입 범위</span>
-                        <span class="portfolio-modal-value" id="portfolioModalContribution"></span>
+
+                    <div class="portfolio-credit-col">
+                        <div class="portfolio-credit-col-title">SPEC &amp; DATA</div>
+                        <div class="portfolio-credit-line">
+                            <span class="portfolio-credit-label">영상 길이</span>
+                            <span class="portfolio-credit-value" id="portfolioModalDuration"></span>
+                        </div>
+                        <div class="portfolio-credit-line">
+                            <span class="portfolio-credit-label">누적 조회수</span>
+                            <span class="portfolio-credit-value" id="portfolioModalViews"></span>
+                        </div>
+                        <div class="portfolio-credit-line">
+                            <span class="portfolio-credit-label">납품 형태</span>
+                            <span class="portfolio-credit-value" id="portfolioModalDelivery"></span>
+                        </div>
+                    </div>
+
+                    <div class="portfolio-credit-col">
+                        <div class="portfolio-credit-col-title">KEY CONCEPT</div>
+                        <p class="portfolio-credit-concept" id="portfolioModalConcept"></p>
                     </div>
                 </div>
- 
-                <div class="portfolio-modal-row">
-                    <div class="portfolio-modal-item">
-                        <span class="portfolio-modal-label">영상 길이</span>
-                        <span class="portfolio-modal-value" id="portfolioModalDuration"></span>
-                    </div>
-                    <div class="portfolio-modal-item">
-                        <span class="portfolio-modal-label">조회수</span>
-                        <span class="portfolio-modal-value" id="portfolioModalViews"></span>
-                    </div>
-                </div>
- 
+
                 <div class="portfolio-modal-cta">
                     <a class="portfolio-modal-btn" id="portfolioModalLink" href="" target="_blank">
-                        ↗ 유튜브에서 직접 보기
+                        ↗ 유튜브에서 영상 전체 보기
                     </a>
+                    <button type="button" class="portfolio-modal-btn portfolio-modal-btn-outline" id="portfolioModalEstimateBtn" onclick="window.requestEstimateFromModal()">
+                        이 스타일로 견적 문의하기
+                    </button>
                 </div>
             </div>
         </div>
     </div>
  
     <script>
-        // ========== 관리자 설정 ==========
-        const ADMIN_PASSWORD = "1234";  // ← 여기서 비밀번호 변경 가능
-        let isAdminMode = false;
+        // ========== [운영] 페이지 통합 관리자 설정 ==========
+        const OPS_PASSWORD = "1234";  // ← 여기서 [운영] 페이지 비밀번호 변경 가능
         let portfolioData = [];
         let activeFilters = new Set();  // 현재 활성화된 다중 필터 키워드 집합 (비어있으면 전체 노출)
         // ================================
@@ -3400,107 +4103,185 @@
         }
 
         // ======================================
-        // 🔐 Admin 전역 함수들 (최상단)
+        // 🔐 [운영] 페이지 진입 (통합된 단일 관리자 진입점)
         // ======================================
- 
-        // 비밀번호 모달 표시
-        window.showPasswordModal = function() {
-            let modal = document.getElementById('passwordModal');
-            if (!modal) {
-                modal = document.createElement('div');
-                modal.id = 'passwordModal';
-                document.body.appendChild(modal);
+
+        // Admin 모드 토글 - 전역 함수
+        // ===== [운영] 페이지 진입 (nav [운영] 클릭 → 비밀번호 1회 확인) =====
+        // ===== 좌측 슬라이드 드로어 열기/닫기 =====
+        window.openDrawer = function() {
+            const drawer = document.getElementById('sideDrawer');
+            const overlay = document.getElementById('drawerOverlay');
+            if (drawer) drawer.classList.add('open');
+            if (overlay) overlay.classList.add('active');
+        };
+
+        window.closeDrawer = function() {
+            const drawer = document.getElementById('sideDrawer');
+            const overlay = document.getElementById('drawerOverlay');
+            if (drawer) drawer.classList.remove('open');
+            if (overlay) overlay.classList.remove('active');
+        };
+
+        // ESC 키로 드로어 닫기
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                window.closeDrawer();
             }
- 
-            modal.innerHTML = `
-                <div style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); display: flex; align-items: center; justify-content: center; z-index: 3000;">
-                    <div style="background: var(--dark-secondary); border: 2px solid #111111; padding: 40px; border-radius: 8px; max-width: 400px; width: 90%; text-align: center;">
-                        <h2 style="color: #111111; margin: 0 0 20px 0; font-size: 18px;">관리자 비밀번호</h2>
-                        <input type="password" id="adminPasswordInput" placeholder="비밀번호 입력" style="width: 100%; padding: 12px; background: #F5F5F3; border: 1px solid #DADAD6; color: #111111; border-radius: 4px; box-sizing: border-box; margin-bottom: 20px; font-size: 14px;" onkeypress="if(event.key==='Enter') window.submitAdminPassword()">
-                        <div style="display: flex; gap: 10px;">
-                            <button onclick="window.submitAdminPassword()" style="flex: 1; background: #111111; color: #fff; border: none; padding: 12px; cursor: pointer; border-radius: 4px; font-weight: 600;">확인</button>
-                            <button onclick="window.closePasswordModal()" style="flex: 1; background: transparent; color: #111111; border: 1px solid #CCCCCC; padding: 12px; cursor: pointer; border-radius: 4px;">취소</button>
-                        </div>
-                    </div>
-                </div>
-            `;
-            
-            setTimeout(() => {
-                const input = document.getElementById('adminPasswordInput');
-                if (input) input.focus();
-            }, 100);
-        };
- 
-        // 비밀번호 모달 닫기
-        window.closePasswordModal = function() {
-            const modal = document.getElementById('passwordModal');
-            if (modal) modal.remove();
-        };
- 
-        // 비밀번호 검증 및 제출
-        window.submitAdminPassword = function() {
-            const password = document.getElementById('adminPasswordInput').value;
-            if (!password) {
-                alert('비밀번호를 입력하세요.');
+        });
+
+        window.enterOpsMode = function() {
+            if (sessionStorage.getItem('opsAuthed') === 'true') {
+                window.showOpsPage();
                 return;
             }
- 
-            if (password === ADMIN_PASSWORD) {
-                isAdminMode = true;
-                window.closePasswordModal();
-                window.showAdminPanel();
-            } else {
-                alert('비밀번호가 잘못되었습니다.');
-                document.getElementById('adminPasswordInput').value = '';
-            }
-        };
- 
-        // 비밀번호 검증
-        function verifyAdminPassword(password) {
-            return password === ADMIN_PASSWORD;
-        }
- 
-        // Admin 모드 토글 - 전역 함수
-        window.toggleAdminMode = function() {
-            const password = prompt('관리자 비밀번호를 입력하세요:');
+            const password = prompt('운영 페이지 비밀번호를 입력하세요:');
             if (password === null) return;
- 
-            if (verifyAdminPassword(password)) {
-                isAdminMode = true;
-                window.showAdminPanel();
+
+            if (password === OPS_PASSWORD) {
+                sessionStorage.setItem('opsAuthed', 'true');
+                window.showOpsPage();
             } else {
                 alert('비밀번호가 잘못되었습니다.');
-                isAdminMode = false;
             }
         };
- 
-        // Admin 패널 표시 - 전역 함수
-        window.showAdminPanel = function() {
-            let adminPanel = document.getElementById('adminPanel');
-            if (!adminPanel) {
-                adminPanel = document.createElement('div');
-                adminPanel.id = 'adminPanel';
-                document.body.insertBefore(adminPanel, document.body.firstChild);
-            }
- 
-            adminPanel.innerHTML = `
-                <div style="background: var(--dark-secondary); border-bottom: 2px solid #111111; padding: 20px; position: relative; z-index: 1000;">
-                    <div style="max-width: 1200px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center;">
-                        <div>
-                            <h3 style="color: #111111; margin: 0; font-size: 16px;">관리자 모드 (포트폴리오 편집)</h3>
-                            <p style="color: #666666; margin: 8px 0 0 0; font-size: 13px;">카드가 흔들릴 때 드래그하여 순서를 변경하거나 삭제 버튼으로 삭제, 수정 버튼으로 수정할 수 있습니다.</p>
-                        </div>
-                        <button onclick="window.closeAdminMode()" style="background: transparent; color: #111111; border: 1px solid #CCCCCC; padding: 8px 16px; cursor: pointer; border-radius: 4px;">종료</button>
-                    </div>
-                </div>
-                <div style="background: #F5F5F3; padding: 20px; border-bottom: 1px solid #DADAD6;">
-                    <div style="max-width: 1200px; margin: 0 auto;">
-                        <button onclick="window.showAddPortfolioForm()" style="background: #111111; color: #fff; border: none; padding: 12px 20px; cursor: pointer; border-radius: 4px; font-weight: 600; font-size: 14px;">+ 새 영상 추가</button>
-                    </div>
-                </div>
-            `;
+
+        // ===== [운영] 페이지 표시 =====
+        window.showOpsPage = function() {
+            document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+            const opsPage = document.getElementById('ops-page');
+            if (opsPage) opsPage.classList.add('active');
+            document.querySelectorAll('.drawer-nav-link').forEach(l => l.classList.remove('active'));
+            window.scrollTo(0, 0);
+            window.switchOpsTab('kanban');
         };
- 
+
+        // ===== [운영] 페이지 내부 탭 전환 (Kanban / 포트폴리오 관리) =====
+        window.switchOpsTab = function(tab) {
+            document.querySelectorAll('.ops-tab-switch-btn[data-ops-tab]').forEach(btn => {
+                btn.classList.toggle('active', btn.getAttribute('data-ops-tab') === tab);
+            });
+            document.querySelectorAll('.ops-tab-content').forEach(panel => {
+                panel.classList.toggle('active', panel.id === 'opsTab-' + tab);
+            });
+
+            if (tab === 'kanban') {
+                initKanbanTab();
+            } else if (tab === 'portfolio') {
+                renderOpsPortfolioList();
+            }
+        };
+
+        // ===== [운영] 로그아웃 =====
+        window.logoutOpsMode = function() {
+            sessionStorage.removeItem('opsAuthed');
+            showPage('work');
+        };
+
+        // ===== [운영] 상단 요약 지표 카드 갱신 (Supabase projects 기준) =====
+        function updateOpsSummaryCards(projects) {
+            const list = Array.isArray(projects) ? projects : [];
+            const total = list.length;
+
+            const now = new Date();
+            const sevenDaysAgo = new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000);
+            const recentCount = list.filter(p => p.updated_at && new Date(p.updated_at) >= sevenDaysAgo).length;
+
+            const aiCount = list.filter(p => (p.category || 'AI 영상') === 'AI 영상').length;
+            const youtubeCount = list.filter(p => p.category === '유튜브 영상').length;
+
+            const totalEl = document.getElementById('opsSummaryTotal');
+            const recentEl = document.getElementById('opsSummaryRecent');
+            const aiEl = document.getElementById('opsSummaryAI');
+            const ytEl = document.getElementById('opsSummaryYoutube');
+            if (totalEl) totalEl.textContent = total;
+            if (recentEl) recentEl.textContent = recentCount;
+            if (aiEl) aiEl.textContent = aiCount;
+            if (ytEl) ytEl.textContent = youtubeCount;
+        }
+
+        // ===== [운영] 포트폴리오 관리 (Admin CMS) 리스트 렌더링 + 드래그 정렬 =====
+        function renderOpsPortfolioList() {
+            const container = document.getElementById('opsPortfolioList');
+            if (!container) return;
+
+            if (!portfolioData || portfolioData.length === 0) {
+                container.innerHTML = '<p style="padding: 20px; color: #999; font-size: 13px;">등록된 포트폴리오가 없습니다.</p>';
+                return;
+            }
+
+            container.innerHTML = '';
+
+            portfolioData.forEach((item, index) => {
+                const row = document.createElement('div');
+                row.className = 'ops-portfolio-row';
+                row.draggable = true;
+                row.dataset.index = index;
+
+                const thumbUrl = getThumbnailUrl(item);
+                const itemTags = Array.isArray(item.tags) ? item.tags : [];
+                const tagsHTML = itemTags.length > 0
+                    ? `<div class="ops-row-tags">${itemTags.map(tag => `<span class="ops-row-tag">#${escapeHTML(String(tag).replace(/\s|·/g, ''))}</span>`).join('')}</div>`
+                    : '';
+
+                row.innerHTML = `
+                    <span class="ops-row-drag-handle" title="드래그하여 순서 변경">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><line x1="4" y1="8" x2="20" y2="8"></line><line x1="4" y1="16" x2="20" y2="16"></line></svg>
+                    </span>
+                    <img class="ops-row-thumb" src="${thumbUrl}" alt="${escapeHTML(item.title || '')}">
+                    <div class="ops-row-info">
+                        <div class="ops-row-title">${escapeHTML(item.title || '(제목 없음)')}</div>
+                        <div class="ops-row-meta">${escapeHTML(item.category || '')} · ${escapeHTML(item.role || '')}</div>
+                        ${tagsHTML}
+                    </div>
+                    <div class="ops-row-actions">
+                        <button type="button" onclick="window.showPortfolioEditModal(${index})">수정</button>
+                        <button type="button" onclick="if(confirm('정말 이 영상을 삭제하시겠습니까?\\n이 작업은 되돌릴 수 없습니다.')) window.deletePortfolioItem(${index})">삭제</button>
+                    </div>
+                `;
+
+                row.addEventListener('dragstart', () => {
+                    row.classList.add('dragging');
+                    row.dragStartIndex = index;
+                });
+
+                row.addEventListener('dragend', () => {
+                    row.classList.remove('dragging');
+                    document.querySelectorAll('.ops-portfolio-row').forEach(r => r.classList.remove('drag-over'));
+                });
+
+                row.addEventListener('dragover', (e) => {
+                    e.preventDefault();
+                    if (row.classList.contains('dragging')) return;
+                    row.classList.add('drag-over');
+                });
+
+                row.addEventListener('dragleave', () => {
+                    row.classList.remove('drag-over');
+                });
+
+                row.addEventListener('drop', (e) => {
+                    e.preventDefault();
+                    row.classList.remove('drag-over');
+
+                    const draggingRow = document.querySelector('.ops-portfolio-row.dragging');
+                    if (draggingRow && draggingRow.dragStartIndex !== undefined) {
+                        const fromIndex = draggingRow.dragStartIndex;
+                        const toIndex = index;
+
+                        if (fromIndex !== toIndex) {
+                            const [movedItem] = portfolioData.splice(fromIndex, 1);
+                            portfolioData.splice(toIndex, 0, movedItem);
+                            savePortfolioData();
+                            renderPortfolioGrid(); // 공개 그리드 갱신 시 renderOpsPortfolioList()도 함께 갱신됨
+                        }
+                    }
+                });
+
+                container.appendChild(row);
+            });
+        }
+
         // 포트폴리오 삭제 - 전역 함수
         window.deletePortfolioItem = function(index) {
             console.log('🗑️ [deletePortfolioItem] 삭제 시작 - 인덱스:', index);
@@ -3530,20 +4311,6 @@
             renderPortfolioGrid();
             
             console.log('✅ 삭제 완료');
-        };
- 
-        // Admin 모드 종료 - 전역 함수
-        window.closeAdminMode = function() {
-            isAdminMode = false;
-            const adminPanel = document.getElementById('adminPanel');
-            if (adminPanel) {
-                adminPanel.remove();
-            }
-            const adminModal = document.getElementById('adminFormModal');
-            if (adminModal) {
-                adminModal.remove();
-            }
-            renderPortfolioGrid();
         };
  
         // 포트폴리오 필터링 (Service / Key Word 다중 선택 필터)
@@ -3915,31 +4682,14 @@
             }
         };
 
-        // ===== 비밀 Admin 진입 (Client Hub 하단 숨겨진 트리거) =====
-        window.handleAdminHiddenTrigger = function() {
-            const password = prompt('관리자 비밀번호를 입력하세요:');
-            if (password === '1234') {
-                window.openKanbanAdmin();
-            } else if (password !== null) {
-                alert('비밀번호가 잘못되었습니다.');
-            }
-        };
-
-        // ===== Admin 칸반 보드 열기/닫기 =====
-        window.openKanbanAdmin = function() {
-            const overlay = document.getElementById('kanbanOverlay');
-            if (overlay) overlay.classList.add('active');
+        // ===== [운영] 칸반 탭이 보일 때 초기화 (트랙: AI로 리셋 후 데이터 로드) =====
+        function initKanbanTab() {
             currentKanbanTrack = 'ai';
             document.querySelectorAll('#kanbanTrackTabs .kanban-plan-filter-btn').forEach(btn => {
                 btn.classList.toggle('active', btn.getAttribute('data-track') === 'ai');
             });
             loadKanbanData();
-        };
-
-        window.closeKanbanAdmin = function() {
-            const overlay = document.getElementById('kanbanOverlay');
-            if (overlay) overlay.classList.remove('active');
-        };
+        }
 
         // ===== 칸반 데이터 로드 (Supabase) =====
         async function loadKanbanData() {
@@ -3968,6 +4718,7 @@
 
                 allKanbanProjects = data || [];
                 renderKanbanBoardForTrack(currentKanbanTrack);
+                updateOpsSummaryCards(allKanbanProjects);
             } catch (err) {
                 console.error('❌ [loadKanbanData] 예외 발생:', err);
                 board.innerHTML = '<p style="padding: 20px; color: #999;">데이터를 불러오지 못했습니다.</p>';
@@ -4399,38 +5150,38 @@
             modal.style.cssText = 'position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); display: flex; align-items: center; justify-content: center; z-index: 2000;';
             
             modal.innerHTML = `
-                <div style="background: var(--dark-secondary); border: 1px solid #111111; padding: 30px; border-radius: 8px; max-width: 600px; width: 90%; max-height: 90vh; overflow-y: auto;">
+                <div style="background: var(--dark-secondary); border: 1px solid rgba(255,255,255,0.12); padding: 30px; border-radius: 8px; max-width: 600px; width: 90%; max-height: 90vh; overflow-y: auto;">
                     <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
-                        <h2 style="color: #111111; margin: 0; font-size: 20px;">새 영상 추가</h2>
-                        <button onclick="document.getElementById('adminFormModal').remove()" style="background: none; border: none; color: #111111; cursor: pointer; display: flex; align-items: center;"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg></button>
+                        <h2 style="color: #FFFFFF; margin: 0; font-size: 20px;">새 영상 추가</h2>
+                        <button onclick="document.getElementById('adminFormModal').remove()" style="background: none; border: none; color: #FFFFFF; cursor: pointer; display: flex; align-items: center;"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg></button>
                     </div>
  
                     <form onsubmit="window.handleAddPortfolio(event)" style="display: flex; flex-direction: column; gap: 15px;">
                         <div>
-                            <label style="color: #666666; display: block; margin-bottom: 5px; font-size: 12px;">YouTube URL 또는 ID *</label>
-                            <input type="text" id="adminYoutubeId" placeholder="예: https://youtu.be/dQw4w9WgXcQ 또는 dQw4w9WgXcQ" required style="width: 100%; padding: 10px; background: #F5F5F3; border: 1px solid #DADAD6; color: #111111; border-radius: 4px; box-sizing: border-box;">
+                            <label style="color: #A0A0A5; display: block; margin-bottom: 5px; font-size: 12px;">YouTube URL 또는 ID *</label>
+                            <input type="text" id="adminYoutubeId" placeholder="예: https://youtu.be/dQw4w9WgXcQ 또는 dQw4w9WgXcQ" required style="width: 100%; padding: 10px; background: #1C1C1F; border: 1px solid rgba(255,255,255,0.14); color: #FFFFFF; border-radius: 4px; box-sizing: border-box;">
                         </div>
 
-                        <div style="border: 1px dashed #CCCCCC; border-radius: 6px; padding: 12px; background: rgba(17,17,17,0.04);">
-                            <label style="color: #111111; display: block; margin-bottom: 8px; font-size: 12px; font-weight: 600;">커스텀 썸네일 (선택 사항 · 파일 업로드가 URL보다 우선 적용됩니다)</label>
+                        <div style="border: 1px dashed rgba(255,255,255,0.16); border-radius: 6px; padding: 12px; background: rgba(17,17,17,0.04);">
+                            <label style="color: #FFFFFF; display: block; margin-bottom: 8px; font-size: 12px; font-weight: 600;">커스텀 썸네일 (선택 사항 · 파일 업로드가 URL보다 우선 적용됩니다)</label>
 
-                            <label style="color: #666666; display: block; margin-bottom: 5px; font-size: 12px;">이미지 파일 선택</label>
-                            <input type="file" id="adminThumbnailFile" accept="image/*" onchange="handleThumbnailFilePreview(this, 'adminThumbnailPreview')" style="width: 100%; padding: 8px; background: #F5F5F3; border: 1px solid #DADAD6; color: #111111; border-radius: 4px; box-sizing: border-box; margin-bottom: 10px;">
+                            <label style="color: #A0A0A5; display: block; margin-bottom: 5px; font-size: 12px;">이미지 파일 선택</label>
+                            <input type="file" id="adminThumbnailFile" accept="image/*" onchange="handleThumbnailFilePreview(this, 'adminThumbnailPreview')" style="width: 100%; padding: 8px; background: #1C1C1F; border: 1px solid rgba(255,255,255,0.14); color: #FFFFFF; border-radius: 4px; box-sizing: border-box; margin-bottom: 10px;">
 
-                            <label style="color: #666666; display: block; margin-bottom: 5px; font-size: 12px;">또는 외부 이미지 URL 직접 입력</label>
-                            <input type="text" id="adminThumbnailUrl" placeholder="예: https://example.com/my-thumbnail.jpg" style="width: 100%; padding: 10px; background: #F5F5F3; border: 1px solid #DADAD6; color: #111111; border-radius: 4px; box-sizing: border-box; margin-bottom: 10px;">
+                            <label style="color: #A0A0A5; display: block; margin-bottom: 5px; font-size: 12px;">또는 외부 이미지 URL 직접 입력</label>
+                            <input type="text" id="adminThumbnailUrl" placeholder="예: https://example.com/my-thumbnail.jpg" style="width: 100%; padding: 10px; background: #1C1C1F; border: 1px solid rgba(255,255,255,0.14); color: #FFFFFF; border-radius: 4px; box-sizing: border-box; margin-bottom: 10px;">
 
-                            <img id="adminThumbnailPreview" src="" alt="썸네일 미리보기" style="display: none; width: 100%; max-height: 220px; object-fit: cover; border-radius: 4px; border: 1px solid #DADAD6;">
-                        </div>
- 
-                        <div>
-                            <label style="color: #666666; display: block; margin-bottom: 5px; font-size: 12px;">영상 제목 *</label>
-                            <input type="text" id="adminTitle" placeholder="예: Reminder of Spring" required style="width: 100%; padding: 10px; background: #F5F5F3; border: 1px solid #DADAD6; color: #111111; border-radius: 4px; box-sizing: border-box;">
+                            <img id="adminThumbnailPreview" src="" alt="썸네일 미리보기" style="display: none; width: 100%; max-height: 220px; object-fit: cover; border-radius: 4px; border: 1px solid rgba(255,255,255,0.14);">
                         </div>
  
                         <div>
-                            <label style="color: #666666; display: block; margin-bottom: 5px; font-size: 12px;">카테고리 *</label>
-                            <select id="adminCategory" name="category" required style="width: 100%; padding: 10px; background: #F5F5F3; border: 1px solid #DADAD6; color: #111111; border-radius: 4px; box-sizing: border-box;">
+                            <label style="color: #A0A0A5; display: block; margin-bottom: 5px; font-size: 12px;">영상 제목 *</label>
+                            <input type="text" id="adminTitle" placeholder="예: Reminder of Spring" required style="width: 100%; padding: 10px; background: #1C1C1F; border: 1px solid rgba(255,255,255,0.14); color: #FFFFFF; border-radius: 4px; box-sizing: border-box;">
+                        </div>
+ 
+                        <div>
+                            <label style="color: #A0A0A5; display: block; margin-bottom: 5px; font-size: 12px;">카테고리 *</label>
+                            <select id="adminCategory" name="category" required style="width: 100%; padding: 10px; background: #1C1C1F; border: 1px solid rgba(255,255,255,0.14); color: #FFFFFF; border-radius: 4px; box-sizing: border-box;">
                                 <option value="">카테고리를 선택하세요</option>
                                 <option value="유튜브 롱폼">유튜브 롱폼</option>
                                 <option value="숏폼">숏폼</option>
@@ -4440,33 +5191,33 @@
                         </div>
  
                         <div>
-                            <label style="color: #666666; display: block; margin-bottom: 5px; font-size: 12px;">참여 역할 *</label>
-                            <input type="text" id="adminRole" placeholder="예: shot | directed | edited" required style="width: 100%; padding: 10px; background: #F5F5F3; border: 1px solid #DADAD6; color: #111111; border-radius: 4px; box-sizing: border-box;">
+                            <label style="color: #A0A0A5; display: block; margin-bottom: 5px; font-size: 12px;">참여 역할 *</label>
+                            <input type="text" id="adminRole" placeholder="예: shot | directed | edited" required style="width: 100%; padding: 10px; background: #1C1C1F; border: 1px solid rgba(255,255,255,0.14); color: #FFFFFF; border-radius: 4px; box-sizing: border-box;">
                         </div>
  
                         <div>
-                            <label style="color: #666666; display: block; margin-bottom: 5px; font-size: 12px;">작업 범위 및 설명 *</label>
-                            <input type="text" id="adminContribution" placeholder="예: 컨셉 기획 100%, 촬영 100%, 편집 100%" required style="width: 100%; padding: 10px; background: #F5F5F3; border: 1px solid #DADAD6; color: #111111; border-radius: 4px; box-sizing: border-box;">
+                            <label style="color: #A0A0A5; display: block; margin-bottom: 5px; font-size: 12px;">작업 범위 및 설명 *</label>
+                            <input type="text" id="adminContribution" placeholder="예: 컨셉 기획 100%, 촬영 100%, 편집 100%" required style="width: 100%; padding: 10px; background: #1C1C1F; border: 1px solid rgba(255,255,255,0.14); color: #FFFFFF; border-radius: 4px; box-sizing: border-box;">
                         </div>
  
                         <div>
-                            <label style="color: #666666; display: block; margin-bottom: 5px; font-size: 12px;">영상 길이</label>
-                            <input type="text" id="adminDuration" placeholder="예: 5분 42초" style="width: 100%; padding: 10px; background: #F5F5F3; border: 1px solid #DADAD6; color: #111111; border-radius: 4px; box-sizing: border-box;">
+                            <label style="color: #A0A0A5; display: block; margin-bottom: 5px; font-size: 12px;">영상 길이</label>
+                            <input type="text" id="adminDuration" placeholder="예: 5분 42초" style="width: 100%; padding: 10px; background: #1C1C1F; border: 1px solid rgba(255,255,255,0.14); color: #FFFFFF; border-radius: 4px; box-sizing: border-box;">
                         </div>
  
                         <div>
-                            <label style="color: #666666; display: block; margin-bottom: 5px; font-size: 12px;">조회수</label>
-                            <input type="text" id="adminViews" placeholder="예: 25만 회" style="width: 100%; padding: 10px; background: #F5F5F3; border: 1px solid #DADAD6; color: #111111; border-radius: 4px; box-sizing: border-box;">
+                            <label style="color: #A0A0A5; display: block; margin-bottom: 5px; font-size: 12px;">조회수</label>
+                            <input type="text" id="adminViews" placeholder="예: 25만 회" style="width: 100%; padding: 10px; background: #1C1C1F; border: 1px solid rgba(255,255,255,0.14); color: #FFFFFF; border-radius: 4px; box-sizing: border-box;">
                         </div>
 
                         <div>
-                            <label style="color: #666666; display: block; margin-bottom: 5px; font-size: 12px;">태그 (쉼표로 구분 · Category/Style 필터와 카드 하단 태그에 사용됩니다)</label>
-                            <input type="text" id="adminTags" placeholder="예: 유튜브 롱폼, 시네마틱, 정밀색보정" style="width: 100%; padding: 10px; background: #F5F5F3; border: 1px solid #DADAD6; color: #111111; border-radius: 4px; box-sizing: border-box;">
+                            <label style="color: #A0A0A5; display: block; margin-bottom: 5px; font-size: 12px;">태그 (쉼표로 구분 · Category/Style 필터와 카드 하단 태그에 사용됩니다)</label>
+                            <input type="text" id="adminTags" placeholder="예: 유튜브 롱폼, 시네마틱, 정밀색보정" style="width: 100%; padding: 10px; background: #1C1C1F; border: 1px solid rgba(255,255,255,0.14); color: #FFFFFF; border-radius: 4px; box-sizing: border-box;">
                         </div>
  
                         <div style="display: flex; gap: 10px; margin-top: 20px;">
-                            <button type="submit" style="flex: 1; background: #111111; color: #fff; border: none; padding: 12px; cursor: pointer; border-radius: 4px; font-weight: 600;">저장</button>
-                            <button type="button" onclick="document.getElementById('adminFormModal').remove()" style="flex: 1; background: transparent; color: #111111; border: 1px solid #CCCCCC; padding: 12px; cursor: pointer; border-radius: 4px;">취소</button>
+                            <button type="submit" style="flex: 1; background: var(--accent); color: var(--accent-text); border: none; padding: 12px; cursor: pointer; border-radius: 4px; font-weight: 600;">저장</button>
+                            <button type="button" onclick="document.getElementById('adminFormModal').remove()" style="flex: 1; background: transparent; color: #FFFFFF; border: 1px solid rgba(255,255,255,0.16); padding: 12px; cursor: pointer; border-radius: 4px;">취소</button>
                         </div>
                     </form>
                 </div>
@@ -4626,43 +5377,43 @@
             modal.style.cssText = 'position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); display: flex; align-items: center; justify-content: center; z-index: 2000;';
             
             modal.innerHTML = `
-                <div style="background: var(--dark-secondary); border: 1px solid #111111; padding: 30px; border-radius: 8px; max-width: 600px; width: 90%; max-height: 90vh; overflow-y: auto;">
+                <div style="background: var(--dark-secondary); border: 1px solid rgba(255,255,255,0.12); padding: 30px; border-radius: 8px; max-width: 600px; width: 90%; max-height: 90vh; overflow-y: auto;">
                     <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
-                        <h2 style="color: #111111; margin: 0; font-size: 20px;">포트폴리오 수정</h2>
-                        <button onclick="document.getElementById('editPortfolioModal').remove()" style="background: none; border: none; color: #111111; cursor: pointer; display: flex; align-items: center;"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg></button>
+                        <h2 style="color: #FFFFFF; margin: 0; font-size: 20px;">포트폴리오 수정</h2>
+                        <button onclick="document.getElementById('editPortfolioModal').remove()" style="background: none; border: none; color: #FFFFFF; cursor: pointer; display: flex; align-items: center;"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg></button>
                     </div>
  
                     <form onsubmit="window.handleEditPortfolio(event, ${index})" style="display: flex; flex-direction: column; gap: 15px;">
                         <div>
-                            <label style="color: #666666; display: block; margin-bottom: 5px; font-size: 12px;">YouTube URL 또는 ID</label>
-                            <input type="text" id="editYoutubeId" value="${item.youtubeId}" placeholder="예: dQw4w9WgXcQ" style="width: 100%; padding: 10px; background: #F5F5F3; border: 1px solid #DADAD6; color: #111111; border-radius: 4px; box-sizing: border-box;">
+                            <label style="color: #A0A0A5; display: block; margin-bottom: 5px; font-size: 12px;">YouTube URL 또는 ID</label>
+                            <input type="text" id="editYoutubeId" value="${item.youtubeId}" placeholder="예: dQw4w9WgXcQ" style="width: 100%; padding: 10px; background: #1C1C1F; border: 1px solid rgba(255,255,255,0.14); color: #FFFFFF; border-radius: 4px; box-sizing: border-box;">
                         </div>
 
-                        <div style="border: 1px dashed #CCCCCC; border-radius: 6px; padding: 12px; background: rgba(17,17,17,0.04);">
-                            <label style="color: #111111; display: block; margin-bottom: 8px; font-size: 12px; font-weight: 600;">커스텀 썸네일 (선택 사항 · 파일 업로드가 URL보다 우선 적용됩니다)</label>
+                        <div style="border: 1px dashed rgba(255,255,255,0.16); border-radius: 6px; padding: 12px; background: rgba(17,17,17,0.04);">
+                            <label style="color: #FFFFFF; display: block; margin-bottom: 8px; font-size: 12px; font-weight: 600;">커스텀 썸네일 (선택 사항 · 파일 업로드가 URL보다 우선 적용됩니다)</label>
 
-                            <label style="color: #666666; display: block; margin-bottom: 5px; font-size: 12px;">이미지 파일 선택 (새로 선택 시 기존 썸네일을 대체합니다)</label>
-                            <input type="file" id="editThumbnailFile" accept="image/*" onchange="handleThumbnailFilePreview(this, 'editThumbnailPreview')" style="width: 100%; padding: 8px; background: #F5F5F3; border: 1px solid #DADAD6; color: #111111; border-radius: 4px; box-sizing: border-box; margin-bottom: 10px;">
+                            <label style="color: #A0A0A5; display: block; margin-bottom: 5px; font-size: 12px;">이미지 파일 선택 (새로 선택 시 기존 썸네일을 대체합니다)</label>
+                            <input type="file" id="editThumbnailFile" accept="image/*" onchange="handleThumbnailFilePreview(this, 'editThumbnailPreview')" style="width: 100%; padding: 8px; background: #1C1C1F; border: 1px solid rgba(255,255,255,0.14); color: #FFFFFF; border-radius: 4px; box-sizing: border-box; margin-bottom: 10px;">
 
-                            <label style="color: #666666; display: block; margin-bottom: 5px; font-size: 12px;">또는 외부 이미지 URL 직접 입력</label>
-                            <input type="text" id="editThumbnailUrl" value="${(item.customThumbnail && !item.customThumbnail.startsWith('data:')) ? item.customThumbnail : ''}" placeholder="예: https://example.com/my-thumbnail.jpg" style="width: 100%; padding: 10px; background: #F5F5F3; border: 1px solid #DADAD6; color: #111111; border-radius: 4px; box-sizing: border-box; margin-bottom: 10px;">
+                            <label style="color: #A0A0A5; display: block; margin-bottom: 5px; font-size: 12px;">또는 외부 이미지 URL 직접 입력</label>
+                            <input type="text" id="editThumbnailUrl" value="${(item.customThumbnail && !item.customThumbnail.startsWith('data:')) ? item.customThumbnail : ''}" placeholder="예: https://example.com/my-thumbnail.jpg" style="width: 100%; padding: 10px; background: #1C1C1F; border: 1px solid rgba(255,255,255,0.14); color: #FFFFFF; border-radius: 4px; box-sizing: border-box; margin-bottom: 10px;">
 
-                            <img id="editThumbnailPreview" src="${getThumbnailUrl(item) || ''}" alt="썸네일 미리보기" style="display: ${getThumbnailUrl(item) ? 'block' : 'none'}; width: 100%; max-height: 220px; object-fit: cover; border-radius: 4px; border: 1px solid #DADAD6;">
+                            <img id="editThumbnailPreview" src="${getThumbnailUrl(item) || ''}" alt="썸네일 미리보기" style="display: ${getThumbnailUrl(item) ? 'block' : 'none'}; width: 100%; max-height: 220px; object-fit: cover; border-radius: 4px; border: 1px solid rgba(255,255,255,0.14);">
 
-                            <label style="color: #666666; display: flex; align-items: center; gap: 6px; margin-top: 10px; font-size: 12px; cursor: pointer;">
+                            <label style="color: #A0A0A5; display: flex; align-items: center; gap: 6px; margin-top: 10px; font-size: 12px; cursor: pointer;">
                                 <input type="checkbox" id="editThumbnailRemove" style="cursor: pointer;">
                                 커스텀 썸네일 제거하고 유튜브 자동 썸네일 사용
                             </label>
                         </div>
  
                         <div>
-                            <label style="color: #666666; display: block; margin-bottom: 5px; font-size: 12px;">영상 제목</label>
-                            <input type="text" id="editTitle" value="${item.title}" placeholder="예: Reminder of Spring" style="width: 100%; padding: 10px; background: #F5F5F3; border: 1px solid #DADAD6; color: #111111; border-radius: 4px; box-sizing: border-box;">
+                            <label style="color: #A0A0A5; display: block; margin-bottom: 5px; font-size: 12px;">영상 제목</label>
+                            <input type="text" id="editTitle" value="${item.title}" placeholder="예: Reminder of Spring" style="width: 100%; padding: 10px; background: #1C1C1F; border: 1px solid rgba(255,255,255,0.14); color: #FFFFFF; border-radius: 4px; box-sizing: border-box;">
                         </div>
  
                         <div>
-                            <label style="color: #666666; display: block; margin-bottom: 5px; font-size: 12px;">카테고리</label>
-                            <select id="editCategory" style="width: 100%; padding: 10px; background: #F5F5F3; border: 1px solid #DADAD6; color: #111111; border-radius: 4px; box-sizing: border-box;">
+                            <label style="color: #A0A0A5; display: block; margin-bottom: 5px; font-size: 12px;">카테고리</label>
+                            <select id="editCategory" style="width: 100%; padding: 10px; background: #1C1C1F; border: 1px solid rgba(255,255,255,0.14); color: #FFFFFF; border-radius: 4px; box-sizing: border-box;">
                                 <option value="유튜브 롱폼" ${item.category === '유튜브 롱폼' ? 'selected' : ''}>유튜브 롱폼</option>
                                 <option value="숏폼" ${item.category === '숏폼' ? 'selected' : ''}>숏폼</option>
                                 <option value="단편 영화" ${item.category === '단편 영화' ? 'selected' : ''}>단편 영화</option>
@@ -4671,33 +5422,33 @@
                         </div>
  
                         <div>
-                            <label style="color: #666666; display: block; margin-bottom: 5px; font-size: 12px;">참여 역할</label>
-                            <input type="text" id="editRole" value="${item.role}" placeholder="예: shot | directed | edited" style="width: 100%; padding: 10px; background: #F5F5F3; border: 1px solid #DADAD6; color: #111111; border-radius: 4px; box-sizing: border-box;">
+                            <label style="color: #A0A0A5; display: block; margin-bottom: 5px; font-size: 12px;">참여 역할</label>
+                            <input type="text" id="editRole" value="${item.role}" placeholder="예: shot | directed | edited" style="width: 100%; padding: 10px; background: #1C1C1F; border: 1px solid rgba(255,255,255,0.14); color: #FFFFFF; border-radius: 4px; box-sizing: border-box;">
                         </div>
  
                         <div>
-                            <label style="color: #666666; display: block; margin-bottom: 5px; font-size: 12px;">작업 범위 및 설명</label>
-                            <input type="text" id="editContribution" value="${item.contribution}" placeholder="예: 컨셉 기획 100%, 촬영 100%, 편집 100%" style="width: 100%; padding: 10px; background: #F5F5F3; border: 1px solid #DADAD6; color: #111111; border-radius: 4px; box-sizing: border-box;">
+                            <label style="color: #A0A0A5; display: block; margin-bottom: 5px; font-size: 12px;">작업 범위 및 설명</label>
+                            <input type="text" id="editContribution" value="${item.contribution}" placeholder="예: 컨셉 기획 100%, 촬영 100%, 편집 100%" style="width: 100%; padding: 10px; background: #1C1C1F; border: 1px solid rgba(255,255,255,0.14); color: #FFFFFF; border-radius: 4px; box-sizing: border-box;">
                         </div>
  
                         <div>
-                            <label style="color: #666666; display: block; margin-bottom: 5px; font-size: 12px;">영상 길이</label>
-                            <input type="text" id="editDuration" value="${item.duration || ''}" placeholder="예: 5분 42초" style="width: 100%; padding: 10px; background: #F5F5F3; border: 1px solid #DADAD6; color: #111111; border-radius: 4px; box-sizing: border-box;">
+                            <label style="color: #A0A0A5; display: block; margin-bottom: 5px; font-size: 12px;">영상 길이</label>
+                            <input type="text" id="editDuration" value="${item.duration || ''}" placeholder="예: 5분 42초" style="width: 100%; padding: 10px; background: #1C1C1F; border: 1px solid rgba(255,255,255,0.14); color: #FFFFFF; border-radius: 4px; box-sizing: border-box;">
                         </div>
  
                         <div>
-                            <label style="color: #666666; display: block; margin-bottom: 5px; font-size: 12px;">조회수</label>
-                            <input type="text" id="editViews" value="${item.views || ''}" placeholder="예: 25만 회" style="width: 100%; padding: 10px; background: #F5F5F3; border: 1px solid #DADAD6; color: #111111; border-radius: 4px; box-sizing: border-box;">
+                            <label style="color: #A0A0A5; display: block; margin-bottom: 5px; font-size: 12px;">조회수</label>
+                            <input type="text" id="editViews" value="${item.views || ''}" placeholder="예: 25만 회" style="width: 100%; padding: 10px; background: #1C1C1F; border: 1px solid rgba(255,255,255,0.14); color: #FFFFFF; border-radius: 4px; box-sizing: border-box;">
                         </div>
 
                         <div>
-                            <label style="color: #666666; display: block; margin-bottom: 5px; font-size: 12px;">태그 (쉼표로 구분 · Category/Style 필터와 카드 하단 태그에 사용됩니다)</label>
-                            <input type="text" id="editTags" value="${Array.isArray(item.tags) ? item.tags.join(', ') : ''}" placeholder="예: 유튜브 롱폼, 시네마틱, 정밀색보정" style="width: 100%; padding: 10px; background: #F5F5F3; border: 1px solid #DADAD6; color: #111111; border-radius: 4px; box-sizing: border-box;">
+                            <label style="color: #A0A0A5; display: block; margin-bottom: 5px; font-size: 12px;">태그 (쉼표로 구분 · Category/Style 필터와 카드 하단 태그에 사용됩니다)</label>
+                            <input type="text" id="editTags" value="${Array.isArray(item.tags) ? item.tags.join(', ') : ''}" placeholder="예: 유튜브 롱폼, 시네마틱, 정밀색보정" style="width: 100%; padding: 10px; background: #1C1C1F; border: 1px solid rgba(255,255,255,0.14); color: #FFFFFF; border-radius: 4px; box-sizing: border-box;">
                         </div>
  
                         <div style="display: flex; gap: 10px; margin-top: 20px;">
-                            <button type="submit" style="flex: 1; background: #111111; color: #fff; border: none; padding: 12px; cursor: pointer; border-radius: 4px; font-weight: 600;">수정 완료</button>
-                            <button type="button" onclick="document.getElementById('editPortfolioModal').remove()" style="flex: 1; background: transparent; color: #111111; border: 1px solid #CCCCCC; padding: 12px; cursor: pointer; border-radius: 4px;">취소</button>
+                            <button type="submit" style="flex: 1; background: var(--accent); color: var(--accent-text); border: none; padding: 12px; cursor: pointer; border-radius: 4px; font-weight: 600;">수정 완료</button>
+                            <button type="button" onclick="document.getElementById('editPortfolioModal').remove()" style="flex: 1; background: transparent; color: #FFFFFF; border: 1px solid rgba(255,255,255,0.16); padding: 12px; cursor: pointer; border-radius: 4px;">취소</button>
                         </div>
                     </form>
                 </div>
@@ -4795,7 +5546,7 @@
                 targetPage.classList.add('active');
             }
  
-            document.querySelectorAll('.nav-link').forEach(link => {
+            document.querySelectorAll('.drawer-nav-link').forEach(link => {
                 link.classList.remove('active');
             });
             const navLink = document.querySelector(`[data-page="${pageName}"]`);
@@ -4815,7 +5566,7 @@
             targetPage.classList.add('active');
  
             // 네비게이션 활성 상태 업데이트
-            document.querySelectorAll('.nav-link').forEach(link => {
+            document.querySelectorAll('.drawer-nav-link').forEach(link => {
                 link.classList.remove('active');
             });
             document.querySelector(`[data-page="${pageName}"]`).classList.add('active');
@@ -4827,6 +5578,42 @@
         }
  
         // 브랜드 이름(민지현) 클릭 시 랜딩 페이지 최상단으로 이동
+        // ===== A24 에디토리얼 히어로: 대표 프로젝트 리스트 렌더링 + 호버 프리뷰 =====
+        function renderHeroProjectList() {
+            const container = document.getElementById('heroProjectList');
+            if (!container || !Array.isArray(portfolioData)) return;
+
+            const items = portfolioData.slice(0, 5);
+            if (items.length === 0) {
+                container.innerHTML = '';
+                return;
+            }
+
+            container.innerHTML = items.map((item) => {
+                const thumbUrl = getThumbnailUrl(item);
+                return `
+                    <div class="hero-project-item" data-thumb="${thumbUrl}" onmouseenter="window.heroHoverPreview(this)" onmouseleave="window.heroHoverReset()" onclick="showPage('work')">
+                        <span class="hero-project-title">${escapeHTML(item.title || '')}<sup>2026</sup></span>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        // 히어로 프로젝트 항목 호버 시 배경에 스틸컷 페이드인
+        window.heroHoverPreview = function(el) {
+            const thumb = el.getAttribute('data-thumb');
+            const overlayImg = document.getElementById('heroHoverImage');
+            if (overlayImg && thumb) {
+                overlayImg.style.backgroundImage = `url('${thumb}')`;
+                overlayImg.classList.add('show');
+            }
+        };
+
+        window.heroHoverReset = function() {
+            const overlayImg = document.getElementById('heroHoverImage');
+            if (overlayImg) overlayImg.classList.remove('show');
+        };
+
         // portfolioData로 마소닉 그리드 동적 생성
         function renderPortfolioGrid() {
             const masonryGrid = document.getElementById('masonryGrid');
@@ -4888,40 +5675,32 @@
                 renderedCount++;
                 
                 const masonryItem = document.createElement('div');
-                // Admin 모드일 때 jiggle 클래스 추가
-                masonryItem.className = isAdminMode ? 'masonry-item jiggle admin-mode' : 'masonry-item';
+                masonryItem.className = 'masonry-item';
                 masonryItem.style.cursor = 'pointer';
                 masonryItem.style.position = 'relative';
-                
-                // Admin 모드일 때 draggable 속성 추가
-                if (isAdminMode) {
-                    masonryItem.draggable = true;
-                    masonryItem.style.cursor = 'grab';
-                }
                 
                 // 드래그 이벤트 데이터 저장
                 masonryItem.dataset.index = index;
                 
                 const imageUrl = getThumbnailUrl(item);
                 
-                // Admin 모드일 때만 보이는 삭제 버튼 HTML (썸네일 컨테이너 기준 우측 상단 고정)
-                const deleteButtonHTML = isAdminMode ? `
-                    <button class="portfolio-delete-btn" data-index="${index}" title="삭제" draggable="false">
-                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
-                    </button>
-                ` : '';
-                
-                // Admin 모드일 때만 보이는 수정 버튼 HTML (썸네일 컨테이너 기준 우측 하단 고정)
-                const editButtonHTML = isAdminMode ? `
-                    <button class="portfolio-edit-btn" data-index="${index}" title="수정" draggable="false">
-                        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg>
-                    </button>
-                ` : '';
+                // 포트폴리오 편집(삭제/수정)은 이제 공개 페이지가 아닌 [운영] 페이지의
+                // 포트폴리오 관리 탭에서만 이루어지므로, 공개 그리드에는 버튼을 렌더링하지 않음
+                const deleteButtonHTML = '';
+                const editButtonHTML = '';
                 
                 // 카드 하단 태그 칩 HTML (#유튜브롱폼, #시네마틱 등)
                 const itemTags = Array.isArray(item.tags) ? item.tags : [];
                 const tagsHTML = itemTags.length > 0
                     ? `<div class="portfolio-tags">${itemTags.map(tag => `<span class="portfolio-tag">#${String(tag).replace(/\s|·/g, '')}</span>`).join('')}</div>`
+                    : '';
+                
+                // 썸네일 위 오버레이 뱃지: 러닝타임 + 주요 작업 태그 (클릭 전에도 스펙 파악 가능)
+                const durationBadgeHTML = item.duration
+                    ? `<div class="thumb-badge thumb-badge-duration">${escapeHTML(item.duration)}</div>`
+                    : '';
+                const thumbTagsHTML = itemTags.length > 0
+                    ? `<div class="thumb-badge thumb-badge-tags">${itemTags.slice(0, 3).map(t => `#${escapeHTML(String(t).replace(/\s|·/g, ''))}`).join(' ')}</div>`
                     : '';
                 
                 // 호버 프리뷰 영상 HTML (item.previewVideo가 있을 때만 렌더링 — 없으면 기존처럼 썸네일만 표시)
@@ -4951,6 +5730,8 @@
                         <div class="masonry-item-overlay">
                             <div class="play-button">▶</div>
                         </div>
+                        ${durationBadgeHTML}
+                        ${thumbTagsHTML}
                         ${deleteButtonHTML}
                         ${editButtonHTML}
                     </div>
@@ -4975,36 +5756,8 @@
                     });
                 }
                 
-                // 삭제 버튼 이벤트 핸들러 추가
-                const deleteBtn = masonryItem.querySelector('.portfolio-delete-btn');
-                if (deleteBtn) {
-                    deleteBtn.addEventListener('click', (e) => {
-                        e.stopPropagation();
-                        e.preventDefault();
-                        
-                        console.log('🗑️ 삭제 버튼 클릭 - 인덱스:', index);
-                        
-                        if (confirm('정말 이 영상 포트폴리오를 삭제하시겠습니까?\n이 작업은 되돌릴 수 없습니다.')) {
-                            window.deletePortfolioItem(index);
-                        }
-                    });
-                }
-                
-                // 수정 버튼 이벤트 핸들러 추가
-                const editBtn = masonryItem.querySelector('.portfolio-edit-btn');
-                if (editBtn) {
-                    editBtn.addEventListener('click', (e) => {
-                        e.stopPropagation();
-                        e.preventDefault();
-                        
-                        console.log('✏️ 수정 버튼 클릭 - 인덱스:', index);
-                        window.showPortfolioEditModal(index);
-                    });
-                }
-                masonryItem.addEventListener('click', (e) => {
-                    if (!deleteBtn || e.target !== deleteBtn) {
-                        openPortfolioModal(index);
-                    }
+                masonryItem.addEventListener('click', () => {
+                    openPortfolioModal(index);
                 });
                 
                 // 이미지 로드 실패 처리
@@ -5017,69 +5770,16 @@
                         </div>`;
                 });
                 
-                // Admin 모드일 때만 드래그 이벤트 추가
-                if (isAdminMode) {
-                    masonryItem.addEventListener('dragstart', (e) => {
-                        // 삭제/수정 버튼에서 시작된 드래그는 카드 드래그로 취급하지 않음
-                        if (e.target.closest('.portfolio-delete-btn, .portfolio-edit-btn')) {
-                            e.preventDefault();
-                            return;
-                        }
-                        e.dataTransfer.effectAllowed = 'move';
-                        e.dataTransfer.setData('text/html', e.currentTarget.innerHTML);
-                        masonryItem.classList.add('dragging');
-                        // 드래그 시작 인덱스 저장
-                        masonryItem.dragStartIndex = index;
-                    });
-                    
-                    masonryItem.addEventListener('dragend', (e) => {
-                        masonryItem.classList.remove('dragging');
-                        // 모든 아이템에서 drag-over 클래스 제거
-                        document.querySelectorAll('.masonry-item').forEach(item => {
-                            item.classList.remove('drag-over');
-                        });
-                    });
-                    
-                    masonryItem.addEventListener('dragover', (e) => {
-                        e.preventDefault();
-                        e.dataTransfer.dropEffect = 'move';
-                        if (masonryItem.classList.contains('dragging')) return;
-                        masonryItem.classList.add('drag-over');
-                    });
-                    
-                    masonryItem.addEventListener('dragleave', (e) => {
-                        masonryItem.classList.remove('drag-over');
-                    });
-                    
-                    masonryItem.addEventListener('drop', (e) => {
-                        e.preventDefault();
-                        e.stopPropagation();
-                        
-                        masonryItem.classList.remove('drag-over');
-                        
-                        // 드래그 시작 인덱스 가져오기
-                        const draggingItem = document.querySelector('.masonry-item.dragging');
-                        if (draggingItem && draggingItem.dragStartIndex !== undefined) {
-                            const fromIndex = draggingItem.dragStartIndex;
-                            const toIndex = index;
-                            
-                            // 배열 재정렬
-                            if (fromIndex !== toIndex) {
-                                const [movedItem] = portfolioData.splice(fromIndex, 1);
-                                portfolioData.splice(toIndex, 0, movedItem);
-                                
-                                // LocalStorage에 저장
-                                savePortfolioData();
-                                
-                                // 그리드 다시 렌더링
-                                renderPortfolioGrid();
-                            }
-                        }
-                    });
-                }
-                
                 masonryGrid.appendChild(masonryItem);
             });
+
+            // [운영] 페이지의 포트폴리오 관리 탭이 존재하면 함께 갱신 (단일 소스 동기화)
+            if (document.getElementById('opsPortfolioList')) {
+                renderOpsPortfolioList();
+            }
+
+            // 히어로 대표 프로젝트 리스트도 함께 갱신
+            renderHeroProjectList();
         }
         function playYoutube(videoId) {
             const modal = document.getElementById('youtubeModal');
@@ -5149,6 +5849,28 @@
             document.getElementById('portfolioModalDuration').textContent = portfolio.duration;
             document.getElementById('portfolioModalViews').textContent = portfolio.views;
             document.getElementById('portfolioModalLink').href = portfolio.youtubeUrl;
+
+            // 납품 형태 (카테고리 기반 안내)
+            const deliveryEl = document.getElementById('portfolioModalDelivery');
+            if (deliveryEl) {
+                deliveryEl.textContent = portfolio.category ? `${portfolio.category} · MP4 고화질 납품` : 'MP4 고화질 납품';
+            }
+
+            // 기획 의도 / 편집 포인트 요약 (전용 필드가 없을 경우 참여 정보 기반으로 자동 구성)
+            const conceptEl = document.getElementById('portfolioModalConcept');
+            if (conceptEl) {
+                const tagList = Array.isArray(portfolio.tags) ? portfolio.tags.join(', ') : '';
+                conceptEl.textContent = portfolio.concept
+                    ? portfolio.concept
+                    : `${portfolio.category || ''} 프로젝트로, ${portfolio.role || ''} 파트를 담당했습니다.${tagList ? ' 주요 키워드: ' + tagList + '.' : ''}`;
+            }
+
+            // "이 스타일로 견적 문의하기" 버튼에 현재 프로젝트 정보 저장 (Estimate 폼 자동 참고링크 채우기용)
+            const estimateBtn = document.getElementById('portfolioModalEstimateBtn');
+            if (estimateBtn) {
+                estimateBtn.dataset.refTitle = portfolio.title || '';
+                estimateBtn.dataset.refUrl = portfolio.youtubeUrl || '';
+            }
             
             // 모달 열기
             modal.classList.add('active');
@@ -5161,6 +5883,28 @@
             modal.classList.remove('active');
             document.body.style.overflow = 'auto';
         }
+
+        // "이 스타일로 견적 문의하기" — 상세 모달에서 바로 Estimate 폼으로 이동, 참고 링크 자동 입력
+        window.requestEstimateFromModal = function() {
+            const estimateBtn = document.getElementById('portfolioModalEstimateBtn');
+            const refTitle = estimateBtn ? estimateBtn.dataset.refTitle : '';
+            const refUrl = estimateBtn ? estimateBtn.dataset.refUrl : '';
+
+            closePortfolioModal();
+            showPage('estimate');
+
+            setTimeout(() => {
+                const referenceInput = document.getElementById('reference');
+                const descriptionInput = document.getElementById('description');
+                if (referenceInput && refUrl) {
+                    referenceInput.value = refUrl;
+                }
+                if (descriptionInput && refTitle && !descriptionInput.value) {
+                    descriptionInput.value = `\u300C${refTitle}\u300D\uC640 \uBE44\uC2B7\uD55C \uC2A4\uD0C0\uC77C\uB85C \uC81C\uC791\uC744 \uC694\uCCAD\uB4DC\uB9BD\uB2C8\uB2E4.\n\n`;
+                    descriptionInput.focus();
+                }
+            }, 150);
+        };
  
         // 포트폴리오 모달 외부 클릭 시 닫기
         document.addEventListener('DOMContentLoaded', function() {
@@ -5191,6 +5935,9 @@
             // 1-1. 상시 노출 Workflow 패널 초기 렌더링 (기본: AI 영상 트랙)
             renderWorkflowSteps('ai');
             
+            // 1-2. 히어로 대표 프로젝트 리스트 렌더링
+            renderHeroProjectList();
+            
             // 2. activeFilters 초기값 설정 (빈 Set = 전체 노출)
             activeFilters = new Set();
             console.log('🏷️ activeFilters 초기화:', Array.from(activeFilters));
@@ -5217,29 +5964,8 @@
             // 최초 진입 시 항상 최상단(히어로)에서 시작하도록 스크롤 위치 보정
             window.scrollTo(0, 0);
             
-            // 7. URL 파라미터 확인 (?admin, ?admin=true)
-            const urlParams = new URLSearchParams(window.location.search);
-            if (urlParams.get('admin') === 'true') {
-                // ?admin=true → Client Hub 진행상황 관리용 칸반 보드 바로 오픈 (비밀번호 불필요)
-                console.log('🗂️ URL에서 ?admin=true 감지 - 칸반 Admin 진입');
-                setTimeout(() => {
-                    window.openKanbanAdmin();
-                }, 500);
-            } else if (urlParams.has('admin')) {
-                console.log('🔐 URL에서 ?admin 감지 - 포트폴리오 Admin 모드 진입');
-                setTimeout(() => {
-                    window.toggleAdminMode();
-                }, 500);
-            }
-            
-            // 8. 키보드 단축키 (Ctrl+Shift+A)
-            document.addEventListener('keydown', function(e) {
-                if (e.ctrlKey && e.shiftKey && e.key === 'A') {
-                    e.preventDefault();
-                    console.log('⌨️ Ctrl+Shift+A 단축키 감지');
-                    window.toggleAdminMode();
-                }
-            });
+            // 7. [운영] 페이지 진입은 이제 nav의 [운영] 메뉴 클릭 → 비밀번호 1회 확인으로 통합됨
+            //    (기존에 흩어져 있던 ?admin URL 파라미터, 하단 자물쇠 버튼, 단축키 진입 방식은 모두 정리했습니다)
             
             console.log('🎉 [페이지 로드 완료]');
  
