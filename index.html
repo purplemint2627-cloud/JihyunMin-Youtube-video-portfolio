@@ -6130,6 +6130,8 @@
         let estimateInquiries = [];
         let currentInquiryStatusFilter = '전체';
         let currentOpenInquiryId = null;
+        // 이미 칸반 프로젝트로 등록된 견적 문의 id 추적 (같은 화면 세션 동안 중복 생성 방지)
+        const convertedInquiryIds = new Set();
 
         // ===== Supabase 'estimates' 테이블에서 견적 문의 내역 조회 =====
         async function loadEstimateInquiries() {
@@ -6433,14 +6435,81 @@
         };
 
         // ===== 상태 즉시 변경 (드롭다운) =====
+        // ===== 견적 문의 → 칸반 프로젝트(projects 테이블) 전환 =====
+        // 카테고리는 프로젝트 유형 문구에 'AI'가 포함되어 있으면 AI 영상 트랙, 그 외에는 유튜브 영상 트랙으로 매핑합니다.
+        function inferCategoryFromProjectType(projectType) {
+            return /ai/i.test(projectType || '') ? 'AI 영상' : '유튜브 영상';
+        }
+
+        async function convertInquiryToProject(id, options) {
+            options = options || {};
+            const inquiry = estimateInquiries.find(inq => String(inq.id) === String(id));
+            if (!inquiry) return false;
+
+            if (convertedInquiryIds.has(String(id))) {
+                if (!options.silent) alert('이미 칸반 프로젝트로 등록된 견적 문의입니다.');
+                return false;
+            }
+
+            if (!sbClient) {
+                if (!options.silent) alert('데이터베이스에 연결할 수 없어 칸반 프로젝트를 생성하지 못했습니다.');
+                return false;
+            }
+
+            const category = inferCategoryFromProjectType(inquiry.projectType);
+            const projectTitle = inquiry.company
+                ? `${inquiry.company} - ${inquiry.projectType || '견적 문의'}`
+                : `${inquiry.clientName} - ${inquiry.projectType || '견적 문의'}`;
+
+            const payload = {
+                client_name: inquiry.clientName,
+                phone: inquiry.phone,
+                project_title: projectTitle,
+                category: category,
+                plan_type: inquiry.projectType || '',
+                revision_count: 0,
+                deadline_info: inquiry.deadline || '',
+                status_step: 1,
+                updated_at: new Date().toISOString()
+            };
+
+            try {
+                const { error } = await sbClient.from('projects').insert([payload]);
+                if (error) {
+                    console.error('❌ [convertInquiryToProject] Supabase 오류:', error);
+                    if (!options.silent) alert('칸반 프로젝트 등록에 실패했습니다: ' + error.message);
+                    return false;
+                }
+
+                convertedInquiryIds.add(String(id));
+                if (!options.silent) {
+                    alert('칸반 보드에 새 프로젝트로 등록되었습니다. (' + category + ' 트랙 · 01단계)');
+                }
+                if (String(currentOpenInquiryId) === String(id)) {
+                    renderInquiryDetail(id);
+                }
+                return true;
+            } catch (err) {
+                console.error('❌ [convertInquiryToProject] 예외 발생:', err);
+                if (!options.silent) alert('칸반 프로젝트 등록 중 오류가 발생했습니다: ' + (err && err.message ? err.message : err));
+                return false;
+            }
+        }
+
+        // 상세 패널의 "[칸반 프로젝트로 등록]" 버튼용 핸들러
+        window.convertInquiryToProject = function(id) {
+            if (!confirm('이 견적 문의를 칸반 보드에 새 프로젝트로 등록하시겠습니까?')) return;
+            convertInquiryToProject(id);
+        };
+
         window.updateInquiryStatus = async function(id, newStatus) {
-            const inquiry = estimateInquiries.find(inq => inq.id === id);
+            const inquiry = estimateInquiries.find(inq => String(inq.id) === String(id));
             if (!inquiry) return;
 
             const previousStatus = inquiry.status;
             inquiry.status = newStatus; // 낙관적 업데이트로 즉시 화면 반영
             renderInquiryTable();
-            if (currentOpenInquiryId === id) {
+            if (String(currentOpenInquiryId) === String(id)) {
                 renderInquiryDetail(id);
             }
 
@@ -6456,6 +6525,15 @@
                     alert('상태 변경에 실패했습니다: ' + error.message);
                     inquiry.status = previousStatus; // 실패 시 롤백
                     renderInquiryTable();
+                } else if (newStatus === '수주' && !convertedInquiryIds.has(String(id))) {
+                    // 상태가 '수주'로 바뀌면 자동으로 칸반 프로젝트를 생성 (이미 등록된 건 건너뜀)
+                    const created = await convertInquiryToProject(id, { silent: true });
+                    if (created) {
+                        console.log('✅ [updateInquiryStatus] 상태 변경과 함께 칸반 프로젝트 자동 등록됨:', inquiry.clientName);
+                        if (String(currentOpenInquiryId) === String(id)) {
+                            renderInquiryDetail(id);
+                        }
+                    }
                 }
             } catch (err) {
                 console.error('❌ [updateInquiryStatus] 예외 발생:', err);
@@ -6482,7 +6560,7 @@
 
         // ===== 상세 패널 콘텐츠 렌더링 (기본정보 + 작업 링크 + 메모) =====
         function renderInquiryDetail(id) {
-            const inquiry = estimateInquiries.find(inq => inq.id === id);
+            const inquiry = estimateInquiries.find(inq => String(inq.id) === String(id));
             const titleEl = document.getElementById('inquiryDetailTitle');
             const bodyEl = document.getElementById('inquiryDetailBody');
             if (!inquiry || !titleEl || !bodyEl) return;
@@ -6527,6 +6605,9 @@
                         <div class="inquiry-detail-field-label">요구사항 상세</div>
                         <div class="inquiry-detail-field-value">${escapeHTML(inquiry.description || '작성된 내용이 없습니다.')}</div>
                     </div>
+                    <button type="button" class="ops-add-btn" style="width: 100%; margin-top: 6px;" ${convertedInquiryIds.has(String(inquiry.id)) ? 'disabled' : ''} onclick="window.convertInquiryToProject('${inquiry.id}')">
+                        ${convertedInquiryIds.has(String(inquiry.id)) ? '✓ 칸반 프로젝트 등록됨' : '칸반 프로젝트로 등록'}
+                    </button>
                 </div>
 
                 <div>
@@ -6552,7 +6633,7 @@
 
         // ===== 작업 링크 추가/삭제 =====
         window.addWorkLink = async function(id) {
-            const inquiry = estimateInquiries.find(inq => inq.id === id);
+            const inquiry = estimateInquiries.find(inq => String(inq.id) === String(id));
             if (!inquiry) return;
 
             const labelInput = document.getElementById('workLinkLabelInput');
@@ -6585,7 +6666,7 @@
         };
 
         window.removeWorkLink = async function(id, linkIndex) {
-            const inquiry = estimateInquiries.find(inq => inq.id === id);
+            const inquiry = estimateInquiries.find(inq => String(inq.id) === String(id));
             if (!inquiry || !Array.isArray(inquiry.workLinks)) return;
             inquiry.workLinks.splice(linkIndex, 1);
             renderInquiryDetail(id);
@@ -6606,7 +6687,7 @@
 
         // ===== 내부 메모 저장 =====
         window.saveInquiryNotes = async function(id) {
-            const inquiry = estimateInquiries.find(inq => inq.id === id);
+            const inquiry = estimateInquiries.find(inq => String(inq.id) === String(id));
             const textarea = document.getElementById('inquiryNotesTextarea');
             if (!inquiry || !textarea) return;
 
@@ -7103,13 +7184,15 @@
             }
 
             try {
+                // 연락처는 하이픈 유무와 무관하게 매칭되도록, 이름으로 후보를 먼저 조회한 뒤
+                // 숫자만 남긴 형태로 정규화해서 클라이언트 측에서 비교합니다.
+                const normalizedPhoneInput = phone.replace(/[^0-9]/g, '');
+
                 const { data, error } = await sbClient
                     .from('projects')
                     .select('*')
                     .eq('client_name', name)
-                    .eq('phone', phone)
-                    .order('updated_at', { ascending: false })
-                    .limit(1);
+                    .order('updated_at', { ascending: false });
 
                 if (error) {
                     console.error('❌ [checkProjectStatus] Supabase 조회 오류:', error);
@@ -7119,14 +7202,18 @@
                     return;
                 }
 
-                if (!data || data.length === 0) {
+                const matched = (data || []).filter(row =>
+                    String(row.phone || '').replace(/[^0-9]/g, '') === normalizedPhoneInput
+                );
+
+                if (matched.length === 0) {
                     resultBox.classList.add('show');
                     resultBox.innerHTML = '진행 중인 프로젝트 내역을 찾을 수 없습니다.' +
                         '<span class="status-result-note">이름/연락처를 다시 확인하시거나 담당자에게 문의해주세요.</span>';
                     return;
                 }
 
-                const project = data[0];
+                const project = matched[0];
                 const category = project.category || 'AI 영상';
                 const steps = getStepsByCategory(category);
                 const stepIndex = Math.min(Math.max(parseInt(project.status_step, 10) - 1, 0), steps.length - 1);
