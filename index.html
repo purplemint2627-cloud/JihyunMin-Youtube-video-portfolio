@@ -5859,7 +5859,7 @@
  
     <script>
         // ========== [운영] 페이지 통합 관리자 설정 ==========
-        const OPS_PASSWORD = "1234";  // ← 여기서 [운영] 페이지 비밀번호 변경 가능
+        const OPS_PASSWORD = "2727";  // ← 여기서 [운영] 페이지 비밀번호 변경 가능
         let portfolioData = [];
         let activeFilters = new Set();  // 현재 활성화된 다중 필터 키워드 집합 (비어있으면 전체 노출)
         // ================================
@@ -6159,10 +6159,11 @@
                 }
 
                 // DB 컬럼(snake_case) → 기존 화면 렌더링이 기대하는 필드명으로 매핑
+                // (일부 프로젝트에서 이름 컬럼이 name 대신 client_name으로 되어 있는 경우까지 안전하게 대응)
                 estimateInquiries = (data || []).map(row => ({
                     id: row.id,
                     submittedAt: row.created_at,
-                    clientName: row.name || '(이름 미입력)',
+                    clientName: row.name || row.client_name || '(이름 미입력)',
                     company: row.company || '',
                     email: row.email || '',
                     phone: row.phone || '',
@@ -6184,33 +6185,46 @@
         }
 
         // 실제 견적 제출 성공 시 Supabase 'estimates' 테이블에 INSERT
+        // 반환값: true(저장 성공) / false(저장 실패, 콘솔에 구체적 원인 로그)
         async function addInquiryFromSubmission(formData) {
             if (!sbClient) {
-                console.error('❌ [addInquiryFromSubmission] sbClient가 초기화되지 않았습니다.');
-                return;
+                console.error('❌ [addInquiryFromSubmission] sbClient가 초기화되지 않았습니다. (Supabase SDK 로드 실패 가능성)');
+                return false;
             }
 
+            const payload = {
+                name: formData.name || '(이름 미입력)',
+                company: formData.company || '',
+                email: formData.email || '',
+                phone: formData.phone || '',
+                project_type: formData.projectType || formData.package || '미지정',
+                budget: formData.budget || '협의 필요',
+                status: '접수',
+                deadline: formData.deadline || '',
+                description: formData.description || formData.message || '',
+                reference_link: formData.reference || '',
+                links: [],
+                memo: ''
+            };
+
             try {
-                const { error } = await sbClient.from('estimates').insert({
-                    name: formData.name || '(이름 미입력)',
-                    company: formData.company || '',
-                    email: formData.email || '',
-                    phone: formData.phone || '',
-                    project_type: formData.package || '미지정',
-                    budget: formData.budget || '협의 필요',
-                    status: '접수',
-                    deadline: formData.deadline || '',
-                    description: formData.description || '',
-                    reference_link: formData.reference || '',
-                    links: [],
-                    memo: ''
-                });
+                const { error } = await sbClient.from('estimates').insert(payload);
 
                 if (error) {
-                    console.error('❌ [addInquiryFromSubmission] Supabase INSERT 오류:', error);
+                    // RLS 정책 누락 시 Supabase가 반환하는 대표적인 오류 코드(42501: 권한 거부)를 별도로 안내
+                    if (error.code === '42501' || /permission denied|row-level security/i.test(error.message || '')) {
+                        console.error('❌ [addInquiryFromSubmission] 저장 실패 — RLS(Row Level Security) 정책 때문일 수 있습니다. estimates 테이블에 anon INSERT 정책이 적용되어 있는지 Supabase 대시보드에서 확인해주세요. 원본 오류:', error);
+                    } else {
+                        console.error('❌ [addInquiryFromSubmission] Supabase INSERT 오류:', error);
+                    }
+                    return false;
                 }
+
+                console.log('✅ [addInquiryFromSubmission] estimates 테이블에 저장 완료:', payload.name);
+                return true;
             } catch (err) {
                 console.error('❌ [addInquiryFromSubmission] 예외 발생:', err);
+                return false;
             }
         }
 
@@ -6306,7 +6320,7 @@
                 // 이메일 전송은 이미 성공했으므로, DB 저장이 실패해도 사용자에게는 접수 완료로 안내하되
                 // 콘솔에는 명확히 에러를 남겨 어드민이 나중에 확인할 수 있게 합니다.
                 try {
-                    await addInquiryFromSubmission({
+                    const dbSaved = await addInquiryFromSubmission({
                         name: name,
                         email: email,
                         phone: phone,
@@ -6316,6 +6330,9 @@
                         reference: '',
                         description: message
                     });
+                    if (!dbSaved) {
+                        console.warn('⚠️ [빠른 견적 문의] 이메일은 전송되었지만 어드민 DB 저장에는 실패했습니다. 위 로그의 Supabase 오류를 확인해주세요.');
+                    }
                 } catch (dbErr) {
                     console.error('❌ [빠른 견적 문의] Supabase 저장 실패 (이메일 전송은 정상 완료됨):', dbErr);
                 }
@@ -8512,7 +8529,8 @@
 
         // ===== 공개/비공개 토글 =====
         window.toggleGearVisibility = async function(id) {
-            const item = gearData.find(g => g.id === id);
+            const numId = Number(id);
+            const item = gearData.find(g => Number(g.id) === numId);
             if (!item || !sbClient) return;
 
             const newVisible = item.visible === false ? true : false;
@@ -8521,7 +8539,7 @@
             renderGearGrid();
 
             try {
-                const { error } = await sbClient.from('equipment').update({ is_visible: newVisible }).eq('id', item.id);
+                const { error } = await sbClient.from('equipment').update({ is_visible: newVisible }).eq('id', numId);
                 if (error) {
                     console.error('❌ [toggleGearVisibility] Supabase 오류:', error);
                     alert('공개 설정 변경에 실패했습니다: ' + error.message);
@@ -8538,19 +8556,22 @@
         window.deleteGearItem = async function(id) {
             if (!sbClient) return;
 
+            const numId = Number(id);
+
             try {
-                const { error } = await sbClient.from('equipment').delete().eq('id', id);
+                const { error } = await sbClient.from('equipment').delete().eq('id', numId);
                 if (error) {
                     console.error('❌ [deleteGearItem] Supabase 오류:', error);
-                    alert('삭제에 실패했습니다: ' + error.message);
+                    alert('삭제 실패: ' + error.message);
                     return;
                 }
             } catch (err) {
                 console.error('❌ [deleteGearItem] 예외 발생:', err);
+                alert('삭제 중 오류가 발생했습니다: ' + (err && err.message ? err.message : err));
                 return;
             }
 
-            gearData = gearData.filter(g => g.id !== id);
+            gearData = gearData.filter(g => Number(g.id) !== numId);
             renderOpsGearList();
             renderGearGrid();
         };
@@ -8628,7 +8649,8 @@
 
         // ===== 장비 수정 폼 모달 =====
         window.showEditGearForm = function(id) {
-            const item = gearData.find(g => g.id === id);
+            const numId = Number(id);
+            const item = gearData.find(g => Number(g.id) === numId);
             if (!item) return;
 
             let modal = document.getElementById('gearFormModal');
@@ -8765,7 +8787,8 @@
         window.handleEditGear = async function(event, id) {
             event.preventDefault();
 
-            const item = gearData.find(g => g.id === id);
+            const numId = Number(id);
+            const item = gearData.find(g => Number(g.id) === numId);
             if (!item) return;
 
             const fileInput = document.getElementById('gearImageFile');
@@ -8805,7 +8828,7 @@
                     unit: updated.unit,
                     description: updated.description,
                     image_url: updated.imageUrl || null
-                }).eq('id', id);
+                }).eq('id', numId);
 
                 if (error) {
                     console.error('❌ [handleEditGear] Supabase 오류:', error);
@@ -10219,7 +10242,7 @@
                     // 이메일 전송은 이미 성공했으므로, DB 저장이 실패해도 사용자 흐름은 막지 않되
                     // 콘솔에는 명확히 남겨 어드민이 나중에 확인할 수 있게 합니다.
                     try {
-                        await addInquiryFromSubmission({
+                        const dbSaved = await addInquiryFromSubmission({
                             name: formData.name,
                             email: formData.email,
                             phone: formData.phone,
@@ -10228,6 +10251,9 @@
                             reference: formData.reference,
                             description: formData.description
                         });
+                        if (!dbSaved) {
+                            console.warn('⚠️ [견적 신청] 이메일은 전송되었지만 어드민 DB 저장에는 실패했습니다. 위 로그의 Supabase 오류를 확인해주세요.');
+                        }
                     } catch (dbErr) {
                         console.error('❌ [견적 신청] Supabase 저장 실패 (이메일 전송은 정상 완료됨):', dbErr);
                     }
