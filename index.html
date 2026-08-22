@@ -6094,6 +6094,11 @@
         // ===== [운영] 로그아웃 =====
         window.logoutOpsMode = function() {
             sessionStorage.removeItem('opsAuthed');
+
+            // ops-page의 active 클래스를 명시적으로 즉시 제거 (혹시 모를 상태 잔존 방지)
+            const opsPage = document.getElementById('ops-page');
+            if (opsPage) opsPage.classList.remove('active');
+
             showPage('work');
         };
 
@@ -6229,7 +6234,7 @@
             }
         });
 
-        window.submitQuickEstimate = function(event) {
+        window.submitQuickEstimate = async function(event) {
             event.preventDefault();
 
             const name = document.getElementById('qeName').value.trim();
@@ -6276,23 +6281,32 @@
             formData.append('message', message);
             formData.append('_subject', '[EGG Studio] 빠른 견적 문의 - ' + name);
 
-            const controller = new AbortController();
-            const timeoutId = setTimeout(() => controller.abort(), 10000);
+            try {
+                // ===== 1단계: Formspree로 이메일 알림 전송 (필수, 실패 시 전체 실패 처리) =====
+                const controller = new AbortController();
+                const timeoutId = setTimeout(() => controller.abort(), 10000);
 
-            fetch(FORMSPREE_ENDPOINT, {
-                method: 'POST',
-                body: formData,
-                headers: { 'Accept': 'application/json' },
-                signal: controller.signal
-            })
-                .then((response) => {
+                let response;
+                try {
+                    response = await fetch(FORMSPREE_ENDPOINT, {
+                        method: 'POST',
+                        body: formData,
+                        headers: { 'Accept': 'application/json' },
+                        signal: controller.signal
+                    });
+                } finally {
                     clearTimeout(timeoutId);
-                    if (!response.ok) {
-                        throw new Error('Formspree 응답 오류: ' + response.status);
-                    }
+                }
 
-                    // 어드민 '견적 문의 내역'에 즉시 반영
-                    addInquiryFromSubmission({
+                if (!response.ok) {
+                    throw new Error('Formspree 응답 오류: ' + response.status);
+                }
+
+                // ===== 2단계: Supabase 'estimates' 테이블에도 INSERT (어드민 대시보드 실시간 반영용) =====
+                // 이메일 전송은 이미 성공했으므로, DB 저장이 실패해도 사용자에게는 접수 완료로 안내하되
+                // 콘솔에는 명확히 에러를 남겨 어드민이 나중에 확인할 수 있게 합니다.
+                try {
+                    await addInquiryFromSubmission({
                         name: name,
                         email: email,
                         phone: phone,
@@ -6302,23 +6316,23 @@
                         reference: '',
                         description: message
                     });
+                } catch (dbErr) {
+                    console.error('❌ [빠른 견적 문의] Supabase 저장 실패 (이메일 전송은 정상 완료됨):', dbErr);
+                }
 
-                    showToast('견적 문의가 정상 접수되었습니다.');
+                showToast('견적 문의가 정상 접수되었습니다.');
 
-                    document.getElementById('quickEstimateForm').reset();
-                    window.closeQuickEstimateModal();
-                })
-                .catch((err) => {
-                    clearTimeout(timeoutId);
-                    console.error('❌ [빠른 견적 문의] 전송 오류:', err);
-                    errorEl.textContent = '전송에 실패했습니다. 이메일(purplemint2627@gmail.com)로 직접 문의해주세요.';
-                    errorEl.classList.add('show');
-                })
-                .finally(() => {
-                    submitBtn.disabled = false;
-                    submitBtn.classList.remove('loading');
-                    submitBtnText.textContent = '견적 문의 보내기';
-                });
+                document.getElementById('quickEstimateForm').reset();
+                window.closeQuickEstimateModal();
+            } catch (err) {
+                console.error('❌ [빠른 견적 문의] 전송 오류:', err);
+                errorEl.textContent = '전송에 실패했습니다. 이메일(purplemint2627@gmail.com)로 직접 문의해주세요.';
+                errorEl.classList.add('show');
+            } finally {
+                submitBtn.disabled = false;
+                submitBtn.classList.remove('loading');
+                submitBtnText.textContent = '견적 문의 보내기';
+            }
         };
 
         const INQUIRY_STATUS_LIST = ['접수', '상담중', '수주', '취소'];
@@ -6702,8 +6716,14 @@
             const itemToDelete = portfolioData[index];
             console.log('📝 삭제할 항목:', itemToDelete.title);
 
-            if (!sbClient || !itemToDelete.id) {
+            if (!sbClient) {
                 alert('삭제에 실패했습니다. Supabase 연결을 확인해주세요.');
+                return;
+            }
+
+            if (!itemToDelete.id) {
+                console.error('❌ [deletePortfolioItem] 이 항목에 유효한 id가 없습니다:', itemToDelete);
+                alert('삭제에 실패했습니다: 이 항목에 DB id가 없습니다. 목록을 새로고침한 뒤 다시 시도해주세요.');
                 return;
             }
 
@@ -8183,13 +8203,19 @@
                 const { data, error } = await sbClient.from('works').insert(rows).select();
                 if (error) {
                     console.error('❌ [seedDefaultPortfolioData] Supabase INSERT 오류:', error);
-                    portfolioData = [...defaultPortfolioData];
+                    // ⚠️ 실패 시 id가 없는 defaultPortfolioData를 그대로 쓰면 이후 수정/삭제가
+                    // 전부 깨지므로, 절대 폴백하지 않고 빈 배열로 유지해 문제를 명확히 드러냅니다.
+                    portfolioData = [];
+                    const opsListEl = document.getElementById('opsPortfolioList');
+                    if (opsListEl) showOpsLoadError(opsListEl, '포트폴리오 초기 데이터 생성', error);
                     return;
                 }
                 portfolioData = (data || []).map(rowToPortfolioItem).sort((a, b) => a.sortOrder - b.sortOrder);
             } catch (err) {
                 console.error('❌ [seedDefaultPortfolioData] 예외 발생:', err);
-                portfolioData = [...defaultPortfolioData];
+                portfolioData = [];
+                const opsListEl = document.getElementById('opsPortfolioList');
+                if (opsListEl) showOpsLoadError(opsListEl, '포트폴리오 초기 데이터 생성', err);
             }
         }
 
@@ -8214,7 +8240,6 @@
 
         const defaultGearData = [
             {
-                id: 'gear_1',
                 name: 'SONY A7C2',
                 category: '카메라',
                 quantity: 1,
@@ -8224,7 +8249,6 @@
                 visible: true
             },
             {
-                id: 'gear_2',
                 name: 'DJI 마이크 2대',
                 category: '음향',
                 quantity: 2,
@@ -8234,7 +8258,6 @@
                 visible: true
             },
             {
-                id: 'gear_3',
                 name: '고성능 짐벌',
                 category: '악세서리',
                 quantity: 1,
@@ -8244,7 +8267,6 @@
                 visible: true
             },
             {
-                id: 'gear_4',
                 name: '삼각대',
                 category: '악세서리',
                 quantity: 1,
@@ -8254,7 +8276,6 @@
                 visible: true
             },
             {
-                id: 'gear_5',
                 name: '조명 세트',
                 category: '조명',
                 quantity: 1,
@@ -8344,13 +8365,19 @@
                 const { data, error } = await sbClient.from('equipment').insert(rows).select();
                 if (error) {
                     console.error('❌ [seedDefaultGearData] Supabase INSERT 오류:', error);
-                    gearData = [...defaultGearData];
+                    // ⚠️ 실패 시 가짜 문자열 id('gear_1' 등)가 붙은 defaultGearData로 폴백하면
+                    // 이후 삭제/수정 시 Postgres id 타입 불일치 오류가 나므로 절대 폴백하지 않습니다.
+                    gearData = [];
+                    const opsListEl = document.getElementById('opsGearList');
+                    if (opsListEl) showOpsLoadError(opsListEl, '장비 초기 데이터 생성', error);
                     return;
                 }
                 gearData = (data || []).map(rowToGearItem).sort((a, b) => a.sortOrder - b.sortOrder);
             } catch (err) {
                 console.error('❌ [seedDefaultGearData] 예외 발생:', err);
-                gearData = [...defaultGearData];
+                gearData = [];
+                const opsListEl = document.getElementById('opsGearList');
+                if (opsListEl) showOpsLoadError(opsListEl, '장비 초기 데이터 생성', err);
             }
         }
 
@@ -9025,6 +9052,14 @@
         }
 
         function showPage(pageName) {
+            // ===== [운영] 페이지 진입 시 세션 인증 여부 강제 검사 =====
+            if (pageName === 'ops') {
+                if (sessionStorage.getItem('opsAuthed') !== 'true') {
+                    window.enterOpsMode();
+                    return;
+                }
+            }
+
             // 모든 페이지 숨기기
             document.querySelectorAll('.page').forEach(page => {
                 page.classList.remove('active');
@@ -10153,7 +10188,7 @@
                 },
                 signal: abortController.signal
             })
-            .then(function(response) {
+            .then(async function(response) {
                 clearTimeout(timeoutId);
                 console.log('📮 [fetch 응답 수신] status:', response.status, '/ ok:', response.ok);
  
@@ -10180,16 +10215,22 @@
                         addon: formData.addon
                     });
 
-                    // [운영] 페이지 "견적 문의 내역"에도 새 문의로 함께 반영 (같은 브라우저 기준)
-                    addInquiryFromSubmission({
-                        name: formData.name,
-                        email: formData.email,
-                        phone: formData.phone,
-                        package: formData.package,
-                        deadline: formData.deadline,
-                        reference: formData.reference,
-                        description: formData.description
-                    });
+                    // [운영] 페이지 "견적 문의 내역"(Supabase estimates 테이블)에도 안정적으로 반영
+                    // 이메일 전송은 이미 성공했으므로, DB 저장이 실패해도 사용자 흐름은 막지 않되
+                    // 콘솔에는 명확히 남겨 어드민이 나중에 확인할 수 있게 합니다.
+                    try {
+                        await addInquiryFromSubmission({
+                            name: formData.name,
+                            email: formData.email,
+                            phone: formData.phone,
+                            package: formData.package,
+                            deadline: formData.deadline,
+                            reference: formData.reference,
+                            description: formData.description
+                        });
+                    } catch (dbErr) {
+                        console.error('❌ [견적 신청] Supabase 저장 실패 (이메일 전송은 정상 완료됨):', dbErr);
+                    }
  
                     // 폼 초기화
                     form.reset();
