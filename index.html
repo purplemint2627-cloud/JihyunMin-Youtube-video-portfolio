@@ -289,7 +289,7 @@
         }
 
         .hero-scroll-cue {
-            margin-top: 28px;
+            margin-top: 56px;
             font-size: 12px;
             font-weight: 700;
             letter-spacing: 0.05em;
@@ -540,8 +540,8 @@
             max-width: 1400px;
             margin: 0 auto;
             padding: 20px 40px;
-            display: grid;
-            grid-template-columns: 1fr auto 1fr;
+            display: flex;
+            justify-content: space-between;
             align-items: center;
             gap: 16px;
         }
@@ -553,8 +553,13 @@
             letter-spacing: -0.02em;
             text-transform: uppercase;
             color: var(--text);
-            text-align: center;
-            justify-self: center;
+            text-align: left;
+        }
+
+        .nav-right-group {
+            display: flex;
+            align-items: center;
+            gap: 20px;
         }
 
         .nav-menu-btn {
@@ -568,7 +573,6 @@
             font-size: 11px;
             font-weight: 800;
             letter-spacing: 0.1em;
-            justify-self: start;
             padding: 6px 4px;
             transition: opacity 0.2s ease;
         }
@@ -578,7 +582,6 @@
         }
 
         .nav-quick-estimate-btn {
-            justify-self: end;
             background: var(--accent);
             color: var(--accent-text);
             border: none;
@@ -600,7 +603,7 @@
         .drawer-overlay {
             position: fixed;
             inset: 0;
-            background: rgba(0, 0, 0, 0.6);
+            background: rgba(15, 15, 15, 0.55);
             opacity: 0;
             pointer-events: none;
             transition: opacity 0.35s ease;
@@ -612,91 +615,238 @@
             pointer-events: auto;
         }
 
+        /* ===== 우측 사이드 드로어 — 라이트 그레이 대시보드/워크스페이스 톤 ===== */
         .side-drawer {
             position: fixed;
             top: 0;
-            left: -360px;
-            width: 340px;
-            max-width: 85vw;
+            right: -380px;
+            width: 360px;
+            max-width: 88vw;
             height: 100vh;
             overflow-x: hidden;
             overflow-y: auto;
-            background: #0D0D0D;
-            border-right: 1px solid var(--line);
-            box-shadow: 4px 0 24px rgba(0, 0, 0, 0.8);
+            background: #F8F9FA;
+            border-left: 1px solid #E4E4E7;
+            box-shadow: -8px 0 32px rgba(0, 0, 0, 0.18);
             z-index: 1000;
-            transition: left 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+            transition: right 0.4s cubic-bezier(0.22, 1, 0.36, 1);
             display: flex;
             flex-direction: column;
+            color: #18181B;
         }
 
         .side-drawer.open {
-            left: 0;
+            right: 0;
         }
 
         .side-drawer-header {
             display: flex;
-            align-items: center;
+            align-items: flex-start;
             justify-content: space-between;
-            padding: 26px 24px 22px 24px;
-            border-bottom: 1px solid var(--line);
+            padding: 26px 24px 20px 24px;
+            border-bottom: 1px solid #E4E4E7;
+            background: #FFFFFF;
         }
 
         .side-drawer-brand {
             font-family: 'Pretendard', 'Inter', sans-serif;
-            font-size: 15px;
+            font-size: 16px;
             font-weight: 900;
             letter-spacing: -0.02em;
             text-transform: uppercase;
-            color: #FFFFFF;
+            color: #18181B;
+        }
+
+        .side-drawer-subtitle {
+            margin-top: 4px;
+            font-size: 10px;
+            font-weight: 700;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            color: #A1A1AA;
         }
 
         .side-drawer-close {
-            background: none;
-            border: none;
+            background: #F1F3F5;
+            border: 1px solid #E4E4E7;
+            border-radius: 8px;
             cursor: pointer;
-            color: #FFFFFF;
+            color: #52525B;
             display: flex;
             align-items: center;
-            padding: 4px;
+            justify-content: center;
+            width: 30px;
+            height: 30px;
+            flex-shrink: 0;
+            transition: background 0.2s ease, color 0.2s ease;
+        }
+
+        .side-drawer-close:hover {
+            background: #E4E4E7;
+            color: #18181B;
+        }
+
+        /* 빠른 검색/바로가기 플레이스홀더 (⌘K UI) */
+        .drawer-search-row {
+            padding: 18px 24px 4px 24px;
+            background: #FFFFFF;
+            border-bottom: 1px solid #E4E4E7;
+        }
+
+        .drawer-search-box {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 10px 12px;
+            background: #F1F3F5;
+            border: 1px solid #E4E4E7;
+            border-radius: 8px;
+            color: #A1A1AA;
+            margin-bottom: 18px;
+        }
+
+        .drawer-search-box svg {
+            flex-shrink: 0;
+        }
+
+        .drawer-search-box span:nth-child(2) {
+            flex: 1;
+            font-size: 13px;
+            font-weight: 500;
+        }
+
+        .drawer-search-kbd {
+            font-size: 10px;
+            font-weight: 700;
+            color: #71717A;
+            background: #FFFFFF;
+            border: 1px solid #E4E4E7;
+            border-radius: 4px;
+            padding: 2px 6px;
         }
 
         .drawer-nav-list {
             display: flex;
             flex-direction: column;
             width: 100%;
-            padding: 40px 28px;
+            padding: 22px 16px 8px 16px;
             box-sizing: border-box;
+        }
+
+        .drawer-section-label {
+            font-size: 11px;
+            font-weight: 800;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            color: #A1A1AA;
+            padding: 0 10px;
+            margin-bottom: 10px;
         }
 
         .drawer-nav-link {
             display: flex;
-            align-items: baseline;
+            align-items: center;
             gap: 10px;
-            padding: 14px 2px;
-            border-bottom: 1px solid var(--line);
+            padding: 12px 10px;
+            border-radius: 10px;
             font-family: 'Pretendard', 'Inter', sans-serif;
-            font-size: 18px;
-            font-weight: 800;
-            color: #FFFFFF;
             cursor: pointer;
-            transition: color 0.2s ease;
+            transition: background 0.15s ease;
         }
 
-        .drawer-nav-link span {
+        .drawer-nav-indicator {
+            width: 3px;
+            height: 18px;
+            border-radius: 3px;
+            background: transparent;
+            flex-shrink: 0;
+            transition: background 0.15s ease;
+        }
+
+        .drawer-nav-text {
+            display: flex;
+            align-items: baseline;
+            gap: 8px;
+            font-size: 16px;
+            font-weight: 800;
+            color: #18181B;
+        }
+
+        .drawer-nav-text span {
             font-size: 11px;
             font-weight: 500;
-            color: #A0A0A5;
+            color: #A1A1AA;
         }
 
-        .drawer-nav-link:hover,
+        .drawer-nav-link:hover {
+            background: #FFFFFF;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
+        }
+
+        .drawer-nav-link:hover .drawer-nav-indicator {
+            background: #D4D4D8;
+        }
+
         .drawer-nav-link.active {
-            color: var(--accent);
+            background: #FFFFFF;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+        }
+
+        .drawer-nav-link.active .drawer-nav-indicator {
+            background: var(--accent);
+        }
+
+        .drawer-footer-block {
+            margin-top: auto;
+            background: #FFFFFF;
+            border-top: 1px solid #E4E4E7;
+            padding-top: 18px;
+        }
+
+        .drawer-profile-bar {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 0 24px 18px 24px;
+            border-bottom: 1px solid #E4E4E7;
+            margin-bottom: 18px;
+        }
+
+        .drawer-profile-avatar {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background: #18181B;
+            color: #F8F9FA;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            font-weight: 800;
+            letter-spacing: -0.02em;
+            flex-shrink: 0;
+        }
+
+        .drawer-profile-info {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+        }
+
+        .drawer-profile-name {
+            font-size: 13.5px;
+            font-weight: 800;
+            color: #18181B;
+        }
+
+        .drawer-profile-role {
+            font-size: 11px;
+            font-weight: 500;
+            color: #A1A1AA;
         }
 
         .drawer-contact-block {
-            padding: 20px 24px;
-            margin-top: auto;
+            padding: 0 24px 18px 24px;
         }
 
         .drawer-contact-label {
@@ -704,7 +854,7 @@
             font-weight: 800;
             letter-spacing: 0.1em;
             text-transform: uppercase;
-            color: #A0A0A5;
+            color: #A1A1AA;
             margin-bottom: 12px;
         }
 
@@ -719,10 +869,10 @@
             align-items: center;
             gap: 8px;
             padding: 10px 14px;
-            border: 1px solid var(--line);
+            border: 1px solid #E4E4E7;
             border-radius: 30px;
-            background: transparent;
-            color: #FFFFFF;
+            background: #F8F9FA;
+            color: #18181B;
             font-size: 12px;
             font-weight: 600;
             cursor: pointer;
@@ -731,7 +881,7 @@
 
         .drawer-contact-chip:hover {
             border-color: var(--accent);
-            background: rgba(212, 255, 0, 0.06);
+            background: rgba(212, 255, 0, 0.12);
         }
 
         .drawer-admin-trigger {
@@ -741,11 +891,11 @@
             gap: 6px;
             width: calc(100% - 48px);
             margin: 0 24px 24px 24px;
-            padding: 10px;
-            background: transparent;
-            border: 1px solid var(--line);
-            border-radius: 6px;
-            color: #A0A0A5;
+            padding: 11px;
+            background: #F1F3F5;
+            border: 1px solid #E4E4E7;
+            border-radius: 8px;
+            color: #71717A;
             font-size: 11px;
             font-weight: 700;
             cursor: pointer;
@@ -753,9 +903,11 @@
         }
 
         .drawer-admin-trigger:hover {
-            border-color: #A0A0A5;
-            color: #FFFFFF;
+            border-color: #A1A1AA;
+            background: #E4E4E7;
+            color: #18181B;
         }
+
 
         .nav-links {
             display: flex;
@@ -2435,6 +2587,23 @@
             .landing-subtitle {
                 font-size: 16px;
             }
+
+            .nav-brand {
+                font-size: 16px;
+            }
+
+            .nav-right-group {
+                gap: 10px;
+            }
+
+            .nav-quick-estimate-btn {
+                padding: 8px 14px;
+                font-size: 11px;
+            }
+
+            .nav-menu-btn span {
+                display: none;
+            }
  
             .nav-links {
                 gap: 16px;
@@ -3327,17 +3496,14 @@
 <body>
     <!-- 랜딩 페이지 -->
     <section class="landing-page" id="landing">
-        <div class="hero-hover-image" id="heroHoverImage"></div>
-        <div class="landing-content hero-editorial">
-            <div class="hero-eyebrow">EGG STUDIO — SELECTED WORKS</div>
-            <div class="hero-project-list" id="heroProjectList">
-                <!-- JS가 portfolioData 상위 항목을 A24 스타일 리스트로 렌더링합니다 -->
+        <div class="landing-content">
+            <div class="hero-eyebrow">영상제작 스튜디오</div>
+            <div class="hero-project-list">
+                <div class="hero-project-item" style="cursor: default;">
+                    <span class="hero-project-title">EGG STUDIO<sup>2026</sup></span>
+                </div>
             </div>
             <p class="landing-subtitle"><strong class="landing-subtitle-lead">1인 영상 제작사 Egg Studio를 운영하고 있는 민지현입니다.</strong><br>유튜브 콘텐츠부터 브랜디드 필름, AI 영상 연출까지. 몰입감 있는 서사로 브랜드의 가치를 높이는 영상 프로젝트를 만듭니다.</p>
-            <div class="landing-cta-row">
-                <button class="landing-cta-btn solid" onclick="showPage('work')">포트폴리오 보기</button>
-                <button class="landing-cta-btn outline" onclick="showPage('estimate')">빠른 견적 문의</button>
-            </div>
             <div class="hero-scroll-cue" onclick="showPage('work')">↓ Explore Works</div>
         </div>
         <div class="landing-footer-row">
@@ -3349,12 +3515,14 @@
     <!-- 네비게이션 -->
     <nav>
         <div class="nav-container container">
-            <button class="nav-menu-btn" onclick="window.openDrawer()" aria-label="메뉴 열기">
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
-                <span>MENU</span>
-            </button>
             <div class="nav-brand" onclick="scrollToLanding()" style="cursor: pointer;">EGG STUDIO</div>
-            <button class="nav-quick-estimate-btn" onclick="showPage('estimate')">빠른 견적 문의</button>
+            <div class="nav-right-group">
+                <button class="nav-quick-estimate-btn" onclick="showPage('estimate')">빠른 견적 문의</button>
+                <button class="nav-menu-btn" onclick="window.openDrawer()" aria-label="메뉴 열기">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
+                    <span>MENU</span>
+                </button>
+            </div>
         </div>
     </nav>
 
@@ -3362,39 +3530,79 @@
     <div class="drawer-overlay" id="drawerOverlay" onclick="window.closeDrawer()"></div>
     <aside class="side-drawer" id="sideDrawer">
         <div class="side-drawer-header">
-            <div class="side-drawer-brand">EGG Studio</div>
+            <div>
+                <div class="side-drawer-brand">EGG Studio</div>
+                <div class="side-drawer-subtitle">FILM PRODUCTION TOOLSET</div>
+            </div>
             <button class="side-drawer-close" onclick="window.closeDrawer()" aria-label="메뉴 닫기">
                 <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
             </button>
         </div>
 
-        <div class="drawer-nav-list">
-            <a class="drawer-nav-link" data-page="work" onclick="showPage('work'); window.closeDrawer();">Work <span>포트폴리오</span></a>
-            <a class="drawer-nav-link" data-page="about" onclick="showPage('about'); window.closeDrawer();">About <span>소개 및 장비</span></a>
-            <a class="drawer-nav-link" data-page="pricing" onclick="showPage('pricing'); window.closeDrawer();">Pricing <span>단가표</span></a>
-            <a class="drawer-nav-link" data-page="estimate" onclick="showPage('estimate'); window.closeDrawer();">Estimate <span>견적 신청</span></a>
-            <a class="drawer-nav-link" data-page="clienthub" onclick="showPage('clienthub'); window.closeDrawer();">Client Hub <span>진행 현황 조회</span></a>
-            <a class="drawer-nav-link" data-page="contact" onclick="showPage('contact'); window.closeDrawer();">Contact <span>연락처</span></a>
-        </div>
-
-        <div class="drawer-contact-block">
-            <div class="drawer-contact-label">Direct Contact</div>
-            <div class="drawer-contact-chips">
-                <button type="button" class="drawer-contact-chip" onclick="window.copyEmailChip()">
-                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
-                    이메일 복사
-                </button>
-                <a class="drawer-contact-chip" href="sms:01052480797" onclick="window.handleSmsChip(event)">
-                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>
-                    24시간 문자 문의
-                </a>
+        <div class="drawer-search-row">
+            <div class="drawer-search-box">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+                <span>Quick jump</span>
+                <span class="drawer-search-kbd">⌘K</span>
             </div>
         </div>
 
-        <button class="drawer-admin-trigger" onclick="window.enterOpsMode()">
-            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="11" width="14" height="10" rx="2"></rect><path d="M8 11V7a4 4 0 0 1 8 0v4"></path></svg>
-            Internal Admin
-        </button>
+        <div class="drawer-nav-list">
+            <div class="drawer-section-label">Workspace</div>
+            <a class="drawer-nav-link" data-page="work" onclick="showPage('work'); window.closeDrawer();">
+                <span class="drawer-nav-indicator"></span>
+                <span class="drawer-nav-text">Work <span>포트폴리오</span></span>
+            </a>
+            <a class="drawer-nav-link" data-page="about" onclick="showPage('about'); window.closeDrawer();">
+                <span class="drawer-nav-indicator"></span>
+                <span class="drawer-nav-text">About <span>소개 및 장비</span></span>
+            </a>
+            <a class="drawer-nav-link" data-page="pricing" onclick="showPage('pricing'); window.closeDrawer();">
+                <span class="drawer-nav-indicator"></span>
+                <span class="drawer-nav-text">Pricing <span>단가표</span></span>
+            </a>
+            <a class="drawer-nav-link" data-page="estimate" onclick="showPage('estimate'); window.closeDrawer();">
+                <span class="drawer-nav-indicator"></span>
+                <span class="drawer-nav-text">Estimate <span>견적 신청</span></span>
+            </a>
+            <a class="drawer-nav-link" data-page="clienthub" onclick="showPage('clienthub'); window.closeDrawer();">
+                <span class="drawer-nav-indicator"></span>
+                <span class="drawer-nav-text">Client Hub <span>진행 현황 조회</span></span>
+            </a>
+            <a class="drawer-nav-link" data-page="contact" onclick="showPage('contact'); window.closeDrawer();">
+                <span class="drawer-nav-indicator"></span>
+                <span class="drawer-nav-text">Contact <span>연락처</span></span>
+            </a>
+        </div>
+
+        <div class="drawer-footer-block">
+            <div class="drawer-profile-bar">
+                <span class="drawer-profile-avatar">EG</span>
+                <span class="drawer-profile-info">
+                    <span class="drawer-profile-name">민지현</span>
+                    <span class="drawer-profile-role">Director · EGG Studio</span>
+                </span>
+            </div>
+
+            <div class="drawer-contact-block">
+                <div class="drawer-contact-label">Direct Contact</div>
+                <div class="drawer-contact-chips">
+                    <button type="button" class="drawer-contact-chip" onclick="window.copyEmailChip()">
+                        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+                        이메일 복사
+                    </button>
+                    <a class="drawer-contact-chip" href="sms:01052480797" onclick="window.handleSmsChip(event)">
+                        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>
+                        24시간 문자 문의
+                    </a>
+                </div>
+            </div>
+
+            <button class="drawer-admin-trigger" onclick="window.enterOpsMode()">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="11" width="14" height="10" rx="2"></rect><path d="M8 11V7a4 4 0 0 1 8 0v4"></path></svg>
+                Internal Admin
+            </button>
+        </div>
     </aside>
 
     <!-- ===== Workflow + Client Hub 페이지 (드로어 "Client Hub" 링크로 진입) ===== -->
