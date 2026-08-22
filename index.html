@@ -217,12 +217,13 @@
             text-align: left !important;
             max-width: 1180px;
             width: 100%;
-            gap: 48px;
+            gap: 64px;
         }
 
         .hero-text-col {
             flex: 1;
             min-width: 0;
+            max-width: 620px;
         }
 
         .hero-video-col {
@@ -247,19 +248,19 @@
 
         @media (min-width: 860px) {
             .hero-showreel-card {
-                width: 380px;
+                width: 340px;
             }
         }
 
         @media (min-width: 1024px) {
             .hero-showreel-card {
-                width: 460px;
+                width: 400px;
             }
         }
 
         @media (min-width: 1280px) {
             .hero-showreel-card {
-                width: 500px;
+                width: 440px;
             }
         }
 
@@ -420,12 +421,14 @@
 
         .hero-project-title {
             display: inline-block;
+            max-width: 100%;
             font-family: 'Inter', 'Helvetica Neue', 'Pretendard', sans-serif;
-            font-size: clamp(72px, 14vw, 220px);
+            font-size: clamp(56px, 9.5vw, 152px);
             font-weight: 900;
-            line-height: 0.92;
+            line-height: 0.94;
             letter-spacing: -0.03em;
             color: #FFFFFF;
+            word-break: keep-all;
         }
 
         .hero-project-title sup {
@@ -2187,6 +2190,147 @@
             object-fit: cover;
         }
  
+        /* Gear 페이지 */
+        #gear-page {
+            padding-top: 160px;
+            padding-bottom: 100px;
+        }
+
+        .gear-page-desc {
+            font-size: 13px;
+            color: var(--text-muted);
+            max-width: 420px;
+            line-height: 1.6;
+            text-align: right;
+        }
+
+        .gear-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 24px;
+        }
+
+        @media (max-width: 1200px) {
+            .gear-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+
+        @media (max-width: 768px) {
+            .gear-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .gear-page-desc {
+                text-align: left;
+                max-width: 100%;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .gear-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .gear-card {
+            background: var(--dark-secondary);
+            border: 1px solid var(--line);
+            border-radius: 10px;
+            overflow: hidden;
+            transition: border-color 0.2s ease, transform 0.2s ease;
+        }
+
+        .gear-card:hover {
+            border-color: var(--text-muted);
+            transform: translateY(-3px);
+        }
+
+        .gear-card-thumb {
+            width: 100%;
+            aspect-ratio: 4 / 3;
+            object-fit: cover;
+            display: block;
+            background: #1C1C1F;
+        }
+
+        .gear-card-body {
+            padding: 16px;
+        }
+
+        .gear-category-badge {
+            display: inline-block;
+            font-size: 10px;
+            font-weight: 800;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            color: var(--accent);
+            background: rgba(252, 251, 118, 0.1);
+            padding: 3px 8px;
+            border-radius: 4px;
+            margin-bottom: 10px;
+        }
+
+        .gear-card-name {
+            font-size: 15px;
+            font-weight: 800;
+            color: #FFFFFF;
+            margin-bottom: 4px;
+            letter-spacing: -0.01em;
+        }
+
+        .gear-card-qty {
+            font-size: 11px;
+            font-weight: 700;
+            color: #A0A0A5;
+            margin-bottom: 8px;
+        }
+
+        .gear-card-desc {
+            font-size: 12.5px;
+            color: #A0A0A5;
+            line-height: 1.6;
+        }
+
+        /* Ops 장비 관리 리스트 (포트폴리오 CMS와 동일 패턴) */
+        .ops-gear-row-thumb {
+            width: 64px;
+            height: 48px;
+            object-fit: cover;
+            border-radius: 4px;
+            flex-shrink: 0;
+            background: #1C1C1F;
+        }
+
+        .ops-row-hidden {
+            opacity: 0.45;
+        }
+
+        .ops-row-visibility-btn {
+            background: none;
+            border: 1px solid var(--line);
+            color: #A0A0A5;
+            border-radius: 4px;
+            width: 30px;
+            height: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            flex-shrink: 0;
+            transition: all 0.15s ease;
+        }
+
+        .ops-row-visibility-btn:hover {
+            border-color: #FFFFFF;
+            color: #FFFFFF;
+        }
+
+        .ops-row-visibility-btn.is-hidden {
+            color: #FF6B6B;
+            border-color: rgba(255, 107, 107, 0.4);
+        }
+
         /* Pricing 페이지 */
         #pricing-page {
             padding-top: 160px;
@@ -2195,37 +2339,46 @@
  
         .pricing-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
-            gap: 40px;
-            max-width: 1400px;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 16px;
+            max-width: 1500px;
             margin: 0 auto;
         }
- 
+
         @media (max-width: 1200px) {
             .pricing-grid {
-                grid-template-columns: repeat(2, 1fr);
-                gap: 32px;
+                grid-template-columns: repeat(3, 1fr);
+                gap: 16px;
             }
         }
- 
+
         @media (max-width: 768px) {
             .pricing-grid {
-                grid-template-columns: 1fr;
-                gap: 24px;
+                grid-template-columns: repeat(2, 1fr);
+                gap: 14px;
             }
         }
- 
+
+        @media (max-width: 480px) {
+            .pricing-grid {
+                grid-template-columns: 1fr;
+                gap: 14px;
+            }
+        }
+
         .pricing-card {
             border: 1px solid var(--line);
-            border-radius: 12px;
+            border-radius: 10px;
             background: var(--dark-secondary);
-            padding: 48px 36px;
+            padding: 20px 16px;
             transition: all 0.3s ease;
+            display: flex;
+            flex-direction: column;
         }
 
         .pricing-card:hover {
             border-color: var(--text);
-            transform: translateY(-5px);
+            transform: translateY(-4px);
         }
 
         .pricing-card.featured {
@@ -2235,101 +2388,107 @@
 
         .pricing-badge {
             display: inline-block;
-            font-size: 11px;
-            font-weight: 600;
-            letter-spacing: 1.5px;
+            font-size: 9px;
+            font-weight: 700;
+            letter-spacing: 0.06em;
             text-transform: uppercase;
             color: var(--accent);
-            margin-bottom: 24px;
+            margin-bottom: 10px;
         }
- 
+
         .pricing-card h3 {
-            margin-bottom: 24px;
-            font-size: 22px;
-        }
- 
-        .price-amount {
-            font-size: 48px;
+            margin-bottom: 10px;
+            font-size: 14.5px;
             font-weight: 800;
-            margin-bottom: 8px;
+            line-height: 1.3;
         }
- 
+
+        .price-amount {
+            font-size: 24px;
+            font-weight: 800;
+            margin-bottom: 2px;
+            letter-spacing: -0.02em;
+        }
+
         .price-unit {
-            font-size: 13px;
+            font-size: 10.5px;
             color: var(--text-muted);
             display: block;
-            margin-bottom: 24px;
+            margin-bottom: 10px;
         }
- 
+
         .delivery-time {
-            background: rgba(17, 17, 17, 0.1);
-            border: 1px solid rgba(17, 17, 17, 0.3);
-            padding: 14px 16px;
-            border-radius: 6px;
-            margin-bottom: 24px;
-            font-size: 13px;
-            font-weight: 500;
+            background: rgba(252, 251, 118, 0.08);
+            border: 1px solid rgba(252, 251, 118, 0.25);
+            padding: 6px 8px;
+            border-radius: 5px;
+            margin-bottom: 10px;
+            font-size: 10.5px;
+            font-weight: 600;
             color: var(--accent);
             text-align: center;
-            letter-spacing: 0.5px;
+            letter-spacing: 0.02em;
         }
- 
+
         .price-desc {
-            font-size: 14px;
+            font-size: 11px;
             color: var(--text-muted);
-            margin-bottom: 32px;
-            line-height: 1.6;
+            margin-bottom: 14px;
+            line-height: 1.5;
         }
- 
+
         .features-list {
             list-style: none;
-            margin-bottom: 32px;
+            margin-bottom: 16px;
+            flex: 1;
         }
- 
+
         .features-list li {
-            font-size: 14px;
-            padding: 12px 0 12px 26px;
+            font-size: 11.5px;
+            padding: 6px 0 6px 18px;
             border-bottom: 1px solid var(--line);
             color: var(--text);
             position: relative;
+            line-height: 1.4;
         }
- 
+
         .features-list li:before {
             content: "";
             position: absolute;
             left: 0;
-            top: 15px;
-            width: 14px;
-            height: 14px;
-            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23111111' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='20 6 9 17 4 12'%3E%3C/polyline%3E%3C/svg%3E");
+            top: 8px;
+            width: 11px;
+            height: 11px;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23FCFB76' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='20 6 9 17 4 12'%3E%3C/polyline%3E%3C/svg%3E");
             background-size: contain;
             background-repeat: no-repeat;
         }
- 
+
         .pricing-card button {
             width: 100%;
-            padding: 16px 24px;
+            padding: 10px 12px;
             border: 1px solid var(--text);
             background: transparent;
             color: var(--text);
-            font-size: 13px;
-            font-weight: 500;
+            font-size: 11px;
+            font-weight: 600;
             cursor: pointer;
             transition: all 0.3s ease;
             text-transform: uppercase;
-            letter-spacing: 1px;
+            letter-spacing: 0.5px;
+            border-radius: 4px;
         }
- 
+
         .pricing-card button:hover {
             background: var(--text);
             color: var(--dark);
         }
- 
+
         .pricing-card.featured button {
             background: var(--text);
             color: var(--dark);
         }
- 
+
         .pricing-card.featured button:hover {
             background: transparent;
             color: var(--text);
@@ -2804,14 +2963,6 @@
             .form-row {
                 grid-template-columns: 1fr;
                 gap: 16px;
-            }
- 
-            .pricing-grid {
-                gap: 24px;
-            }
- 
-            .pricing-card {
-                padding: 36px 24px;
             }
         }
  
@@ -3817,6 +3968,35 @@
             padding: 10px 12px;
         }
 
+        .showreel-layout-control {
+            margin-bottom: 18px;
+        }
+
+        .showreel-layout-control label {
+            display: block;
+            font-size: 12px;
+            font-weight: 600;
+            color: #A0A0A5;
+            margin-bottom: 8px;
+        }
+
+        .showreel-layout-control input[type="range"] {
+            width: 100%;
+            accent-color: var(--accent);
+            cursor: pointer;
+        }
+
+        .showreel-layout-control select {
+            width: 100%;
+            padding: 9px 10px;
+            background: #1C1C1F;
+            border: 1px solid var(--line);
+            border-radius: 6px;
+            color: #FFFFFF;
+            font-size: 13px;
+            font-family: 'Pretendard', 'Inter', sans-serif;
+        }
+
         /* ===== [운영] 페이지 (Operation Hub) ===== */
         .ops-container {
             padding: 40px 0 100px 0;
@@ -4498,6 +4678,7 @@
             <div class="nav-links-inline">
                 <a data-page="work" onclick="showPage('work')">Work</a>
                 <a data-page="about" onclick="showPage('about')">About</a>
+                <a data-page="gear" onclick="showPage('gear')">Video Equipment</a>
                 <a data-page="pricing" onclick="showPage('pricing')">Pricing</a>
                 <a data-page="estimate" onclick="showPage('estimate')">Estimate</a>
                 <a data-page="clienthub" onclick="showPage('clienthub')">Client Hub</a>
@@ -4543,6 +4724,10 @@
             <a class="drawer-nav-link" data-page="about" onclick="showPage('about'); window.closeDrawer();">
                 <span class="drawer-nav-indicator"></span>
                 <span class="drawer-nav-text">About <span>소개 및 장비</span></span>
+            </a>
+            <a class="drawer-nav-link" data-page="gear" onclick="showPage('gear'); window.closeDrawer();">
+                <span class="drawer-nav-indicator"></span>
+                <span class="drawer-nav-text">Video Equipment <span>보유 장비</span></span>
             </a>
             <a class="drawer-nav-link" data-page="pricing" onclick="showPage('pricing'); window.closeDrawer();">
                 <span class="drawer-nav-indicator"></span>
@@ -4661,6 +4846,7 @@
                     <button class="ops-tab-switch-btn" data-ops-tab="inquiries" onclick="window.switchOpsTab('inquiries')">견적 문의 내역</button>
                     <button class="ops-tab-switch-btn" data-ops-tab="portfolio" onclick="window.switchOpsTab('portfolio')">포트폴리오 관리</button>
                     <button class="ops-tab-switch-btn" data-ops-tab="showreel" onclick="window.switchOpsTab('showreel')">쇼릴 / 대표 영상 설정</button>
+                    <button class="ops-tab-switch-btn" data-ops-tab="gear" onclick="window.switchOpsTab('gear')">보유 장비 관리</button>
                     <button class="ops-tab-switch-btn ops-logout-btn" onclick="window.logoutOpsMode()">로그아웃</button>
                 </div>
             </div>
@@ -4800,6 +4986,36 @@
                         </div>
                     </div>
 
+                    <div class="showreel-current-preview">
+                        <div class="card-detail-section-title">쇼릴 위치 & 크기</div>
+                        <p class="showreel-settings-desc">메인 화면에서 쇼릴 카드의 위치와 크기를 세밀하게 조정합니다.</p>
+
+                        <div class="showreel-layout-control">
+                            <label for="showreelXOffset">가로 위치 (우측 여백) — <span id="showreelXOffsetValue">4</span>%</label>
+                            <input type="range" id="showreelXOffset" min="0" max="20" step="1" value="4" oninput="window.previewShowreelLayout()">
+                        </div>
+
+                        <div class="showreel-layout-control">
+                            <label for="showreelYAlign">세로 위치</label>
+                            <select id="showreelYAlign" onchange="window.previewShowreelLayout()">
+                                <option value="flex-start">상단 (Top)</option>
+                                <option value="center">중앙 (Center)</option>
+                                <option value="flex-end" selected>하단 (Bottom)</option>
+                            </select>
+                        </div>
+
+                        <div class="showreel-layout-control">
+                            <label for="showreelWidth">카드 크기 (너비) — <span id="showreelWidthValue">400</span>px</label>
+                            <input type="range" id="showreelWidth" min="320" max="520" step="10" value="400" oninput="window.previewShowreelLayout()">
+                        </div>
+
+                        <div class="showreel-settings-actions">
+                            <button type="button" class="ops-add-btn" onclick="window.saveShowreelLayout()">위치/크기 저장</button>
+                            <button type="button" class="inquiry-detail-link-btn" onclick="window.resetShowreelLayout()">기본값으로 초기화</button>
+                            <span class="inquiry-notes-saved-hint" id="showreelLayoutSavedHint"></span>
+                        </div>
+                    </div>
+
                     <div class="showreel-settings-actions">
                         <button type="button" class="ops-add-btn" onclick="window.saveShowreelConfig()">저장 및 메인 화면에 반영</button>
                         <button type="button" class="inquiry-detail-link-btn" onclick="window.resetShowreelConfig()">기본값으로 초기화</button>
@@ -4810,6 +5026,17 @@
                         <div class="card-detail-section-title">현재 설정</div>
                         <div class="showreel-current-value" id="showreelCurrentValue">-</div>
                     </div>
+                </div>
+            </div>
+
+            <!-- 탭 5: 보유 장비 관리 (Gear CMS) -->
+            <div class="ops-tab-content" id="opsTab-gear">
+                <div class="ops-portfolio-toolbar">
+                    <button class="ops-add-btn" onclick="window.showAddGearForm()">+ 새 장비 추가</button>
+                    <span class="ops-portfolio-hint">행을 드래그하여 노출 순서를 변경할 수 있습니다.</span>
+                </div>
+                <div class="ops-portfolio-list" id="opsGearList">
+                    <!-- JS가 gearData를 렌더링합니다 -->
                 </div>
             </div>
         </div>
@@ -4889,6 +5116,19 @@
         </div>
     </section>
  
+    <!-- GEAR (Video Equipment) 페이지 -->
+    <section id="gear-page" class="page">
+        <div class="container gear-container">
+            <div class="work-header">
+                <div class="section-title">Video Equipment</div>
+                <p class="gear-page-desc">EGG Studio가 직접 보유하고 있는 촬영·음향·조명 장비입니다. 프로젝트 성격에 맞춰 유연하게 지원해 드립니다.</p>
+            </div>
+            <div class="gear-grid" id="gearGrid">
+                <!-- JS가 gearData를 렌더링합니다 -->
+            </div>
+        </div>
+    </section>
+ 
     <!-- PRICING 페이지 -->
     <section id="pricing-page" class="page">
         <div class="container">
@@ -4948,45 +5188,26 @@
                     <button onclick="selectPackage('유튜브 일반 (200,000원)', 'youtube-general')">선택</button>
                 </div>
  
-                <!-- 4. 유튜브 중장편 (20~30분) -->
+                <!-- 4. 유튜브 중·롱폼 종합 (중장편 + 롱폼 통합) -->
                 <div class="pricing-card featured">
-                    <div class="pricing-badge">브랜드 채널 추천</div>
-                    <h3>유튜브 중장편</h3>
-                    <div class="price-amount">250,000</div>
+                    <div class="pricing-badge">브랜드 & 고퀄리티 종합편집</div>
+                    <h3>유튜브 롱폼</h3>
+                    <div class="price-amount">350,000</div>
                     <span class="price-unit">원 / 건</span>
                     <div class="delivery-time">3~4일 이내 마감</div>
-                    <p class="price-desc">20분 ~ 30분 / 긴 호흡의 몰입감 있는 서사 구조</p>
+                    <p class="price-desc">20분 ~ 60분 내외 / 몰입감 있는 서사와 풀버전 고퀄리티 종합 편집</p>
                     <ul class="features-list">
-                        <li>몰입감 있는 서사 편집</li>
-                        <li>고급 색보정 & 룩</li>
-                        <li>다양한 BGM/효과음</li>
-                        <li>모션그래픽 기본안</li>
-                        <li>고품질 썸네일</li>
-                        <li>수정 4회</li>
+                        <li>몰입감 있는 서사 구조 & 컷편집</li>
+                        <li>전문 색보정 & 룩(Look) 완성</li>
+                        <li>다양한 BGM & 프리미엄 효과음</li>
+                        <li>모션그래픽 & 타이틀 모션 디자인</li>
+                        <li>고품질/프리미엄 썸네일 제작</li>
+                        <li>수정 4회 기본 제공</li>
+                        <li>마감기한 철저 준수 보장</li>
                     </ul>
-                    <button onclick="selectPackage('유튜브 중장편 (250,000원)', 'youtube-mid')">추천 선택</button>
+                    <button onclick="selectPackage('유튜브 롱폼 (350,000원)', 'youtube-longform')">추천 선택</button>
                 </div>
- 
-                <!-- 5. 유튜브 롱폼 (1시간) -->
-                <div class="pricing-card">
-                    <div class="pricing-badge">고퀄리티 종합편집</div>
-                    <h3>유튜브 롱폼</h3>
-                    <div class="price-amount">400,000</div>
-                    <span class="price-unit">원 / 건</span>
-                    <div class="delivery-time">4~5일 이내 마감</div>
-                    <p class="price-desc">1시간 내외 / 풀버전 롱폼 고퀄리티 종합 편집</p>
-                    <ul class="features-list">
-                        <li>풀버전 고퀄리티 편집</li>
-                        <li>전문적 색보정 & 룩</li>
-                        <li>애프터이펙트 효과</li>
-                        <li>타이틀 모션 디자인</li>
-                        <li>프리미엄 썸네일</li>
-                        <li>수정 5회</li>
-                        <li>마감기한 보장</li>
-                    </ul>
-                    <button onclick="selectPackage('유튜브 롱폼 (400,000원)', 'youtube-longform')">선택</button>
-                </div>
-                <!-- 6. AI 영상 생성 및 연출 -->
+                <!-- 5. AI 영상 생성 및 연출 -->
                 <div class="pricing-card">
                     <div class="pricing-badge">AI CREATIVE</div>
                     <h3>AI 영상 생성 및 연출</h3>
@@ -5486,6 +5707,8 @@
                 renderOpsPortfolioList();
             } else if (tab === 'showreel') {
                 initShowreelTab();
+            } else if (tab === 'gear') {
+                renderOpsGearList();
             }
         };
 
@@ -7287,6 +7510,446 @@
                 console.error('❌ LocalStorage 저장 오류:', e);
                 alert('데이터 저장에 실패했습니다. 브라우저 저장소를 확인해주세요.');
             }
+
+        // ========================================
+        // 🎥 보유 장비 (Gear) 관리 — LocalStorage 기반 CMS
+        // ========================================
+        const GEAR_STORAGE_KEY = 'gearData';
+        const GEAR_CATEGORIES = ['카메라', '음향', '조명', '렌즈', '악세서리', '기타'];
+
+        const defaultGearData = [
+            {
+                id: 'gear_1',
+                name: 'SONY A7C2',
+                category: '카메라',
+                quantity: 1,
+                unit: 'EA',
+                description: '풀프레임 미러리스 카메라. 고화질 촬영 및 4K 영상 녹화 지원.',
+                imageUrl: '',
+                visible: true
+            },
+            {
+                id: 'gear_2',
+                name: 'DJI 마이크 2대',
+                category: '음향',
+                quantity: 2,
+                unit: 'EA',
+                description: '무선 라발리에 마이크. 인터뷰 및 현장 동시 녹음에 활용.',
+                imageUrl: '',
+                visible: true
+            },
+            {
+                id: 'gear_3',
+                name: '고성능 짐벌',
+                category: '악세서리',
+                quantity: 1,
+                unit: 'SET',
+                description: '흔들림 없는 부드러운 무빙샷 촬영을 위한 3축 짐벌.',
+                imageUrl: '',
+                visible: true
+            },
+            {
+                id: 'gear_4',
+                name: '삼각대',
+                category: '악세서리',
+                quantity: 1,
+                unit: 'EA',
+                description: '안정적인 고정샷 및 인터뷰 촬영용 삼각대.',
+                imageUrl: '',
+                visible: true
+            },
+            {
+                id: 'gear_5',
+                name: '조명 세트',
+                category: '조명',
+                quantity: 1,
+                unit: 'SET',
+                description: '실내 촬영 및 인터뷰용 3점 조명 세트.',
+                imageUrl: '',
+                visible: true
+            }
+        ];
+
+        let gearData = [];
+
+        function loadGearData() {
+            try {
+                const saved = localStorage.getItem(GEAR_STORAGE_KEY);
+                if (saved) {
+                    const loaded = JSON.parse(saved);
+                    if (loaded && loaded.length > 0) {
+                        gearData = loaded;
+                        return;
+                    }
+                }
+            } catch (e) {
+                console.warn('⚠️ [loadGearData] 파싱 오류:', e);
+            }
+            gearData = [...defaultGearData];
+            saveGearData();
+        }
+
+        function saveGearData() {
+            try {
+                localStorage.setItem(GEAR_STORAGE_KEY, JSON.stringify(gearData));
+            } catch (e) {
+                console.error('❌ [saveGearData] 저장 오류:', e);
+                alert('장비 데이터 저장에 실패했습니다.');
+            }
+        }
+
+        // ===== 클라이언트용 Gear 페이지 렌더링 (공개 노출 항목만) =====
+        function renderGearGrid() {
+            const grid = document.getElementById('gearGrid');
+            if (!grid) return;
+
+            const visibleItems = gearData.filter(item => item.visible !== false);
+
+            if (visibleItems.length === 0) {
+                grid.innerHTML = '<p style="color: var(--text-muted); font-size: 13px;">등록된 장비가 없습니다.</p>';
+                return;
+            }
+
+            grid.innerHTML = visibleItems.map(item => {
+                const thumbHTML = item.imageUrl
+                    ? `<img class="gear-card-thumb" src="${escapeHTML(item.imageUrl)}" alt="${escapeHTML(item.name)}">`
+                    : `<div class="gear-card-thumb" style="display:flex; align-items:center; justify-content:center; color:#3F3F46; font-size:11px;">NO IMAGE</div>`;
+
+                return `
+                    <div class="gear-card">
+                        ${thumbHTML}
+                        <div class="gear-card-body">
+                            <span class="gear-category-badge">${escapeHTML(item.category || '기타')}</span>
+                            <div class="gear-card-name">${escapeHTML(item.name || '')}</div>
+                            <div class="gear-card-qty">${escapeHTML(String(item.quantity || 1))} ${escapeHTML(item.unit || 'EA')}</div>
+                            <p class="gear-card-desc">${escapeHTML(item.description || '')}</p>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        // ===== [운영] 장비 관리 리스트 렌더링 (비공개 포함 전체 + 드래그 정렬) =====
+        function renderOpsGearList() {
+            const container = document.getElementById('opsGearList');
+            if (!container) return;
+
+            if (!gearData || gearData.length === 0) {
+                container.innerHTML = '<p style="padding: 20px; color: #999; font-size: 13px;">등록된 장비가 없습니다.</p>';
+                return;
+            }
+
+            container.innerHTML = '';
+
+            gearData.forEach((item, index) => {
+                const row = document.createElement('div');
+                row.className = 'ops-portfolio-row' + (item.visible === false ? ' ops-row-hidden' : '');
+                row.draggable = true;
+                row.dataset.index = index;
+
+                const thumbHTML = item.imageUrl
+                    ? `<img class="ops-gear-row-thumb" src="${escapeHTML(item.imageUrl)}" alt="${escapeHTML(item.name)}">`
+                    : `<div class="ops-gear-row-thumb" style="display:flex; align-items:center; justify-content:center; color:#3F3F46; font-size:9px;">NO IMG</div>`;
+
+                row.innerHTML = `
+                    <span class="ops-row-drag-handle" title="드래그하여 순서 변경">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><line x1="4" y1="8" x2="20" y2="8"></line><line x1="4" y1="16" x2="20" y2="16"></line></svg>
+                    </span>
+                    ${thumbHTML}
+                    <div class="ops-row-info">
+                        <div class="ops-row-title">${escapeHTML(item.name || '(이름 없음)')}</div>
+                        <div class="ops-row-meta">${escapeHTML(item.category || '기타')} · ${escapeHTML(String(item.quantity || 1))} ${escapeHTML(item.unit || 'EA')}${item.visible === false ? ' · 비공개' : ''}</div>
+                    </div>
+                    <button type="button" class="ops-row-visibility-btn ${item.visible === false ? 'is-hidden' : ''}" onclick="window.toggleGearVisibility('${item.id}')" title="${item.visible === false ? '비공개 중 (클릭 시 공개)' : '공개 중 (클릭 시 비공개)'}">
+                        ${item.visible === false
+                            ? '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"></path><line x1="1" y1="1" x2="23" y2="23"></line></svg>'
+                            : '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>'}
+                    </button>
+                    <div class="ops-row-actions">
+                        <button type="button" onclick="window.showEditGearForm('${item.id}')">수정</button>
+                        <button type="button" onclick="if(confirm('정말 이 장비를 삭제하시겠습니까?')) window.deleteGearItem('${item.id}')">삭제</button>
+                    </div>
+                `;
+
+                row.addEventListener('dragstart', () => {
+                    row.classList.add('dragging');
+                    row.dragStartIndex = index;
+                });
+
+                row.addEventListener('dragend', () => {
+                    row.classList.remove('dragging');
+                    document.querySelectorAll('#opsGearList .ops-portfolio-row').forEach(r => r.classList.remove('drag-over'));
+                });
+
+                row.addEventListener('dragover', (e) => {
+                    e.preventDefault();
+                    if (row.classList.contains('dragging')) return;
+                    row.classList.add('drag-over');
+                });
+
+                row.addEventListener('dragleave', () => {
+                    row.classList.remove('drag-over');
+                });
+
+                row.addEventListener('drop', (e) => {
+                    e.preventDefault();
+                    row.classList.remove('drag-over');
+
+                    const draggingRow = document.querySelector('#opsGearList .ops-portfolio-row.dragging');
+                    if (draggingRow && draggingRow.dragStartIndex !== undefined) {
+                        const fromIndex = draggingRow.dragStartIndex;
+                        const toIndex = index;
+                        if (fromIndex !== toIndex) {
+                            const [moved] = gearData.splice(fromIndex, 1);
+                            gearData.splice(toIndex, 0, moved);
+                            saveGearData();
+                            renderOpsGearList();
+                            renderGearGrid();
+                        }
+                    }
+                });
+
+                container.appendChild(row);
+            });
+        }
+
+        // ===== 공개/비공개 토글 =====
+        window.toggleGearVisibility = function(id) {
+            const item = gearData.find(g => g.id === id);
+            if (!item) return;
+            item.visible = item.visible === false ? true : false;
+            saveGearData();
+            renderOpsGearList();
+            renderGearGrid();
+        };
+
+        // ===== 장비 삭제 =====
+        window.deleteGearItem = function(id) {
+            gearData = gearData.filter(g => g.id !== id);
+            saveGearData();
+            renderOpsGearList();
+            renderGearGrid();
+        };
+
+        // ===== 카테고리 옵션 HTML 생성 =====
+        function buildGearCategoryOptionsHTML(selected) {
+            return GEAR_CATEGORIES.map(cat =>
+                `<option value="${cat}" ${cat === selected ? 'selected' : ''}>${cat}</option>`
+            ).join('');
+        }
+
+        // ===== 장비 추가 폼 모달 =====
+        window.showAddGearForm = function() {
+            let modal = document.getElementById('gearFormModal');
+            if (!modal) {
+                modal = document.createElement('div');
+                modal.id = 'gearFormModal';
+                document.body.appendChild(modal);
+            }
+
+            modal.style.cssText = 'position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); display: flex; align-items: center; justify-content: center; z-index: 2000;';
+
+            modal.innerHTML = `
+                <div style="background: var(--dark-secondary); border: 1px solid rgba(255,255,255,0.12); padding: 30px; border-radius: 8px; max-width: 500px; width: 90%; max-height: 90vh; overflow-y: auto;">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                        <h2 style="color: #FFFFFF; margin: 0; font-size: 20px;">새 장비 추가</h2>
+                        <button onclick="document.getElementById('gearFormModal').remove()" style="background: none; border: none; color: #FFFFFF; cursor: pointer; display: flex; align-items: center;"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg></button>
+                    </div>
+
+                    <form onsubmit="window.handleAddGear(event)" style="display: flex; flex-direction: column; gap: 15px;">
+                        <div style="border: 1px dashed rgba(255,255,255,0.16); border-radius: 6px; padding: 12px;">
+                            <label style="color: #FFFFFF; display: block; margin-bottom: 8px; font-size: 12px; font-weight: 600;">장비 사진 (선택 사항 · 파일 업로드가 URL보다 우선 적용됩니다)</label>
+                            <label style="color: #A0A0A5; display: block; margin-bottom: 5px; font-size: 12px;">이미지 파일 선택</label>
+                            <input type="file" id="gearImageFile" accept="image/*" onchange="handleThumbnailFilePreview(this, 'gearImagePreview')" style="width: 100%; padding: 8px; background: #1C1C1F; border: 1px solid rgba(255,255,255,0.14); color: #FFFFFF; border-radius: 4px; box-sizing: border-box; margin-bottom: 10px;">
+                            <label style="color: #A0A0A5; display: block; margin-bottom: 5px; font-size: 12px;">또는 외부 이미지 URL 직접 입력</label>
+                            <input type="text" id="gearImageUrl" placeholder="예: https://example.com/gear.jpg" style="width: 100%; padding: 10px; background: #1C1C1F; border: 1px solid rgba(255,255,255,0.14); color: #FFFFFF; border-radius: 4px; box-sizing: border-box; margin-bottom: 10px;">
+                            <img id="gearImagePreview" src="" alt="미리보기" style="display: none; width: 100%; max-height: 180px; object-fit: cover; border-radius: 4px; border: 1px solid rgba(255,255,255,0.14);">
+                        </div>
+
+                        <div>
+                            <label style="color: #A0A0A5; display: block; margin-bottom: 5px; font-size: 12px;">제품명 *</label>
+                            <input type="text" id="gearName" placeholder="예: SONY A7C2" required style="width: 100%; padding: 10px; background: #1C1C1F; border: 1px solid rgba(255,255,255,0.14); color: #FFFFFF; border-radius: 4px; box-sizing: border-box;">
+                        </div>
+
+                        <div style="display: flex; gap: 10px;">
+                            <div style="flex: 1;">
+                                <label style="color: #A0A0A5; display: block; margin-bottom: 5px; font-size: 12px;">카테고리 *</label>
+                                <select id="gearCategory" required style="width: 100%; padding: 10px; background: #1C1C1F; border: 1px solid rgba(255,255,255,0.14); color: #FFFFFF; border-radius: 4px; box-sizing: border-box;">
+                                    ${buildGearCategoryOptionsHTML('카메라')}
+                                </select>
+                            </div>
+                            <div style="width: 90px;">
+                                <label style="color: #A0A0A5; display: block; margin-bottom: 5px; font-size: 12px;">개수</label>
+                                <input type="number" id="gearQuantity" min="1" value="1" style="width: 100%; padding: 10px; background: #1C1C1F; border: 1px solid rgba(255,255,255,0.14); color: #FFFFFF; border-radius: 4px; box-sizing: border-box;">
+                            </div>
+                            <div style="width: 90px;">
+                                <label style="color: #A0A0A5; display: block; margin-bottom: 5px; font-size: 12px;">단위</label>
+                                <input type="text" id="gearUnit" value="EA" placeholder="EA/SET" style="width: 100%; padding: 10px; background: #1C1C1F; border: 1px solid rgba(255,255,255,0.14); color: #FFFFFF; border-radius: 4px; box-sizing: border-box;">
+                            </div>
+                        </div>
+
+                        <div>
+                            <label style="color: #A0A0A5; display: block; margin-bottom: 5px; font-size: 12px;">비고 / 설명</label>
+                            <textarea id="gearDescription" rows="3" placeholder="간단한 스펙이나 특징을 입력하세요." style="width: 100%; padding: 10px; background: #1C1C1F; border: 1px solid rgba(255,255,255,0.14); color: #FFFFFF; border-radius: 4px; box-sizing: border-box; font-family: inherit; resize: vertical;"></textarea>
+                        </div>
+
+                        <div style="display: flex; gap: 10px; margin-top: 10px;">
+                            <button type="button" onclick="document.getElementById('gearFormModal').remove()" style="flex: 1; background: transparent; color: #FFFFFF; border: 1px solid rgba(255,255,255,0.16); padding: 12px; cursor: pointer; border-radius: 4px; font-weight: 600;">취소</button>
+                            <button type="submit" style="flex: 1; background: var(--accent); color: var(--accent-text); border: none; padding: 12px; cursor: pointer; border-radius: 4px; font-weight: 600;">저장</button>
+                        </div>
+                    </form>
+                </div>
+            `;
+        };
+
+        // ===== 장비 수정 폼 모달 =====
+        window.showEditGearForm = function(id) {
+            const item = gearData.find(g => g.id === id);
+            if (!item) return;
+
+            let modal = document.getElementById('gearFormModal');
+            if (!modal) {
+                modal = document.createElement('div');
+                modal.id = 'gearFormModal';
+                document.body.appendChild(modal);
+            }
+
+            modal.style.cssText = 'position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); display: flex; align-items: center; justify-content: center; z-index: 2000;';
+
+            const previewStyle = item.imageUrl ? 'display:block;' : 'display:none;';
+
+            modal.innerHTML = `
+                <div style="background: var(--dark-secondary); border: 1px solid rgba(255,255,255,0.12); padding: 30px; border-radius: 8px; max-width: 500px; width: 90%; max-height: 90vh; overflow-y: auto;">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                        <h2 style="color: #FFFFFF; margin: 0; font-size: 20px;">장비 정보 수정</h2>
+                        <button onclick="document.getElementById('gearFormModal').remove()" style="background: none; border: none; color: #FFFFFF; cursor: pointer; display: flex; align-items: center;"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg></button>
+                    </div>
+
+                    <form onsubmit="window.handleEditGear(event, '${item.id}')" style="display: flex; flex-direction: column; gap: 15px;">
+                        <div style="border: 1px dashed rgba(255,255,255,0.16); border-radius: 6px; padding: 12px;">
+                            <label style="color: #FFFFFF; display: block; margin-bottom: 8px; font-size: 12px; font-weight: 600;">장비 사진 (새로 선택 시 기존 이미지를 대체합니다)</label>
+                            <label style="color: #A0A0A5; display: block; margin-bottom: 5px; font-size: 12px;">이미지 파일 선택</label>
+                            <input type="file" id="gearImageFile" accept="image/*" onchange="handleThumbnailFilePreview(this, 'gearImagePreview')" style="width: 100%; padding: 8px; background: #1C1C1F; border: 1px solid rgba(255,255,255,0.14); color: #FFFFFF; border-radius: 4px; box-sizing: border-box; margin-bottom: 10px;">
+                            <label style="color: #A0A0A5; display: block; margin-bottom: 5px; font-size: 12px;">또는 외부 이미지 URL 직접 입력</label>
+                            <input type="text" id="gearImageUrl" value="${(item.imageUrl && !item.imageUrl.startsWith('data:')) ? escapeHTML(item.imageUrl) : ''}" placeholder="예: https://example.com/gear.jpg" style="width: 100%; padding: 10px; background: #1C1C1F; border: 1px solid rgba(255,255,255,0.14); color: #FFFFFF; border-radius: 4px; box-sizing: border-box; margin-bottom: 10px;">
+                            <img id="gearImagePreview" src="${item.imageUrl || ''}" alt="미리보기" style="${previewStyle} width: 100%; max-height: 180px; object-fit: cover; border-radius: 4px; border: 1px solid rgba(255,255,255,0.14);">
+                        </div>
+
+                        <div>
+                            <label style="color: #A0A0A5; display: block; margin-bottom: 5px; font-size: 12px;">제품명 *</label>
+                            <input type="text" id="gearName" value="${escapeHTML(item.name || '')}" required style="width: 100%; padding: 10px; background: #1C1C1F; border: 1px solid rgba(255,255,255,0.14); color: #FFFFFF; border-radius: 4px; box-sizing: border-box;">
+                        </div>
+
+                        <div style="display: flex; gap: 10px;">
+                            <div style="flex: 1;">
+                                <label style="color: #A0A0A5; display: block; margin-bottom: 5px; font-size: 12px;">카테고리 *</label>
+                                <select id="gearCategory" required style="width: 100%; padding: 10px; background: #1C1C1F; border: 1px solid rgba(255,255,255,0.14); color: #FFFFFF; border-radius: 4px; box-sizing: border-box;">
+                                    ${buildGearCategoryOptionsHTML(item.category)}
+                                </select>
+                            </div>
+                            <div style="width: 90px;">
+                                <label style="color: #A0A0A5; display: block; margin-bottom: 5px; font-size: 12px;">개수</label>
+                                <input type="number" id="gearQuantity" min="1" value="${parseInt(item.quantity, 10) || 1}" style="width: 100%; padding: 10px; background: #1C1C1F; border: 1px solid rgba(255,255,255,0.14); color: #FFFFFF; border-radius: 4px; box-sizing: border-box;">
+                            </div>
+                            <div style="width: 90px;">
+                                <label style="color: #A0A0A5; display: block; margin-bottom: 5px; font-size: 12px;">단위</label>
+                                <input type="text" id="gearUnit" value="${escapeHTML(item.unit || 'EA')}" style="width: 100%; padding: 10px; background: #1C1C1F; border: 1px solid rgba(255,255,255,0.14); color: #FFFFFF; border-radius: 4px; box-sizing: border-box;">
+                            </div>
+                        </div>
+
+                        <div>
+                            <label style="color: #A0A0A5; display: block; margin-bottom: 5px; font-size: 12px;">비고 / 설명</label>
+                            <textarea id="gearDescription" rows="3" style="width: 100%; padding: 10px; background: #1C1C1F; border: 1px solid rgba(255,255,255,0.14); color: #FFFFFF; border-radius: 4px; box-sizing: border-box; font-family: inherit; resize: vertical;">${escapeHTML(item.description || '')}</textarea>
+                        </div>
+
+                        <div style="display: flex; gap: 10px; margin-top: 10px;">
+                            <button type="button" onclick="document.getElementById('gearFormModal').remove()" style="flex: 1; background: transparent; color: #FFFFFF; border: 1px solid rgba(255,255,255,0.16); padding: 12px; cursor: pointer; border-radius: 4px; font-weight: 600;">취소</button>
+                            <button type="submit" style="flex: 1; background: var(--accent); color: var(--accent-text); border: none; padding: 12px; cursor: pointer; border-radius: 4px; font-weight: 600;">수정 완료</button>
+                        </div>
+                    </form>
+                </div>
+            `;
+        };
+
+        // ===== 장비 추가 저장 =====
+        window.handleAddGear = async function(event) {
+            event.preventDefault();
+
+            const fileInput = document.getElementById('gearImageFile');
+            const urlInput = document.getElementById('gearImageUrl');
+            const selectedFile = fileInput && fileInput.files ? fileInput.files[0] : null;
+
+            let imageUrl = '';
+            if (selectedFile) {
+                try {
+                    imageUrl = await readFileAsBase64(selectedFile);
+                } catch (e) {
+                    console.error('❌ 장비 이미지 파일 읽기 오류:', e);
+                }
+            } else if (urlInput && urlInput.value.trim() !== '') {
+                imageUrl = urlInput.value.trim();
+            }
+
+            const newItem = {
+                id: 'gear_' + Date.now(),
+                name: document.getElementById('gearName').value.trim(),
+                category: document.getElementById('gearCategory').value,
+                quantity: parseInt(document.getElementById('gearQuantity').value, 10) || 1,
+                unit: document.getElementById('gearUnit').value.trim() || 'EA',
+                description: document.getElementById('gearDescription').value.trim(),
+                imageUrl: imageUrl,
+                visible: true
+            };
+
+            gearData.push(newItem);
+            saveGearData();
+
+            const modal = document.getElementById('gearFormModal');
+            if (modal) modal.remove();
+
+            renderOpsGearList();
+            renderGearGrid();
+            alert('✅ 장비가 추가되었습니다!');
+        };
+
+        // ===== 장비 수정 저장 =====
+        window.handleEditGear = async function(event, id) {
+            event.preventDefault();
+
+            const item = gearData.find(g => g.id === id);
+            if (!item) return;
+
+            const fileInput = document.getElementById('gearImageFile');
+            const urlInput = document.getElementById('gearImageUrl');
+            const selectedFile = fileInput && fileInput.files ? fileInput.files[0] : null;
+
+            let imageUrl = item.imageUrl || '';
+            if (selectedFile) {
+                try {
+                    imageUrl = await readFileAsBase64(selectedFile);
+                } catch (e) {
+                    console.error('❌ 장비 이미지 파일 읽기 오류:', e);
+                }
+            } else if (urlInput && urlInput.value.trim() !== '') {
+                imageUrl = urlInput.value.trim();
+            }
+
+            item.name = document.getElementById('gearName').value.trim();
+            item.category = document.getElementById('gearCategory').value;
+            item.quantity = parseInt(document.getElementById('gearQuantity').value, 10) || 1;
+            item.unit = document.getElementById('gearUnit').value.trim() || 'EA';
+            item.description = document.getElementById('gearDescription').value.trim();
+            item.imageUrl = imageUrl;
+
+            saveGearData();
+
+            const modal = document.getElementById('gearFormModal');
+            if (modal) modal.remove();
+
+            renderOpsGearList();
+            renderGearGrid();
+            alert('✅ 장비 정보가 수정되었습니다!');
+        };
         }
  
         // 포트폴리오 수정 모달 표시 - 전역 함수
@@ -7983,9 +8646,91 @@
             }
         }
 
+        // ========================================
+        // 📐 쇼릴 위치 & 크기 커스텀 설정
+        // ========================================
+        const SHOWREEL_LAYOUT_KEY = 'heroShowreelLayout';
+        const SHOWREEL_LAYOUT_DEFAULT = { xOffset: 4, yAlign: 'flex-end', width: 400 };
+
+        function loadShowreelLayout() {
+            try {
+                const raw = localStorage.getItem(SHOWREEL_LAYOUT_KEY);
+                return raw ? Object.assign({}, SHOWREEL_LAYOUT_DEFAULT, JSON.parse(raw)) : Object.assign({}, SHOWREEL_LAYOUT_DEFAULT);
+            } catch (e) {
+                console.error('❌ [loadShowreelLayout] 로드 오류:', e);
+                return Object.assign({}, SHOWREEL_LAYOUT_DEFAULT);
+            }
+        }
+
+        function applyShowreelLayout(layout) {
+            const videoCol = document.querySelector('.hero-video-col');
+            const card = document.getElementById('heroShowreelCard');
+            if (!videoCol || !card) return;
+
+            const safeLayout = Object.assign({}, SHOWREEL_LAYOUT_DEFAULT, layout || {});
+
+            videoCol.style.marginRight = safeLayout.xOffset + '%';
+            videoCol.style.alignSelf = safeLayout.yAlign;
+            card.style.width = safeLayout.width + 'px';
+        }
+
+        // 슬라이더/셀렉트 조작 시 저장 전 실시간 미리보기 (아직 localStorage에는 저장되지 않음)
+        window.previewShowreelLayout = function() {
+            const xOffset = parseInt(document.getElementById('showreelXOffset').value, 10);
+            const yAlign = document.getElementById('showreelYAlign').value;
+            const width = parseInt(document.getElementById('showreelWidth').value, 10);
+
+            document.getElementById('showreelXOffsetValue').textContent = xOffset;
+            document.getElementById('showreelWidthValue').textContent = width;
+
+            applyShowreelLayout({ xOffset, yAlign, width });
+        };
+
+        // ===== 위치/크기 저장 =====
+        window.saveShowreelLayout = function() {
+            const layout = {
+                xOffset: parseInt(document.getElementById('showreelXOffset').value, 10),
+                yAlign: document.getElementById('showreelYAlign').value,
+                width: parseInt(document.getElementById('showreelWidth').value, 10)
+            };
+
+            try {
+                localStorage.setItem(SHOWREEL_LAYOUT_KEY, JSON.stringify(layout));
+            } catch (e) {
+                console.error('❌ [saveShowreelLayout] 저장 오류:', e);
+            }
+
+            applyShowreelLayout(layout);
+
+            const hint = document.getElementById('showreelLayoutSavedHint');
+            if (hint) {
+                hint.textContent = '저장 완료 · 메인 화면에 반영되었습니다.';
+                hint.classList.add('show');
+            }
+        };
+
+        // ===== 위치/크기 기본값 초기화 =====
+        window.resetShowreelLayout = function() {
+            localStorage.removeItem(SHOWREEL_LAYOUT_KEY);
+            applyShowreelLayout(SHOWREEL_LAYOUT_DEFAULT);
+
+            document.getElementById('showreelXOffset').value = SHOWREEL_LAYOUT_DEFAULT.xOffset;
+            document.getElementById('showreelXOffsetValue').textContent = SHOWREEL_LAYOUT_DEFAULT.xOffset;
+            document.getElementById('showreelYAlign').value = SHOWREEL_LAYOUT_DEFAULT.yAlign;
+            document.getElementById('showreelWidth').value = SHOWREEL_LAYOUT_DEFAULT.width;
+            document.getElementById('showreelWidthValue').textContent = SHOWREEL_LAYOUT_DEFAULT.width;
+
+            const hint = document.getElementById('showreelLayoutSavedHint');
+            if (hint) {
+                hint.textContent = '기본 위치/크기로 초기화되었습니다.';
+                hint.classList.add('show');
+            }
+        };
+
         function initHeroShowreel() {
             const config = loadShowreelConfig();
             applyShowreelConfig(config);
+            applyShowreelLayout(loadShowreelLayout());
         }
 
         // 쇼릴 카드 우측 하단 음소거 토글 버튼 (MP4 재생 모드에서만 동작)
@@ -8054,6 +8799,21 @@
             if (config && config.sourceType === 'url' && config.url) {
                 const input = document.getElementById('showreelUrlInput');
                 if (input) input.value = config.url;
+            }
+
+            // 위치/크기 컨트롤에 저장된 값 반영
+            const layout = loadShowreelLayout();
+            const xOffsetInput = document.getElementById('showreelXOffset');
+            const yAlignSelect = document.getElementById('showreelYAlign');
+            const widthInput = document.getElementById('showreelWidth');
+            if (xOffsetInput) {
+                xOffsetInput.value = layout.xOffset;
+                document.getElementById('showreelXOffsetValue').textContent = layout.xOffset;
+            }
+            if (yAlignSelect) yAlignSelect.value = layout.yAlign;
+            if (widthInput) {
+                widthInput.value = layout.width;
+                document.getElementById('showreelWidthValue').textContent = layout.width;
             }
         }
 
@@ -8132,6 +8892,10 @@
 
             // 1-3. 히어로 쇼릴 비디오 초기화
             initHeroShowreel();
+
+            // 1-4. 보유 장비(Gear) 데이터 로드 및 클라이언트 페이지 렌더링
+            loadGearData();
+            renderGearGrid();
             
             // 2. activeFilters 초기값 설정 (빈 Set = 전체 노출)
             activeFilters = new Set();
