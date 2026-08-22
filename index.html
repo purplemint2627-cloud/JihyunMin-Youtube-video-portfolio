@@ -283,6 +283,18 @@
             inset: 0;
             width: 100%;
             height: 100%;
+            opacity: 1;
+            transition: opacity 0.4s ease;
+        }
+
+        .hero-showreel-media img {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
         }
 
         .hero-showreel-video {
@@ -1907,14 +1919,13 @@
             height: 100%;
             object-fit: cover;
             display: block;
-            filter: grayscale(85%) saturate(0.9) contrast(1.02);
-            transition: transform 0.6s ease, filter 0.6s ease;
+            filter: none;
+            transition: transform 0.4s ease;
         }
  
         .masonry-item:hover .masonry-item-image img,
         .masonry-item:hover .masonry-item-image svg {
-            transform: scale(1.03);
-            filter: grayscale(0%) saturate(1) contrast(1.02);
+            transform: scale(1.02);
         }
 
         /* 호버 프리뷰 영상 (item.previewVideo가 있을 때만 렌더링됨) */
@@ -3026,6 +3037,160 @@
             color: var(--text);
         }
  
+        /* 빠른 견적 문의 팝업 모달 */
+        .quick-estimate-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.65);
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+            z-index: 4500;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .quick-estimate-overlay.active {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .quick-estimate-modal {
+            background: #141416;
+            border: 1px solid var(--line);
+            border-radius: 14px;
+            width: 100%;
+            max-width: 480px;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+
+        .quick-estimate-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            padding: 26px 26px 20px 26px;
+            border-bottom: 1px solid var(--line);
+            position: sticky;
+            top: 0;
+            background: #141416;
+            z-index: 1;
+        }
+
+        .quick-estimate-eyebrow {
+            font-size: 10px;
+            font-weight: 800;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            color: var(--accent);
+            margin-bottom: 6px;
+        }
+
+        .quick-estimate-title {
+            font-size: 19px;
+            font-weight: 800;
+            color: #FFFFFF;
+        }
+
+        #quickEstimateForm {
+            padding: 22px 26px 28px 26px;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .qe-form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+        }
+
+        .qe-form-group label {
+            display: block;
+            font-size: 11.5px;
+            font-weight: 700;
+            color: #A0A0A5;
+            margin-bottom: 7px;
+        }
+
+        .qe-form-group input,
+        .qe-form-group select,
+        .qe-form-group textarea {
+            width: 100%;
+            padding: 11px 12px;
+            background: #1C1C1F;
+            border: 1px solid var(--line);
+            border-radius: 6px;
+            color: #FFFFFF;
+            font-size: 13px;
+            font-family: 'Pretendard', 'Inter', sans-serif;
+            box-sizing: border-box;
+        }
+
+        .qe-form-group textarea {
+            resize: vertical;
+        }
+
+        .qe-form-error {
+            display: none;
+            font-size: 12px;
+            color: #FF6B6B;
+            background: rgba(255, 107, 107, 0.1);
+            border: 1px solid rgba(255, 107, 107, 0.3);
+            border-radius: 6px;
+            padding: 10px 12px;
+        }
+
+        .qe-form-error.show {
+            display: block;
+        }
+
+        .qe-submit-btn {
+            width: 100%;
+            padding: 14px;
+            background: var(--accent);
+            color: var(--accent-text);
+            border: none;
+            border-radius: 6px;
+            font-size: 13px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: opacity 0.2s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .qe-submit-btn:hover {
+            opacity: 0.85;
+        }
+
+        .qe-submit-btn:disabled,
+        .qe-submit-btn.loading {
+            opacity: 0.6;
+            cursor: not-allowed;
+            pointer-events: none;
+        }
+
+        .qe-submit-btn .spinner {
+            display: inline-block;
+            width: 13px;
+            height: 13px;
+            border: 2px solid rgba(10, 10, 10, 0.35);
+            border-top: 2px solid #0A0A0A;
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+        }
+
+        @media (max-width: 480px) {
+            .qe-form-row {
+                grid-template-columns: 1fr;
+            }
+        }
+
         /* 유튜브 비디오 라이트박스 모달 */
         .youtube-modal {
             display: none;
@@ -3968,6 +4133,100 @@
             padding: 10px 12px;
         }
 
+        /* 쇼릴 재생목록 (Playlist) */
+        .playlist-items {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            margin-bottom: 22px;
+        }
+
+        .playlist-item-row {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 10px 12px;
+            background: #1C1C1F;
+            border: 1px solid var(--line);
+            border-radius: 8px;
+            cursor: grab;
+        }
+
+        .playlist-item-row.dragging {
+            opacity: 0.4;
+        }
+
+        .playlist-item-row.drag-over {
+            border-color: var(--accent);
+        }
+
+        .playlist-item-drag-handle {
+            color: #71717A;
+            flex-shrink: 0;
+            display: flex;
+        }
+
+        .playlist-item-type-badge {
+            font-size: 10px;
+            font-weight: 800;
+            letter-spacing: 0.04em;
+            text-transform: uppercase;
+            color: var(--accent);
+            background: rgba(252, 251, 118, 0.1);
+            padding: 3px 8px;
+            border-radius: 4px;
+            flex-shrink: 0;
+        }
+
+        .playlist-item-info {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .playlist-item-label {
+            font-size: 12.5px;
+            font-weight: 700;
+            color: #FFFFFF;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .playlist-item-meta {
+            font-size: 11px;
+            color: #71717A;
+        }
+
+        .playlist-item-remove {
+            background: none;
+            border: none;
+            color: #71717A;
+            cursor: pointer;
+            flex-shrink: 0;
+            display: flex;
+            transition: color 0.15s ease;
+        }
+
+        .playlist-item-remove:hover {
+            color: #FF6B6B;
+        }
+
+        .playlist-empty {
+            font-size: 12.5px;
+            color: #71717A;
+            padding: 16px;
+            text-align: center;
+            border: 1px dashed var(--line);
+            border-radius: 8px;
+            margin-bottom: 22px;
+        }
+
+        .showreel-add-media-form {
+            border-top: 1px solid var(--line);
+            padding-top: 22px;
+            margin-bottom: 22px;
+        }
+
         .showreel-layout-control {
             margin-bottom: 18px;
         }
@@ -4316,6 +4575,35 @@
 
         .inquiry-table tbody tr:last-child td {
             border-bottom: none;
+        }
+
+        .inquiry-empty-state {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 56px 24px;
+            color: #52525B;
+        }
+
+        .inquiry-empty-state svg {
+            margin-bottom: 16px;
+            color: #3F3F46;
+        }
+
+        .inquiry-empty-title {
+            font-size: 14px;
+            font-weight: 700;
+            color: #D4D4D8;
+            margin-bottom: 6px;
+        }
+
+        .inquiry-empty-sub {
+            font-size: 12.5px;
+            color: #71717A;
+            max-width: 320px;
+            line-height: 1.6;
         }
 
         .inquiry-cell-sub {
@@ -4685,7 +4973,7 @@
                 <a data-page="contact" onclick="showPage('contact')">Contact</a>
             </div>
             <div class="nav-right-group">
-                <button class="nav-quick-estimate-btn" onclick="showPage('estimate')">빠른 견적 문의</button>
+                <button class="nav-quick-estimate-btn" onclick="window.openQuickEstimateModal()">빠른 견적 문의</button>
                 <button class="nav-menu-btn" onclick="window.openDrawer()" aria-label="메뉴 열기">
                     <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
                     <span>MENU</span>
@@ -4964,26 +5252,55 @@
             <!-- 탭 4: 쇼릴 / 대표 영상 설정 -->
             <div class="ops-tab-content" id="opsTab-showreel">
                 <div class="showreel-settings-card">
-                    <div class="card-detail-section-title">메인 히어로 쇼릴 소스</div>
-                    <p class="showreel-settings-desc">메인 화면 우측 쇼릴 카드에 재생될 영상을 설정합니다. 포트폴리오에 등록된 영상 중 선택하거나, 유튜브/비메오/MP4 URL을 직접 입력할 수 있습니다.</p>
+                    <div class="card-detail-section-title">쇼릴 재생목록 (Playlist)</div>
+                    <p class="showreel-settings-desc">메인 화면 쇼릴 카드에서 순차 재생될 미디어 목록입니다. 영상은 끝까지(또는 지정한 시간) 재생 후, 이미지는 지정된 시간 동안 노출된 후 다음 항목으로 부드럽게 전환되며, 마지막 항목 재생 후 다시 처음부터 루프됩니다.</p>
 
-                    <div class="showreel-source-toggle">
-                        <button type="button" class="showreel-source-btn active" data-source-type="portfolio" onclick="window.switchShowreelSourceType('portfolio')">포트폴리오 영상 선택</button>
-                        <button type="button" class="showreel-source-btn" data-source-type="url" onclick="window.switchShowreelSourceType('url')">외부 URL 직접 입력</button>
+                    <div class="playlist-items" id="showreelPlaylistItems">
+                        <!-- JS가 재생목록을 렌더링합니다 -->
                     </div>
 
-                    <div class="showreel-source-panel active" id="showreelSourcePanel-portfolio">
-                        <div class="card-detail-field">
-                            <label for="showreelPortfolioSelect">포트폴리오 영상</label>
-                            <select id="showreelPortfolioSelect"></select>
+                    <div class="showreel-add-media-form">
+                        <div class="card-detail-section-title" style="margin-top: 4px;">+ 미디어 추가</div>
+                        <div class="card-detail-grid">
+                            <div class="card-detail-field">
+                                <label for="newMediaType">미디어 타입</label>
+                                <select id="newMediaType" onchange="window.onNewMediaTypeChange()">
+                                    <option value="video">비디오 URL</option>
+                                    <option value="image">이미지 URL</option>
+                                    <option value="portfolio">포트폴리오 연동</option>
+                                </select>
+                            </div>
+                            <div class="card-detail-field" id="newMediaDurationField" style="display:none;">
+                                <label for="newMediaDuration">노출 시간 (초)</label>
+                                <input type="number" id="newMediaDuration" min="1" value="4">
+                            </div>
                         </div>
-                    </div>
 
-                    <div class="showreel-source-panel" id="showreelSourcePanel-url">
-                        <div class="card-detail-field">
-                            <label for="showreelUrlInput">영상 URL (YouTube / Vimeo / 직접 MP4 링크)</label>
-                            <input type="url" id="showreelUrlInput" placeholder="https://www.youtube.com/watch?v=... 또는 https://.../video.mp4">
+                        <div class="card-detail-field" id="newMediaUrlField">
+                            <label for="newMediaUrl">영상/이미지 URL</label>
+                            <input type="text" id="newMediaUrl" placeholder="https://.../video.mp4 또는 https://.../image.jpg">
                         </div>
+
+                        <div class="card-detail-field" id="newMediaPortfolioField" style="display:none;">
+                            <label for="newMediaPortfolioSelect">포트폴리오 영상</label>
+                            <select id="newMediaPortfolioSelect"></select>
+                        </div>
+
+                        <div class="card-detail-grid" id="newMediaVideoModeRow">
+                            <div class="card-detail-field">
+                                <label for="newMediaVideoMode">영상 재생 방식</label>
+                                <select id="newMediaVideoMode" onchange="window.onNewMediaVideoModeChange()">
+                                    <option value="full">끝까지 재생</option>
+                                    <option value="timed">N초 후 넘기기</option>
+                                </select>
+                            </div>
+                            <div class="card-detail-field" id="newMediaVideoSecondsField" style="display:none;">
+                                <label for="newMediaVideoSeconds">N초</label>
+                                <input type="number" id="newMediaVideoSeconds" min="1" value="8">
+                            </div>
+                        </div>
+
+                        <button type="button" class="ops-add-btn" onclick="window.addShowreelPlaylistItem()">+ 재생목록에 추가</button>
                     </div>
 
                     <div class="showreel-current-preview">
@@ -5016,14 +5333,8 @@
                         </div>
                     </div>
 
-                    <div class="showreel-settings-actions">
-                        <button type="button" class="ops-add-btn" onclick="window.saveShowreelConfig()">저장 및 메인 화면에 반영</button>
-                        <button type="button" class="inquiry-detail-link-btn" onclick="window.resetShowreelConfig()">기본값으로 초기화</button>
-                        <span class="inquiry-notes-saved-hint" id="showreelSavedHint"></span>
-                    </div>
-
                     <div class="showreel-current-preview">
-                        <div class="card-detail-section-title">현재 설정</div>
+                        <div class="card-detail-section-title">현재 재생목록</div>
                         <div class="showreel-current-value" id="showreelCurrentValue">-</div>
                     </div>
                 </div>
@@ -5415,6 +5726,72 @@
         </div>
     </footer>
  
+    <!-- 빠른 견적 문의 팝업 모달 -->
+    <div class="quick-estimate-overlay" id="quickEstimateOverlay" onclick="if(event.target===this) window.closeQuickEstimateModal();">
+        <div class="quick-estimate-modal">
+            <div class="quick-estimate-header">
+                <div>
+                    <div class="quick-estimate-eyebrow">EGG STUDIO</div>
+                    <div class="quick-estimate-title">빠른 견적 문의</div>
+                </div>
+                <button class="side-drawer-close" onclick="window.closeQuickEstimateModal()" aria-label="닫기">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+                </button>
+            </div>
+
+            <form id="quickEstimateForm" onsubmit="window.submitQuickEstimate(event)">
+                <div class="qe-form-group">
+                    <label for="qeName">성함 / 회사명 *</label>
+                    <input type="text" name="name" id="qeName" placeholder="예: 홍길동 / (주)브랜드플로우" required>
+                </div>
+
+                <div class="qe-form-row">
+                    <div class="qe-form-group">
+                        <label for="qePhone">연락처 *</label>
+                        <input type="tel" name="phone" id="qePhone" placeholder="010-1234-5678" required>
+                    </div>
+                    <div class="qe-form-group">
+                        <label for="qeEmail">이메일 *</label>
+                        <input type="email" name="email" id="qeEmail" placeholder="example@email.com" required>
+                    </div>
+                </div>
+
+                <div class="qe-form-row">
+                    <div class="qe-form-group">
+                        <label for="qeProjectType">희망 프로젝트 유형</label>
+                        <select name="projectType" id="qeProjectType">
+                            <option value="유튜브 롱폼">유튜브 롱폼</option>
+                            <option value="숏폼">숏폼</option>
+                            <option value="AI 영상">AI 영상</option>
+                            <option value="단편 영화">단편 영화</option>
+                            <option value="기타">기타</option>
+                        </select>
+                    </div>
+                    <div class="qe-form-group">
+                        <label for="qeBudget">예산</label>
+                        <input type="text" name="budget" id="qeBudget" placeholder="예: 30만원 ~">
+                    </div>
+                </div>
+
+                <div class="qe-form-group">
+                    <label for="qeDeadline">희망 마감일</label>
+                    <input type="text" name="deadline" id="qeDeadline" placeholder="예: 2026-09-30 또는 협의 가능">
+                </div>
+
+                <div class="qe-form-group">
+                    <label for="qeMessage">의뢰 세부 내용 / 참고 링크</label>
+                    <textarea name="message" id="qeMessage" rows="4" placeholder="프로젝트 개요, 참고 유튜브/드라이브 링크 등을 자유롭게 남겨주세요."></textarea>
+                </div>
+
+                <div class="qe-form-error" id="qeFormError"></div>
+
+                <button type="submit" class="qe-submit-btn" id="qeSubmitBtn">
+                    <span id="qeSubmitBtnText">견적 문의 보내기</span>
+                </button>
+            </form>
+        </div>
+    </div>
+ 
     <!-- 유튜브 비디오 라이트박스 모달 -->
     <div class="youtube-modal" id="youtubeModal">
         <div class="youtube-modal-content">
@@ -5748,85 +6125,11 @@
         let currentInquiryStatusFilter = '전체';
         let currentOpenInquiryId = null;
 
-        // 최초 진입 시 사용할 Mock 견적 데이터 (localStorage가 비어있을 때만 시딩됨)
+        // 최초 진입 시 견적 문의 내역은 비어있는 상태로 시작합니다.
+        // 실제 클라이언트가 '빠른 견적 문의'를 제출하면 addInquiryFromSubmission()을 통해
+        // 이 배열(및 localStorage)에 실시간으로 쌓입니다.
         function getMockInquiries() {
-            const now = Date.now();
-            const day = 24 * 60 * 60 * 1000;
-            return [
-                {
-                    id: 'inq_mock_1',
-                    submittedAt: new Date(now - 1 * day).toISOString(),
-                    clientName: '김서준',
-                    company: '(주)브랜드플로우',
-                    email: 'seojun.kim@brandflow.co.kr',
-                    phone: '010-2211-3344',
-                    projectType: '유튜브 롱폼',
-                    budget: '400,000원',
-                    status: '상담중',
-                    deadline: '2026-09-05',
-                    description: '브랜드 소개 유튜브 롱폼 영상 제작 문의드립니다. 러닝타임 8~10분, 인터뷰 + 제품 촬영 컷 혼합 구성을 원합니다.',
-                    referenceLink: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ',
-                    workLinks: [
-                        { label: 'Notion 기획안', url: 'https://notion.so/example-brandflow-plan' }
-                    ],
-                    notes: '1차 통화 완료. 예산 협의 중이며 9월 초 촬영 희망.',
-                    notesUpdatedAt: new Date(now - 1 * day + 3600000).toISOString()
-                },
-                {
-                    id: 'inq_mock_2',
-                    submittedAt: new Date(now - 3 * day).toISOString(),
-                    clientName: '이하늘',
-                    company: '개인 크리에이터',
-                    email: 'haneul.lee@gmail.com',
-                    phone: '010-5566-7788',
-                    projectType: 'AI 영상',
-                    budget: '300,000원~',
-                    status: '접수',
-                    deadline: '2026-08-30',
-                    description: 'AI 생성 소스를 활용한 뮤직비디오 스타일의 짧은 영상 제작을 원합니다. 레퍼런스는 별도로 전달드리겠습니다.',
-                    referenceLink: '',
-                    workLinks: [],
-                    notes: '',
-                    notesUpdatedAt: null
-                },
-                {
-                    id: 'inq_mock_3',
-                    submittedAt: new Date(now - 6 * day).toISOString(),
-                    clientName: '박지민',
-                    company: '스튜디오나인',
-                    email: 'jimin.park@studio9.com',
-                    phone: '010-9988-1122',
-                    projectType: '숏폼',
-                    budget: '50,000원',
-                    status: '수주',
-                    deadline: '2026-08-25',
-                    description: '인스타 릴스용 숏폼 3건 편집 요청. 기본 색보정과 트렌디한 자막 스타일 부탁드립니다.',
-                    referenceLink: 'https://www.instagram.com/reel/example',
-                    workLinks: [
-                        { label: 'Google Drive 원본', url: 'https://drive.google.com/drive/folders/example' },
-                        { label: '피드백 시트', url: 'https://docs.google.com/spreadsheets/d/example' }
-                    ],
-                    notes: '계약금 입금 확인 완료. 8/25 마감 목표로 진행 중.',
-                    notesUpdatedAt: new Date(now - 2 * day).toISOString()
-                },
-                {
-                    id: 'inq_mock_4',
-                    submittedAt: new Date(now - 9 * day).toISOString(),
-                    clientName: '최우진',
-                    company: '(주)그린테크',
-                    email: 'wjchoi@greentech.io',
-                    phone: '010-3344-5566',
-                    projectType: '단편 영화',
-                    budget: '협의 필요',
-                    status: '취소',
-                    deadline: '2026-10-15',
-                    description: '사내 캠페인용 단편 영화 제작 문의였으나 내부 예산 사정으로 보류하게 되었습니다.',
-                    referenceLink: '',
-                    workLinks: [],
-                    notes: '클라이언트 측 예산 보류로 취소. 추후 재문의 가능성 있음.',
-                    notesUpdatedAt: new Date(now - 8 * day).toISOString()
-                }
-            ];
+            return [];
         }
 
         // localStorage에서 견적 문의 내역 로드 (없으면 Mock 데이터로 시딩)
@@ -5860,11 +6163,11 @@
                 id: 'inq_' + Date.now(),
                 submittedAt: new Date().toISOString(),
                 clientName: formData.name || '(이름 미입력)',
-                company: '',
+                company: formData.company || '',
                 email: formData.email || '',
                 phone: formData.phone || '',
                 projectType: formData.package || '미지정',
-                budget: '협의 필요',
+                budget: formData.budget || '협의 필요',
                 status: '접수',
                 deadline: formData.deadline || '',
                 description: formData.description || '',
@@ -5875,6 +6178,118 @@
             });
             saveEstimateInquiries();
         }
+
+        // ========================================
+        // ⚡ 빠른 견적 문의 팝업 모달
+        // ========================================
+        window.openQuickEstimateModal = function() {
+            const overlay = document.getElementById('quickEstimateOverlay');
+            if (overlay) overlay.classList.add('active');
+        };
+
+        window.closeQuickEstimateModal = function() {
+            const overlay = document.getElementById('quickEstimateOverlay');
+            if (overlay) overlay.classList.remove('active');
+        };
+
+        // ESC 키로 빠른 견적 모달 닫기
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                window.closeQuickEstimateModal();
+            }
+        });
+
+        window.submitQuickEstimate = function(event) {
+            event.preventDefault();
+
+            const name = document.getElementById('qeName').value.trim();
+            const phone = document.getElementById('qePhone').value.trim();
+            const email = document.getElementById('qeEmail').value.trim();
+            const projectType = document.getElementById('qeProjectType').value;
+            const budget = document.getElementById('qeBudget').value.trim();
+            const deadline = document.getElementById('qeDeadline').value.trim();
+            const message = document.getElementById('qeMessage').value.trim();
+
+            const errorEl = document.getElementById('qeFormError');
+            const submitBtn = document.getElementById('qeSubmitBtn');
+            const submitBtnText = document.getElementById('qeSubmitBtnText');
+
+            errorEl.textContent = '';
+            errorEl.classList.remove('show');
+
+            // ===== 필수값 유효성 검사 =====
+            if (!name || !phone || !email) {
+                errorEl.textContent = '성함/회사명, 연락처, 이메일은 필수 입력 항목입니다.';
+                errorEl.classList.add('show');
+                return;
+            }
+
+            // 간단한 이메일 형식 체크
+            if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+                errorEl.textContent = '올바른 이메일 형식을 입력해주세요.';
+                errorEl.classList.add('show');
+                return;
+            }
+
+            // ===== 전송 중 로딩 상태 =====
+            submitBtn.disabled = true;
+            submitBtn.classList.add('loading');
+            submitBtnText.innerHTML = '<span class="spinner"></span> 전송 중...';
+
+            const formData = new FormData();
+            formData.append('name', name);
+            formData.append('phone', phone);
+            formData.append('email', email);
+            formData.append('projectType', projectType);
+            formData.append('budget', budget);
+            formData.append('deadline', deadline);
+            formData.append('message', message);
+            formData.append('_subject', '[EGG Studio] 빠른 견적 문의 - ' + name);
+
+            const controller = new AbortController();
+            const timeoutId = setTimeout(() => controller.abort(), 10000);
+
+            fetch(FORMSPREE_ENDPOINT, {
+                method: 'POST',
+                body: formData,
+                headers: { 'Accept': 'application/json' },
+                signal: controller.signal
+            })
+                .then((response) => {
+                    clearTimeout(timeoutId);
+                    if (!response.ok) {
+                        throw new Error('Formspree 응답 오류: ' + response.status);
+                    }
+
+                    // 어드민 '견적 문의 내역'에 즉시 반영
+                    addInquiryFromSubmission({
+                        name: name,
+                        email: email,
+                        phone: phone,
+                        package: projectType,
+                        budget: budget,
+                        deadline: deadline,
+                        reference: '',
+                        description: message
+                    });
+
+                    showToast('견적 문의가 정상 접수되었습니다.');
+
+                    document.getElementById('quickEstimateForm').reset();
+                    window.closeQuickEstimateModal();
+                })
+                .catch((err) => {
+                    clearTimeout(timeoutId);
+                    console.error('❌ [빠른 견적 문의] 전송 오류:', err);
+                    errorEl.textContent = '전송에 실패했습니다. 이메일(purplemint2627@gmail.com)로 직접 문의해주세요.';
+                    errorEl.classList.add('show');
+                })
+                .finally(() => {
+                    submitBtn.disabled = false;
+                    submitBtn.classList.remove('loading');
+                    submitBtnText.textContent = '견적 문의 보내기';
+                });
+        };
 
         const INQUIRY_STATUS_LIST = ['접수', '상담중', '수주', '취소'];
 
@@ -5891,6 +6306,22 @@
         function renderInquiryTable() {
             const tbody = document.getElementById('inquiryTableBody');
             if (!tbody) return;
+
+            // 견적 문의가 아예 한 건도 없는 경우 — 풍성한 Empty State 안내
+            if (estimateInquiries.length === 0) {
+                tbody.innerHTML = `
+                    <tr>
+                        <td colspan="7">
+                            <div class="inquiry-empty-state">
+                                <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><path d="M22 12l-6.5-6.5a2 2 0 0 0-2.83 0l-9.34 9.34a2 2 0 0 0 0 2.83l6.17 6.17a2 2 0 0 0 2.83 0L19 17"></path><path d="M2 12l6.5 4.5L22 12"></path><rect x="2" y="6" width="20" height="12" rx="2"></rect></svg>
+                                <p class="inquiry-empty-title">아직 접수된 견적 문의가 없습니다.</p>
+                                <p class="inquiry-empty-sub">클라이언트가 사이트에서 견적을 신청하면 이곳에 실시간으로 표시됩니다.</p>
+                            </div>
+                        </td>
+                    </tr>
+                `;
+                return;
+            }
 
             const filtered = currentInquiryStatusFilter === '전체'
                 ? estimateInquiries
@@ -7510,6 +7941,7 @@
                 console.error('❌ LocalStorage 저장 오류:', e);
                 alert('데이터 저장에 실패했습니다. 브라우저 저장소를 확인해주세요.');
             }
+        }
 
         // ========================================
         // 🎥 보유 장비 (Gear) 관리 — LocalStorage 기반 CMS
@@ -7950,7 +8382,6 @@
             renderGearGrid();
             alert('✅ 장비 정보가 수정되었습니다!');
         };
-        }
  
         // 포트폴리오 수정 모달 표시 - 전역 함수
         window.showPortfolioEditModal = function(index) {
@@ -8727,6 +9158,332 @@
             }
         };
 
+
+        // ========================================
+        // 🎞️ 쇼릴 재생목록 (Playlist) — 영상/이미지 롤링 재생 + 어드민 관리
+        // ========================================
+        const SHOWREEL_PLAYLIST_KEY = 'heroShowreelPlaylist';
+        const SHOWREEL_FADE_MS = 400; // .hero-showreel-media의 opacity transition 시간과 일치시킴
+
+        function getDefaultShowreelPlaylist() {
+            return [
+                { id: 'pl_default_1', type: 'video', url: HERO_SHOWREEL_SRC, videoMode: 'full', videoSeconds: 8 }
+            ];
+        }
+
+        function loadShowreelPlaylist() {
+            try {
+                const raw = localStorage.getItem(SHOWREEL_PLAYLIST_KEY);
+                if (raw) {
+                    const parsed = JSON.parse(raw);
+                    if (Array.isArray(parsed) && parsed.length > 0) return parsed;
+                }
+            } catch (e) {
+                console.error('❌ [loadShowreelPlaylist] 로드 오류:', e);
+            }
+            return getDefaultShowreelPlaylist();
+        }
+
+        function saveShowreelPlaylistToStorage(playlist) {
+            try {
+                localStorage.setItem(SHOWREEL_PLAYLIST_KEY, JSON.stringify(playlist));
+            } catch (e) {
+                console.error('❌ [saveShowreelPlaylistToStorage] 저장 오류:', e);
+            }
+        }
+
+        let showreelPlaylist = [];
+        let showreelPlaylistIndex = 0;
+        let showreelAdvanceTimer = null;
+
+        // ===== 메인 화면 쇼릴 플레이어 초기화 =====
+        function initHeroShowreelPlaylist() {
+            showreelPlaylist = loadShowreelPlaylist();
+            showreelPlaylistIndex = 0;
+            playShowreelItem(0);
+            applyShowreelLayout(loadShowreelLayout());
+        }
+
+        function advanceShowreel() {
+            playShowreelItem(showreelPlaylistIndex + 1);
+        }
+
+        // ===== 재생목록의 특정 인덱스 항목 재생 (페이드 전환 포함) =====
+        function playShowreelItem(index) {
+            if (!showreelPlaylist || showreelPlaylist.length === 0) return;
+
+            showreelPlaylistIndex = ((index % showreelPlaylist.length) + showreelPlaylist.length) % showreelPlaylist.length;
+            const item = showreelPlaylist[showreelPlaylistIndex];
+
+            const media = document.getElementById('heroShowreelMedia');
+            const muteBtn = document.getElementById('heroShowreelMuteBtn');
+            if (!media) return;
+
+            clearTimeout(showreelAdvanceTimer);
+
+            // 페이드 아웃
+            media.style.opacity = '0';
+
+            setTimeout(() => {
+                media.innerHTML = '';
+
+                // 포트폴리오 연동 항목은 실제 유튜브 ID로 치환
+                let resolved = item;
+                if (item.type === 'portfolio') {
+                    const pItem = portfolioData[item.portfolioIndex];
+                    if (pItem && pItem.youtubeId) {
+                        resolved = { type: 'youtube', youtubeId: pItem.youtubeId, videoMode: item.videoMode || 'full', videoSeconds: item.videoSeconds || 8 };
+                    } else {
+                        // 연동 대상이 없어졌으면 건너뛰고 다음 항목으로
+                        advanceShowreel();
+                        return;
+                    }
+                }
+
+                if (resolved.type === 'video') {
+                    window.__heroShowreelClickthrough = true;
+                    const video = document.createElement('video');
+                    video.className = 'hero-showreel-video';
+                    video.id = 'heroShowreelVideo';
+                    video.autoplay = true;
+                    video.muted = true;
+                    video.playsInline = true;
+                    video.src = resolved.url;
+                    media.appendChild(video);
+                    if (muteBtn) muteBtn.style.display = 'flex';
+
+                    video.play().catch(() => {});
+
+                    if (resolved.videoMode === 'timed') {
+                        showreelAdvanceTimer = setTimeout(advanceShowreel, (resolved.videoSeconds || 8) * 1000);
+                    } else {
+                        video.onended = advanceShowreel;
+                    }
+                } else if (resolved.type === 'youtube') {
+                    window.__heroShowreelClickthrough = false;
+                    media.innerHTML = `<iframe src="https://www.youtube.com/embed/${resolved.youtubeId}?autoplay=1&mute=1&controls=0&showinfo=0&rel=0&modestbranding=1&playsinline=1" allow="autoplay; encrypted-media" frameborder="0"></iframe>`;
+                    if (muteBtn) muteBtn.style.display = 'none';
+                    // 유튜브 iframe은 'ended' 이벤트를 직접 받기 어려우므로, 지정 시간(또는 기본 12초) 후 전환
+                    const seconds = resolved.videoMode === 'timed' ? (resolved.videoSeconds || 8) : 12;
+                    showreelAdvanceTimer = setTimeout(advanceShowreel, seconds * 1000);
+                } else if (resolved.type === 'image') {
+                    window.__heroShowreelClickthrough = true;
+                    const img = document.createElement('img');
+                    img.src = resolved.url;
+                    img.alt = 'showreel';
+                    media.appendChild(img);
+                    if (muteBtn) muteBtn.style.display = 'none';
+                    showreelAdvanceTimer = setTimeout(advanceShowreel, (resolved.duration || 4) * 1000);
+                }
+
+                // 페이드 인
+                requestAnimationFrame(() => {
+                    media.style.opacity = '1';
+                });
+            }, SHOWREEL_FADE_MS);
+        }
+
+        // ===== [운영] 재생목록 관리 UI =====
+        function renderShowreelPlaylistUI() {
+            const container = document.getElementById('showreelPlaylistItems');
+            const summaryEl = document.getElementById('showreelCurrentValue');
+            if (!container) return;
+
+            const playlist = loadShowreelPlaylist();
+
+            if (summaryEl) {
+                summaryEl.textContent = `총 ${playlist.length}개 미디어 재생목록 · 마지막 항목 이후 자동 루프`;
+            }
+
+            if (playlist.length === 0) {
+                container.innerHTML = '<div class="playlist-empty">등록된 미디어가 없습니다. 아래에서 미디어를 추가해주세요.</div>';
+                return;
+            }
+
+            container.innerHTML = '';
+
+            playlist.forEach((item, index) => {
+                const row = document.createElement('div');
+                row.className = 'playlist-item-row';
+                row.draggable = true;
+                row.dataset.index = index;
+
+                let typeLabel = '비디오';
+                let labelText = item.url || '';
+                let metaText = item.videoMode === 'timed' ? `${item.videoSeconds || 8}초 후 전환` : '끝까지 재생 후 전환';
+
+                if (item.type === 'image') {
+                    typeLabel = '이미지';
+                    labelText = item.url || '';
+                    metaText = `${item.duration || 4}초 노출`;
+                } else if (item.type === 'portfolio') {
+                    typeLabel = '포트폴리오';
+                    const pItem = portfolioData[item.portfolioIndex];
+                    labelText = pItem ? pItem.title : '(연결된 포트폴리오 없음)';
+                    metaText = item.videoMode === 'timed' ? `${item.videoSeconds || 8}초 후 전환` : '끝까지 재생 후 전환(약 12초)';
+                }
+
+                row.innerHTML = `
+                    <span class="playlist-item-drag-handle" title="드래그하여 순서 변경">
+                        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><line x1="4" y1="8" x2="20" y2="8"></line><line x1="4" y1="16" x2="20" y2="16"></line></svg>
+                    </span>
+                    <span class="playlist-item-type-badge">${typeLabel}</span>
+                    <div class="playlist-item-info">
+                        <div class="playlist-item-label">${escapeHTML(labelText)}</div>
+                        <div class="playlist-item-meta">${escapeHTML(metaText)}</div>
+                    </div>
+                    <button type="button" class="playlist-item-remove" onclick="window.removeShowreelPlaylistItem(${index})" title="삭제" aria-label="삭제">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+                    </button>
+                `;
+
+                row.addEventListener('dragstart', () => {
+                    row.classList.add('dragging');
+                    row.dragStartIndex = index;
+                });
+
+                row.addEventListener('dragend', () => {
+                    row.classList.remove('dragging');
+                    document.querySelectorAll('#showreelPlaylistItems .playlist-item-row').forEach(r => r.classList.remove('drag-over'));
+                });
+
+                row.addEventListener('dragover', (e) => {
+                    e.preventDefault();
+                    if (row.classList.contains('dragging')) return;
+                    row.classList.add('drag-over');
+                });
+
+                row.addEventListener('dragleave', () => {
+                    row.classList.remove('drag-over');
+                });
+
+                row.addEventListener('drop', (e) => {
+                    e.preventDefault();
+                    row.classList.remove('drag-over');
+
+                    const draggingRow = document.querySelector('#showreelPlaylistItems .playlist-item-row.dragging');
+                    if (draggingRow && draggingRow.dragStartIndex !== undefined) {
+                        const fromIndex = draggingRow.dragStartIndex;
+                        const toIndex = index;
+                        if (fromIndex !== toIndex) {
+                            const current = loadShowreelPlaylist();
+                            const [moved] = current.splice(fromIndex, 1);
+                            current.splice(toIndex, 0, moved);
+                            saveShowreelPlaylistToStorage(current);
+                            renderShowreelPlaylistUI();
+                            initHeroShowreelPlaylist();
+                        }
+                    }
+                });
+
+                container.appendChild(row);
+            });
+        }
+
+        // ===== 새 미디어 추가 폼: 타입에 따라 입력 필드 표시/숨김 =====
+        window.onNewMediaTypeChange = function() {
+            const type = document.getElementById('newMediaType').value;
+            const urlField = document.getElementById('newMediaUrlField');
+            const portfolioField = document.getElementById('newMediaPortfolioField');
+            const durationField = document.getElementById('newMediaDurationField');
+            const videoModeRow = document.getElementById('newMediaVideoModeRow');
+
+            urlField.style.display = (type === 'video' || type === 'image') ? 'block' : 'none';
+            portfolioField.style.display = (type === 'portfolio') ? 'block' : 'none';
+            durationField.style.display = (type === 'image') ? 'block' : 'none';
+            videoModeRow.style.display = (type === 'video' || type === 'portfolio') ? 'grid' : 'none';
+
+            if (type === 'portfolio') {
+                populateShowreelPortfolioSelect('newMediaPortfolioSelect');
+            }
+        };
+
+        window.onNewMediaVideoModeChange = function() {
+            const mode = document.getElementById('newMediaVideoMode').value;
+            document.getElementById('newMediaVideoSecondsField').style.display = (mode === 'timed') ? 'block' : 'none';
+        };
+
+        // ===== 재생목록에 새 미디어 추가 =====
+        window.addShowreelPlaylistItem = function() {
+            const type = document.getElementById('newMediaType').value;
+            const playlist = loadShowreelPlaylist();
+
+            let newItem = null;
+
+            if (type === 'video') {
+                const url = document.getElementById('newMediaUrl').value.trim();
+                if (!url) {
+                    alert('영상 URL을 입력해주세요.');
+                    return;
+                }
+                const mode = document.getElementById('newMediaVideoMode').value;
+                newItem = {
+                    id: 'pl_' + Date.now(),
+                    type: 'video',
+                    url: url,
+                    videoMode: mode,
+                    videoSeconds: parseInt(document.getElementById('newMediaVideoSeconds').value, 10) || 8
+                };
+            } else if (type === 'image') {
+                const url = document.getElementById('newMediaUrl').value.trim();
+                if (!url) {
+                    alert('이미지 URL을 입력해주세요.');
+                    return;
+                }
+                newItem = {
+                    id: 'pl_' + Date.now(),
+                    type: 'image',
+                    url: url,
+                    duration: parseInt(document.getElementById('newMediaDuration').value, 10) || 4
+                };
+            } else if (type === 'portfolio') {
+                const select = document.getElementById('newMediaPortfolioSelect');
+                const idx = select ? parseInt(select.value, 10) : NaN;
+                if (isNaN(idx) || !portfolioData[idx]) {
+                    alert('연동할 포트폴리오 영상을 선택해주세요.');
+                    return;
+                }
+                const mode = document.getElementById('newMediaVideoMode').value;
+                newItem = {
+                    id: 'pl_' + Date.now(),
+                    type: 'portfolio',
+                    portfolioIndex: idx,
+                    videoMode: mode,
+                    videoSeconds: parseInt(document.getElementById('newMediaVideoSeconds').value, 10) || 8
+                };
+            }
+
+            if (!newItem) return;
+
+            playlist.push(newItem);
+            saveShowreelPlaylistToStorage(playlist);
+            renderShowreelPlaylistUI();
+            initHeroShowreelPlaylist();
+
+            // 입력 필드 초기화
+            const urlInput = document.getElementById('newMediaUrl');
+            if (urlInput) urlInput.value = '';
+        };
+
+        // ===== 재생목록 항목 삭제 =====
+        window.removeShowreelPlaylistItem = function(index) {
+            const playlist = loadShowreelPlaylist();
+            playlist.splice(index, 1);
+            saveShowreelPlaylistToStorage(playlist);
+            renderShowreelPlaylistUI();
+            initHeroShowreelPlaylist();
+        };
+
+        // 쇼릴 탭의 "포트폴리오 연동" select를 채우는 공용 함수 (id를 인자로 받아 재사용)
+        function populateShowreelPortfolioSelect(selectId) {
+            const select = document.getElementById(selectId || 'showreelPortfolioSelect');
+            if (!select || !Array.isArray(portfolioData)) return;
+
+            select.innerHTML = portfolioData.map((item, idx) =>
+                `<option value="${idx}">${escapeHTML(item.title || '(제목 없음)')}</option>`
+            ).join('');
+        }
+
         function initHeroShowreel() {
             const config = loadShowreelConfig();
             applyShowreelConfig(config);
@@ -8756,15 +9513,6 @@
             });
         };
 
-        function populateShowreelPortfolioSelect() {
-            const select = document.getElementById('showreelPortfolioSelect');
-            if (!select || !Array.isArray(portfolioData)) return;
-
-            select.innerHTML = portfolioData.map((item, idx) =>
-                `<option value="${idx}">${escapeHTML(item.title || '(제목 없음)')}</option>`
-            ).join('');
-        }
-
         function renderShowreelCurrentValue() {
             const el = document.getElementById('showreelCurrentValue');
             if (!el) return;
@@ -8785,21 +9533,10 @@
 
         // 쇼릴 탭이 열릴 때 초기화 (드롭다운 채우기 + 현재 설정 UI 반영)
         function initShowreelTab() {
-            populateShowreelPortfolioSelect();
-            renderShowreelCurrentValue();
-
-            const config = loadShowreelConfig();
-            const sourceType = (config && config.sourceType) || 'portfolio';
-            window.switchShowreelSourceType(sourceType);
-
-            if (config && config.sourceType === 'portfolio' && config.portfolioIndex !== undefined) {
-                const select = document.getElementById('showreelPortfolioSelect');
-                if (select) select.value = String(config.portfolioIndex);
-            }
-            if (config && config.sourceType === 'url' && config.url) {
-                const input = document.getElementById('showreelUrlInput');
-                if (input) input.value = config.url;
-            }
+            renderShowreelPlaylistUI();
+            populateShowreelPortfolioSelect('newMediaPortfolioSelect');
+            window.onNewMediaTypeChange();
+            window.onNewMediaVideoModeChange();
 
             // 위치/크기 컨트롤에 저장된 값 반영
             const layout = loadShowreelLayout();
@@ -8890,15 +9627,16 @@
             // 1-2. 히어로 대표 프로젝트 리스트 렌더링
             renderHeroProjectList();
 
-            // 1-3. 히어로 쇼릴 비디오 초기화
-            initHeroShowreel();
+            // 1-3. 히어로 쇼릴 재생목록(Playlist) 초기화
+            initHeroShowreelPlaylist();
 
             // 1-4. 보유 장비(Gear) 데이터 로드 및 클라이언트 페이지 렌더링
             loadGearData();
             renderGearGrid();
             
-            // 2. activeFilters 초기값 설정 (빈 Set = 전체 노출)
+            // 2. activeFilters 초기값 설정 (빈 Set = 전체 노출) — '전체' 필터를 명시적 기본값으로 확정
             activeFilters = new Set();
+            updateFilterActiveStates(); // 상단 텍스트 필터의 활성 표시('전체' 볼드)를 초기 상태와 동기화
             console.log('🏷️ activeFilters 초기화:', Array.from(activeFilters));
             
             // 3. 포트폴리오 그리드 렌더링
