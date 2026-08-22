@@ -6063,7 +6063,7 @@
         };
 
         // ===== [운영] 페이지 내부 탭 전환 (Kanban / 포트폴리오 관리) =====
-        window.switchOpsTab = function(tab) {
+        window.switchOpsTab = async function(tab) {
             document.querySelectorAll('.ops-tab-switch-btn[data-ops-tab]').forEach(btn => {
                 btn.classList.toggle('active', btn.getAttribute('data-ops-tab') === tab);
             });
@@ -6074,17 +6074,19 @@
             if (tab === 'kanban') {
                 initKanbanTab();
             } else if (tab === 'inquiries') {
-                loadEstimateInquiries();
                 currentInquiryStatusFilter = '전체';
                 document.querySelectorAll('#inquiryStatusFilter .inquiry-filter-btn').forEach(btn => {
                     btn.classList.toggle('active', btn.getAttribute('data-status') === '전체');
                 });
+                await loadEstimateInquiries();
                 renderInquiryTable();
             } else if (tab === 'portfolio') {
+                await loadPortfolioData();
                 renderOpsPortfolioList();
             } else if (tab === 'showreel') {
-                initShowreelTab();
+                await initShowreelTab();
             } else if (tab === 'gear') {
+                await loadGearData();
                 renderOpsGearList();
             }
         };
@@ -6118,65 +6120,93 @@
         }
 
         // ========================================
-        // 📋 견적 문의 내역 관리 (LocalStorage 기반)
+        // 📋 견적 문의 내역 관리 (Supabase 'estimates' 테이블 기반)
         // ========================================
-        const INQUIRY_STORAGE_KEY = 'adminEstimateInquiries';
         let estimateInquiries = [];
         let currentInquiryStatusFilter = '전체';
         let currentOpenInquiryId = null;
 
-        // 최초 진입 시 견적 문의 내역은 비어있는 상태로 시작합니다.
-        // 실제 클라이언트가 '빠른 견적 문의'를 제출하면 addInquiryFromSubmission()을 통해
-        // 이 배열(및 localStorage)에 실시간으로 쌓입니다.
-        function getMockInquiries() {
-            return [];
-        }
+        // ===== Supabase 'estimates' 테이블에서 견적 문의 내역 조회 =====
+        async function loadEstimateInquiries() {
+            const tbody = document.getElementById('inquiryTableBody');
+            if (tbody) {
+                tbody.innerHTML = '<tr><td colspan="7" style="text-align:center; color:#A0A0A5; padding: 32px 16px;">불러오는 중...</td></tr>';
+            }
 
-        // localStorage에서 견적 문의 내역 로드 (없으면 Mock 데이터로 시딩)
-        function loadEstimateInquiries() {
+            if (!sbClient) {
+                console.error('❌ [loadEstimateInquiries] sbClient가 초기화되지 않았습니다.');
+                estimateInquiries = [];
+                if (tbody) tbody.innerHTML = '<tr><td colspan="7" style="text-align:center; color:#A0A0A5; padding: 32px 16px;">Supabase 연결에 실패했습니다.</td></tr>';
+                return;
+            }
+
             try {
-                const raw = localStorage.getItem(INQUIRY_STORAGE_KEY);
-                if (raw) {
-                    estimateInquiries = JSON.parse(raw);
-                } else {
-                    estimateInquiries = getMockInquiries();
-                    saveEstimateInquiries();
+                const { data, error } = await sbClient
+                    .from('estimates')
+                    .select('*')
+                    .order('created_at', { ascending: false });
+
+                if (error) {
+                    console.error('❌ [loadEstimateInquiries] Supabase 조회 오류:', error);
+                    estimateInquiries = [];
+                    if (tbody) tbody.innerHTML = `<tr><td colspan="7" style="text-align:center; color:#A0A0A5; padding: 32px 16px;">데이터를 불러오지 못했습니다. (${escapeHTML(error.message)})</td></tr>`;
+                    return;
                 }
-            } catch (e) {
-                console.error('❌ [loadEstimateInquiries] 로드 오류:', e);
-                estimateInquiries = getMockInquiries();
+
+                // DB 컬럼(snake_case) → 기존 화면 렌더링이 기대하는 필드명으로 매핑
+                estimateInquiries = (data || []).map(row => ({
+                    id: row.id,
+                    submittedAt: row.created_at,
+                    clientName: row.name || '(이름 미입력)',
+                    company: row.company || '',
+                    email: row.email || '',
+                    phone: row.phone || '',
+                    projectType: row.project_type || '미지정',
+                    budget: row.budget || '협의 필요',
+                    status: row.status || '접수',
+                    deadline: row.deadline || '',
+                    description: row.description || '',
+                    referenceLink: row.reference_link || '',
+                    workLinks: Array.isArray(row.links) ? row.links : [],
+                    notes: row.memo || '',
+                    notesUpdatedAt: row.updated_at || null
+                }));
+            } catch (err) {
+                console.error('❌ [loadEstimateInquiries] 예외 발생:', err);
+                estimateInquiries = [];
+                if (tbody) tbody.innerHTML = '<tr><td colspan="7" style="text-align:center; color:#A0A0A5; padding: 32px 16px;">데이터를 불러오지 못했습니다.</td></tr>';
             }
         }
 
-        function saveEstimateInquiries() {
+        // 실제 견적 제출 성공 시 Supabase 'estimates' 테이블에 INSERT
+        async function addInquiryFromSubmission(formData) {
+            if (!sbClient) {
+                console.error('❌ [addInquiryFromSubmission] sbClient가 초기화되지 않았습니다.');
+                return;
+            }
+
             try {
-                localStorage.setItem(INQUIRY_STORAGE_KEY, JSON.stringify(estimateInquiries));
-            } catch (e) {
-                console.error('❌ [saveEstimateInquiries] 저장 오류:', e);
-            }
-        }
+                const { error } = await sbClient.from('estimates').insert({
+                    name: formData.name || '(이름 미입력)',
+                    company: formData.company || '',
+                    email: formData.email || '',
+                    phone: formData.phone || '',
+                    project_type: formData.package || '미지정',
+                    budget: formData.budget || '협의 필요',
+                    status: '접수',
+                    deadline: formData.deadline || '',
+                    description: formData.description || '',
+                    reference_link: formData.reference || '',
+                    links: [],
+                    memo: ''
+                });
 
-        // 실제 Formspree 견적 제출 성공 시 관리자 목록에도 새 문의로 추가 (같은 브라우저 내 테스트용)
-        function addInquiryFromSubmission(formData) {
-            loadEstimateInquiries();
-            estimateInquiries.unshift({
-                id: 'inq_' + Date.now(),
-                submittedAt: new Date().toISOString(),
-                clientName: formData.name || '(이름 미입력)',
-                company: formData.company || '',
-                email: formData.email || '',
-                phone: formData.phone || '',
-                projectType: formData.package || '미지정',
-                budget: formData.budget || '협의 필요',
-                status: '접수',
-                deadline: formData.deadline || '',
-                description: formData.description || '',
-                referenceLink: formData.reference || '',
-                workLinks: [],
-                notes: '',
-                notesUpdatedAt: null
-            });
-            saveEstimateInquiries();
+                if (error) {
+                    console.error('❌ [addInquiryFromSubmission] Supabase INSERT 오류:', error);
+                }
+            } catch (err) {
+                console.error('❌ [addInquiryFromSubmission] 예외 발생:', err);
+            }
         }
 
         // ========================================
@@ -6364,14 +6394,32 @@
         };
 
         // ===== 상태 즉시 변경 (드롭다운) =====
-        window.updateInquiryStatus = function(id, newStatus) {
+        window.updateInquiryStatus = async function(id, newStatus) {
             const inquiry = estimateInquiries.find(inq => inq.id === id);
             if (!inquiry) return;
-            inquiry.status = newStatus;
-            saveEstimateInquiries();
+
+            const previousStatus = inquiry.status;
+            inquiry.status = newStatus; // 낙관적 업데이트로 즉시 화면 반영
             renderInquiryTable();
             if (currentOpenInquiryId === id) {
                 renderInquiryDetail(id);
+            }
+
+            if (!sbClient) return;
+            try {
+                const { error } = await sbClient
+                    .from('estimates')
+                    .update({ status: newStatus, updated_at: new Date().toISOString() })
+                    .eq('id', id);
+
+                if (error) {
+                    console.error('❌ [updateInquiryStatus] Supabase 오류:', error);
+                    alert('상태 변경에 실패했습니다: ' + error.message);
+                    inquiry.status = previousStatus; // 실패 시 롤백
+                    renderInquiryTable();
+                }
+            } catch (err) {
+                console.error('❌ [updateInquiryStatus] 예외 발생:', err);
             }
         };
 
@@ -6464,7 +6512,7 @@
         }
 
         // ===== 작업 링크 추가/삭제 =====
-        window.addWorkLink = function(id) {
+        window.addWorkLink = async function(id) {
             const inquiry = estimateInquiries.find(inq => inq.id === id);
             if (!inquiry) return;
 
@@ -6480,32 +6528,75 @@
 
             if (!Array.isArray(inquiry.workLinks)) inquiry.workLinks = [];
             inquiry.workLinks.push({ label: label || url, url: url });
-            saveEstimateInquiries();
             renderInquiryDetail(id);
+
+            if (!sbClient) return;
+            try {
+                const { error } = await sbClient
+                    .from('estimates')
+                    .update({ links: inquiry.workLinks, updated_at: new Date().toISOString() })
+                    .eq('id', id);
+                if (error) {
+                    console.error('❌ [addWorkLink] Supabase 오류:', error);
+                    alert('링크 저장에 실패했습니다: ' + error.message);
+                }
+            } catch (err) {
+                console.error('❌ [addWorkLink] 예외 발생:', err);
+            }
         };
 
-        window.removeWorkLink = function(id, linkIndex) {
+        window.removeWorkLink = async function(id, linkIndex) {
             const inquiry = estimateInquiries.find(inq => inq.id === id);
             if (!inquiry || !Array.isArray(inquiry.workLinks)) return;
             inquiry.workLinks.splice(linkIndex, 1);
-            saveEstimateInquiries();
             renderInquiryDetail(id);
+
+            if (!sbClient) return;
+            try {
+                const { error } = await sbClient
+                    .from('estimates')
+                    .update({ links: inquiry.workLinks, updated_at: new Date().toISOString() })
+                    .eq('id', id);
+                if (error) {
+                    console.error('❌ [removeWorkLink] Supabase 오류:', error);
+                }
+            } catch (err) {
+                console.error('❌ [removeWorkLink] 예외 발생:', err);
+            }
         };
 
         // ===== 내부 메모 저장 =====
-        window.saveInquiryNotes = function(id) {
+        window.saveInquiryNotes = async function(id) {
             const inquiry = estimateInquiries.find(inq => inq.id === id);
             const textarea = document.getElementById('inquiryNotesTextarea');
             if (!inquiry || !textarea) return;
 
-            inquiry.notes = textarea.value;
-            inquiry.notesUpdatedAt = new Date().toISOString();
-            saveEstimateInquiries();
+            const notesValue = textarea.value;
+            const nowIso = new Date().toISOString();
 
-            const hint = document.getElementById('inquiryNotesSavedHint');
-            if (hint) {
-                hint.textContent = '저장됨 · ' + formatInquiryDate(inquiry.notesUpdatedAt);
-                hint.classList.add('show');
+            if (!sbClient) return;
+            try {
+                const { error } = await sbClient
+                    .from('estimates')
+                    .update({ memo: notesValue, updated_at: nowIso })
+                    .eq('id', id);
+
+                if (error) {
+                    console.error('❌ [saveInquiryNotes] Supabase 오류:', error);
+                    alert('메모 저장에 실패했습니다: ' + error.message);
+                    return;
+                }
+
+                inquiry.notes = notesValue;
+                inquiry.notesUpdatedAt = nowIso;
+
+                const hint = document.getElementById('inquiryNotesSavedHint');
+                if (hint) {
+                    hint.textContent = '저장됨 · ' + formatInquiryDate(inquiry.notesUpdatedAt);
+                    hint.classList.add('show');
+                }
+            } catch (err) {
+                console.error('❌ [saveInquiryNotes] 예외 발생:', err);
             }
         };
 
@@ -6540,9 +6631,14 @@
                     <img class="ops-row-thumb" src="${thumbUrl}" alt="${escapeHTML(item.title || '')}">
                     <div class="ops-row-info">
                         <div class="ops-row-title">${escapeHTML(item.title || '(제목 없음)')}</div>
-                        <div class="ops-row-meta">${escapeHTML(item.category || '')} · ${escapeHTML(item.role || '')}</div>
+                        <div class="ops-row-meta">${escapeHTML(item.category || '')} · ${escapeHTML(item.role || '')}${item.visible === false ? ' · 비공개' : ''}</div>
                         ${tagsHTML}
                     </div>
+                    <button type="button" class="ops-row-visibility-btn ${item.visible === false ? 'is-hidden' : ''}" onclick="window.togglePortfolioVisibility(${index})" title="${item.visible === false ? '비공개 중 (클릭 시 공개)' : '공개 중 (클릭 시 비공개)'}">
+                        ${item.visible === false
+                            ? '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"></path><line x1="1" y1="1" x2="23" y2="23"></line></svg>'
+                            : '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>'}
+                    </button>
                     <div class="ops-row-actions">
                         <button type="button" onclick="window.showPortfolioEditModal(${index})">수정</button>
                         <button type="button" onclick="if(confirm('정말 이 영상을 삭제하시겠습니까?\\n이 작업은 되돌릴 수 없습니다.')) window.deletePortfolioItem(${index})">삭제</button>
@@ -6581,8 +6677,9 @@
                         if (fromIndex !== toIndex) {
                             const [movedItem] = portfolioData.splice(fromIndex, 1);
                             portfolioData.splice(toIndex, 0, movedItem);
-                            savePortfolioData();
-                            renderPortfolioGrid(); // 공개 그리드 갱신 시 renderOpsPortfolioList()도 함께 갱신됨
+                            renderOpsPortfolioList();
+                            renderPortfolioGridFromCache();
+                            persistPortfolioOrder(); // Supabase sort_order 일괄 반영 (비동기, 백그라운드)
                         }
                     }
                 });
@@ -6592,7 +6689,7 @@
         }
 
         // 포트폴리오 삭제 - 전역 함수
-        window.deletePortfolioItem = function(index) {
+        window.deletePortfolioItem = async function(index) {
             console.log('🗑️ [deletePortfolioItem] 삭제 시작 - 인덱스:', index);
             
             // 유효성 검사
@@ -6602,24 +6699,61 @@
                 return;
             }
             
-            // 삭제 전 데이터 확인
             const itemToDelete = portfolioData[index];
             console.log('📝 삭제할 항목:', itemToDelete.title);
-            console.log('📊 현재 portfolioData 길이:', portfolioData.length);
-            
+
+            if (!sbClient || !itemToDelete.id) {
+                alert('삭제에 실패했습니다. Supabase 연결을 확인해주세요.');
+                return;
+            }
+
+            try {
+                const { error } = await sbClient.from('works').delete().eq('id', itemToDelete.id);
+                if (error) {
+                    console.error('❌ [deletePortfolioItem] Supabase 오류:', error);
+                    alert('삭제에 실패했습니다: ' + error.message);
+                    return;
+                }
+            } catch (err) {
+                console.error('❌ [deletePortfolioItem] 예외 발생:', err);
+                alert('삭제 중 오류가 발생했습니다.');
+                return;
+            }
+
             // 배열에서 제거
             portfolioData.splice(index, 1);
             console.log('✂️ 배열에서 제거됨. 새로운 길이:', portfolioData.length);
             
-            // LocalStorage에 저장
-            savePortfolioData();
-            console.log('💾 LocalStorage 저장 완료');
-            
             // 화면 즉시 업데이트
-            console.log('🔄 renderPortfolioGrid 호출');
-            renderPortfolioGrid();
+            console.log('🔄 그리드 갱신');
+            renderPortfolioGridFromCache();
+            renderOpsPortfolioList();
             
             console.log('✅ 삭제 완료');
+        };
+
+        // ===== 포트폴리오 공개/비공개 토글 =====
+        window.togglePortfolioVisibility = async function(index) {
+            const item = portfolioData[index];
+            if (!item || !item.id || !sbClient) return;
+
+            const newVisible = item.visible === false ? true : false;
+            item.visible = newVisible; // 낙관적 업데이트
+            renderOpsPortfolioList();
+            renderPortfolioGridFromCache();
+
+            try {
+                const { error } = await sbClient.from('works').update({ is_visible: newVisible }).eq('id', item.id);
+                if (error) {
+                    console.error('❌ [togglePortfolioVisibility] Supabase 오류:', error);
+                    alert('공개 설정 변경에 실패했습니다: ' + error.message);
+                    item.visible = !newVisible; // 롤백
+                    renderOpsPortfolioList();
+                    renderPortfolioGridFromCache();
+                }
+            } catch (err) {
+                console.error('❌ [togglePortfolioVisibility] 예외 발생:', err);
+            }
         };
  
         // 포트폴리오 필터링 (Service / Key Word 다중 선택 필터)
@@ -6635,7 +6769,7 @@
             
             updateFilterActiveStates();
             renderActiveFilterChip();
-            renderPortfolioGrid();
+            renderPortfolioGridFromCache();
         };
 
         // 태그 칩의 '×' 버튼 전용 — 해당 키워드만 필터에서 제거
@@ -6644,7 +6778,7 @@
             
             updateFilterActiveStates();
             renderActiveFilterChip();
-            renderPortfolioGrid();
+            renderPortfolioGridFromCache();
         };
 
         // 상단 텍스트 필터(Service / Key Word)의 활성 스타일(볼드 블랙) 갱신
@@ -7872,7 +8006,8 @@
             console.log('📦 새 항목:', newItem);
             
             // 포트폴리오에 추가
-            addPortfolioItem(newItem);
+            const success = await addPortfolioItem(newItem);
+            if (!success) return;
             
             // 모달 닫기
             const modal = document.getElementById('adminFormModal');
@@ -7882,14 +8017,15 @@
             }
             
             // 화면 갱신
-            console.log('🔄 renderPortfolioGrid 호출');
-            renderPortfolioGrid();
+            console.log('🔄 그리드 갱신');
+            renderPortfolioGridFromCache();
+            renderOpsPortfolioList();
             
             alert('영상이 추가되었습니다!');
         };
  
         // 새 영상 추가 함수
-        function addPortfolioItem(item) {
+        async function addPortfolioItem(item) {
             console.log('🟡 [addPortfolioItem] 함수 시작');
             console.log('📊 현재 portfolioData 길이:', portfolioData.length);
             console.log('📝 추가할 항목:', item);
@@ -7897,56 +8033,154 @@
             if (!item || !item.youtubeId || !item.title || !item.category) {
                 console.error('❌ 필수 필드가 누락되었습니다.');
                 alert('필수 정보를 모두 입력해주세요.');
-                return;
+                return false;
             }
             
-            // 맨 앞에 추가
-            portfolioData.unshift(item);
-            console.log('✅ portfolioData에 추가됨. 새로운 길이:', portfolioData.length);
-            
-            // LocalStorage에 저장
-            savePortfolioData();
-            console.log('💾 LocalStorage에 저장 완료');
+            if (!sbClient) {
+                alert('Supabase 연결에 실패하여 저장할 수 없습니다.');
+                return false;
+            }
+
+            try {
+                const { data, error } = await sbClient.from('works').insert({
+                    title: item.title,
+                    category: item.category,
+                    role: item.role,
+                    contribution: item.contribution,
+                    duration: item.duration,
+                    views: item.views,
+                    youtube_id: item.youtubeId,
+                    custom_thumbnail_url: item.customThumbnail || null,
+                    tags: item.tags || [],
+                    is_visible: true,
+                    sort_order: -1 // 맨 앞에 오도록 가장 작은 값으로 우선 저장 (아래에서 order 재정렬)
+                }).select().single();
+
+                if (error) {
+                    console.error('❌ [addPortfolioItem] Supabase INSERT 오류:', error);
+                    alert('저장에 실패했습니다: ' + error.message);
+                    return false;
+                }
+
+                // 맨 앞에 추가
+                portfolioData.unshift(rowToPortfolioItem(data));
+                console.log('✅ portfolioData에 추가됨. 새로운 길이:', portfolioData.length);
+
+                // sort_order를 현재 배열 순서(맨 앞=0)에 맞춰 일괄 재정렬
+                await persistPortfolioOrder();
+                return true;
+            } catch (err) {
+                console.error('❌ [addPortfolioItem] 예외 발생:', err);
+                alert('저장 중 오류가 발생했습니다.');
+                return false;
+            }
         }
  
         // LocalStorage에서 포트폴리오 데이터 로드
-        function loadPortfolioData() {
-            console.log('📂 portfolioData 로드 중...');
-            const savedData = localStorage.getItem('portfolioData');
-            if (savedData) {
-                try {
-                    const loaded = JSON.parse(savedData);
-                    if (loaded && loaded.length > 0) {
-                        portfolioData = loaded;
-                        console.log('✅ LocalStorage에서 로드됨:', portfolioData.length, '개');
-                        return;
-                    }
-                } catch (e) {
-                    console.warn('⚠️ LocalStorage 파싱 오류:', e);
-                }
+        // Supabase 'works' 테이블에서 포트폴리오 목록 로드 (sort_order 기준 정렬)
+        // publicOnly=true면 공개(is_visible=true) 항목만, false/미지정이면 어드민용으로 전체를 가져옴
+        async function loadPortfolioData(publicOnly) {
+            if (!sbClient) {
+                console.error('❌ [loadPortfolioData] sbClient가 초기화되지 않았습니다.');
+                portfolioData = [];
+                return;
             }
-            
-            // LocalStorage가 없으면 기본 데이터 사용
-            console.log('📦 기본 데이터 사용');
-            portfolioData = [...defaultPortfolioData];
-            savePortfolioData();
-        }
- 
-        // 포트폴리오 데이터 저장
-        function savePortfolioData() {
+
             try {
-                localStorage.setItem('portfolioData', JSON.stringify(portfolioData));
-                console.log('✅ portfolioData LocalStorage 저장 완료 (', portfolioData.length, '개)');
-            } catch (e) {
-                console.error('❌ LocalStorage 저장 오류:', e);
-                alert('데이터 저장에 실패했습니다. 브라우저 저장소를 확인해주세요.');
+                let query = sbClient.from('works').select('*').order('sort_order', { ascending: true });
+                if (publicOnly) {
+                    query = query.eq('is_visible', true);
+                }
+                const { data, error } = await query;
+
+                if (error) {
+                    console.error('❌ [loadPortfolioData] Supabase 조회 오류:', error);
+                    portfolioData = [];
+                    return;
+                }
+
+                if (!data || data.length === 0) {
+                    console.log('📦 works 테이블이 비어있어 기본 데이터를 시딩합니다.');
+                    await seedDefaultPortfolioData();
+                    return;
+                }
+
+                portfolioData = data.map(rowToPortfolioItem);
+                console.log('✅ Supabase에서 works 로드됨:', portfolioData.length, '개');
+            } catch (err) {
+                console.error('❌ [loadPortfolioData] 예외 발생:', err);
+                portfolioData = [];
+            }
+        }
+
+        // DB row(snake_case) → 화면에서 사용하는 필드명(camelCase)으로 변환
+        function rowToPortfolioItem(row) {
+            return {
+                id: row.id,
+                title: row.title || '',
+                category: row.category || '',
+                role: row.role || '',
+                contribution: row.contribution || '',
+                duration: row.duration || '',
+                views: row.views || '',
+                youtubeId: row.youtube_id || '',
+                youtubeUrl: row.youtube_id ? `https://www.youtube.com/watch?v=${row.youtube_id}` : '',
+                customThumbnail: row.custom_thumbnail_url || null,
+                previewVideo: row.preview_video_url || null,
+                tags: Array.isArray(row.tags) ? row.tags : [],
+                visible: row.is_visible !== false,
+                sortOrder: row.sort_order || 0
+            };
+        }
+
+        // works 테이블이 완전히 비어있을 때만 최초 1회 기본 데이터를 INSERT
+        async function seedDefaultPortfolioData() {
+            if (!sbClient) return;
+            try {
+                const rows = defaultPortfolioData.map((item, idx) => ({
+                    title: item.title,
+                    category: item.category,
+                    role: item.role,
+                    contribution: item.contribution,
+                    duration: item.duration,
+                    views: item.views,
+                    youtube_id: item.youtubeId,
+                    custom_thumbnail_url: item.customThumbnail || null,
+                    tags: item.tags || [],
+                    is_visible: true,
+                    sort_order: idx
+                }));
+
+                const { data, error } = await sbClient.from('works').insert(rows).select();
+                if (error) {
+                    console.error('❌ [seedDefaultPortfolioData] Supabase INSERT 오류:', error);
+                    portfolioData = [...defaultPortfolioData];
+                    return;
+                }
+                portfolioData = (data || []).map(rowToPortfolioItem).sort((a, b) => a.sortOrder - b.sortOrder);
+            } catch (err) {
+                console.error('❌ [seedDefaultPortfolioData] 예외 발생:', err);
+                portfolioData = [...defaultPortfolioData];
+            }
+        }
+
+        // 드래그 재정렬 후 전체 배열의 sort_order를 현재 위치대로 일괄 반영
+        async function persistPortfolioOrder() {
+            if (!sbClient) return;
+            try {
+                await Promise.all(
+                    portfolioData.map((item, idx) =>
+                        sbClient.from('works').update({ sort_order: idx }).eq('id', item.id)
+                    )
+                );
+            } catch (err) {
+                console.error('❌ [persistPortfolioOrder] 예외 발생:', err);
             }
         }
 
         // ========================================
         // 🎥 보유 장비 (Gear) 관리 — LocalStorage 기반 CMS
         // ========================================
-        const GEAR_STORAGE_KEY = 'gearData';
         const GEAR_CATEGORIES = ['카메라', '음향', '조명', '렌즈', '악세서리', '기타'];
 
         const defaultGearData = [
@@ -8004,29 +8238,93 @@
 
         let gearData = [];
 
-        function loadGearData() {
-            try {
-                const saved = localStorage.getItem(GEAR_STORAGE_KEY);
-                if (saved) {
-                    const loaded = JSON.parse(saved);
-                    if (loaded && loaded.length > 0) {
-                        gearData = loaded;
-                        return;
-                    }
-                }
-            } catch (e) {
-                console.warn('⚠️ [loadGearData] 파싱 오류:', e);
+        // Supabase 'equipment' 테이블에서 장비 목록 로드 (sort_order 기준 정렬)
+        async function loadGearData(publicOnly) {
+            if (!sbClient) {
+                console.error('❌ [loadGearData] sbClient가 초기화되지 않았습니다.');
+                gearData = [];
+                return;
             }
-            gearData = [...defaultGearData];
-            saveGearData();
+
+            try {
+                let query = sbClient.from('equipment').select('*').order('sort_order', { ascending: true });
+                if (publicOnly) {
+                    query = query.eq('is_visible', true);
+                }
+                const { data, error } = await query;
+
+                if (error) {
+                    console.error('❌ [loadGearData] Supabase 조회 오류:', error);
+                    gearData = [];
+                    return;
+                }
+
+                if (!data || data.length === 0) {
+                    console.log('📦 equipment 테이블이 비어있어 기본 데이터를 시딩합니다.');
+                    await seedDefaultGearData();
+                    return;
+                }
+
+                gearData = data.map(rowToGearItem);
+            } catch (err) {
+                console.error('❌ [loadGearData] 예외 발생:', err);
+                gearData = [];
+            }
         }
 
-        function saveGearData() {
+        function rowToGearItem(row) {
+            return {
+                id: row.id,
+                name: row.name || '',
+                category: row.category || '기타',
+                quantity: row.quantity || 1,
+                unit: row.unit || 'EA',
+                description: row.description || '',
+                imageUrl: row.image_url || '',
+                visible: row.is_visible !== false,
+                sortOrder: row.sort_order || 0
+            };
+        }
+
+        // equipment 테이블이 완전히 비어있을 때만 최초 1회 기본 데이터를 INSERT
+        async function seedDefaultGearData() {
+            if (!sbClient) return;
             try {
-                localStorage.setItem(GEAR_STORAGE_KEY, JSON.stringify(gearData));
-            } catch (e) {
-                console.error('❌ [saveGearData] 저장 오류:', e);
-                alert('장비 데이터 저장에 실패했습니다.');
+                const rows = defaultGearData.map((item, idx) => ({
+                    name: item.name,
+                    category: item.category,
+                    quantity: item.quantity,
+                    unit: item.unit,
+                    description: item.description,
+                    image_url: item.imageUrl || null,
+                    is_visible: true,
+                    sort_order: idx
+                }));
+
+                const { data, error } = await sbClient.from('equipment').insert(rows).select();
+                if (error) {
+                    console.error('❌ [seedDefaultGearData] Supabase INSERT 오류:', error);
+                    gearData = [...defaultGearData];
+                    return;
+                }
+                gearData = (data || []).map(rowToGearItem).sort((a, b) => a.sortOrder - b.sortOrder);
+            } catch (err) {
+                console.error('❌ [seedDefaultGearData] 예외 발생:', err);
+                gearData = [...defaultGearData];
+            }
+        }
+
+        // 드래그 재정렬 후 전체 배열의 sort_order를 현재 위치대로 일괄 반영
+        async function persistGearOrder() {
+            if (!sbClient) return;
+            try {
+                await Promise.all(
+                    gearData.map((item, idx) =>
+                        sbClient.from('equipment').update({ sort_order: idx }).eq('id', item.id)
+                    )
+                );
+            } catch (err) {
+                console.error('❌ [persistGearOrder] 예외 발생:', err);
             }
         }
 
@@ -8134,9 +8432,9 @@
                         if (fromIndex !== toIndex) {
                             const [moved] = gearData.splice(fromIndex, 1);
                             gearData.splice(toIndex, 0, moved);
-                            saveGearData();
                             renderOpsGearList();
                             renderGearGrid();
+                            persistGearOrder(); // Supabase sort_order 일괄 반영 (비동기, 백그라운드)
                         }
                     }
                 });
@@ -8146,19 +8444,46 @@
         }
 
         // ===== 공개/비공개 토글 =====
-        window.toggleGearVisibility = function(id) {
+        window.toggleGearVisibility = async function(id) {
             const item = gearData.find(g => g.id === id);
-            if (!item) return;
-            item.visible = item.visible === false ? true : false;
-            saveGearData();
+            if (!item || !sbClient) return;
+
+            const newVisible = item.visible === false ? true : false;
+            item.visible = newVisible; // 낙관적 업데이트
             renderOpsGearList();
             renderGearGrid();
+
+            try {
+                const { error } = await sbClient.from('equipment').update({ is_visible: newVisible }).eq('id', item.id);
+                if (error) {
+                    console.error('❌ [toggleGearVisibility] Supabase 오류:', error);
+                    alert('공개 설정 변경에 실패했습니다: ' + error.message);
+                    item.visible = !newVisible; // 롤백
+                    renderOpsGearList();
+                    renderGearGrid();
+                }
+            } catch (err) {
+                console.error('❌ [toggleGearVisibility] 예외 발생:', err);
+            }
         };
 
         // ===== 장비 삭제 =====
-        window.deleteGearItem = function(id) {
+        window.deleteGearItem = async function(id) {
+            if (!sbClient) return;
+
+            try {
+                const { error } = await sbClient.from('equipment').delete().eq('id', id);
+                if (error) {
+                    console.error('❌ [deleteGearItem] Supabase 오류:', error);
+                    alert('삭제에 실패했습니다: ' + error.message);
+                    return;
+                }
+            } catch (err) {
+                console.error('❌ [deleteGearItem] 예외 발생:', err);
+                return;
+            }
+
             gearData = gearData.filter(g => g.id !== id);
-            saveGearData();
             renderOpsGearList();
             renderGearGrid();
         };
@@ -8323,18 +8648,43 @@
             }
 
             const newItem = {
-                id: 'gear_' + Date.now(),
                 name: document.getElementById('gearName').value.trim(),
                 category: document.getElementById('gearCategory').value,
                 quantity: parseInt(document.getElementById('gearQuantity').value, 10) || 1,
                 unit: document.getElementById('gearUnit').value.trim() || 'EA',
                 description: document.getElementById('gearDescription').value.trim(),
-                imageUrl: imageUrl,
-                visible: true
+                imageUrl: imageUrl
             };
 
-            gearData.push(newItem);
-            saveGearData();
+            if (!sbClient) {
+                alert('Supabase 연결에 실패하여 저장할 수 없습니다.');
+                return;
+            }
+
+            try {
+                const { data, error } = await sbClient.from('equipment').insert({
+                    name: newItem.name,
+                    category: newItem.category,
+                    quantity: newItem.quantity,
+                    unit: newItem.unit,
+                    description: newItem.description,
+                    image_url: newItem.imageUrl || null,
+                    is_visible: true,
+                    sort_order: gearData.length
+                }).select().single();
+
+                if (error) {
+                    console.error('❌ [handleAddGear] Supabase INSERT 오류:', error);
+                    alert('저장에 실패했습니다: ' + error.message);
+                    return;
+                }
+
+                gearData.push(rowToGearItem(data));
+            } catch (err) {
+                console.error('❌ [handleAddGear] 예외 발생:', err);
+                alert('저장 중 오류가 발생했습니다.');
+                return;
+            }
 
             const modal = document.getElementById('gearFormModal');
             if (modal) modal.remove();
@@ -8366,14 +8716,42 @@
                 imageUrl = urlInput.value.trim();
             }
 
-            item.name = document.getElementById('gearName').value.trim();
-            item.category = document.getElementById('gearCategory').value;
-            item.quantity = parseInt(document.getElementById('gearQuantity').value, 10) || 1;
-            item.unit = document.getElementById('gearUnit').value.trim() || 'EA';
-            item.description = document.getElementById('gearDescription').value.trim();
-            item.imageUrl = imageUrl;
+            const updated = {
+                name: document.getElementById('gearName').value.trim(),
+                category: document.getElementById('gearCategory').value,
+                quantity: parseInt(document.getElementById('gearQuantity').value, 10) || 1,
+                unit: document.getElementById('gearUnit').value.trim() || 'EA',
+                description: document.getElementById('gearDescription').value.trim(),
+                imageUrl: imageUrl
+            };
 
-            saveGearData();
+            if (!sbClient) {
+                alert('Supabase 연결에 실패하여 저장할 수 없습니다.');
+                return;
+            }
+
+            try {
+                const { error } = await sbClient.from('equipment').update({
+                    name: updated.name,
+                    category: updated.category,
+                    quantity: updated.quantity,
+                    unit: updated.unit,
+                    description: updated.description,
+                    image_url: updated.imageUrl || null
+                }).eq('id', id);
+
+                if (error) {
+                    console.error('❌ [handleEditGear] Supabase 오류:', error);
+                    alert('수정에 실패했습니다: ' + error.message);
+                    return;
+                }
+            } catch (err) {
+                console.error('❌ [handleEditGear] 예외 발생:', err);
+                alert('수정 중 오류가 발생했습니다.');
+                return;
+            }
+
+            Object.assign(item, updated);
 
             const modal = document.getElementById('gearFormModal');
             if (modal) modal.remove();
@@ -8520,8 +8898,8 @@
                 ? editTagsInput.value.split(',').map(t => t.trim()).filter(t => t.length > 0)
                 : [];
  
-            // portfolioData 업데이트
-            portfolioData[index] = {
+            // portfolioData 업데이트 대상 구성
+            const updatedItem = {
                 youtubeId: youtubeId,
                 title: document.getElementById('editTitle').value,
                 category: document.getElementById('editCategory').value,
@@ -8533,15 +8911,46 @@
                 customThumbnail: customThumbnail || null,
                 tags: parsedTags
             };
- 
-            // LocalStorage 저장
-            savePortfolioData();
+
+            const targetId = existingItem.id;
+            if (!sbClient || !targetId) {
+                alert('수정에 실패했습니다. Supabase 연결을 확인해주세요.');
+                return;
+            }
+
+            try {
+                const { error } = await sbClient.from('works').update({
+                    title: updatedItem.title,
+                    category: updatedItem.category,
+                    role: updatedItem.role,
+                    contribution: updatedItem.contribution,
+                    duration: updatedItem.duration,
+                    views: updatedItem.views,
+                    youtube_id: updatedItem.youtubeId,
+                    custom_thumbnail_url: updatedItem.customThumbnail || null,
+                    tags: updatedItem.tags
+                }).eq('id', targetId);
+
+                if (error) {
+                    console.error('❌ [handleEditPortfolio] Supabase 오류:', error);
+                    alert('수정에 실패했습니다: ' + error.message);
+                    return;
+                }
+            } catch (err) {
+                console.error('❌ [handleEditPortfolio] 예외 발생:', err);
+                alert('수정 중 오류가 발생했습니다.');
+                return;
+            }
+
+            // 메모리상의 캐시도 함께 갱신 (id는 유지)
+            portfolioData[index] = Object.assign({}, updatedItem, { id: targetId, visible: existingItem.visible, sortOrder: existingItem.sortOrder });
             
             // 모달 닫기
             document.getElementById('editPortfolioModal').remove();
             
             // 그리드 다시 렌더링
-            renderPortfolioGrid();
+            renderPortfolioGridFromCache();
+            renderOpsPortfolioList();
             
             alert('영상이 수정되었습니다!');
         };
@@ -8637,17 +9046,15 @@
         };
 
         // portfolioData로 마소닉 그리드 동적 생성
-        function renderPortfolioGrid() {
+        function renderPortfolioGridFromCache() {
             const masonryGrid = document.getElementById('masonryGrid');
             
             // 그리드 초기화
             masonryGrid.innerHTML = '';
             
-            // ===== 데이터 안전성 체크 =====
-            if (!portfolioData || portfolioData.length === 0) {
-                console.warn('⚠️ portfolioData가 비어있습니다. 기본 데이터로 재설정합니다.');
-                portfolioData = [...defaultPortfolioData];
-                savePortfolioData();
+            // ===== 데이터 안전성 체크 (메모리상의 캐시만 사용, DB에 다시 쓰지 않음) =====
+            if (!portfolioData) {
+                portfolioData = [];
             }
             
             // activeFilters 안전성 체크
@@ -8655,7 +9062,7 @@
                 activeFilters = new Set();
             }
             
-            console.log(`✅ renderPortfolioGrid 시작 - activeFilters: [${Array.from(activeFilters).join(', ')}], portfolioData 길이: ${portfolioData.length}`);
+            console.log(`✅ renderPortfolioGridFromCache 시작 - activeFilters: [${Array.from(activeFilters).join(', ')}], portfolioData 길이: ${portfolioData.length}`);
             
             // 플레이스홀더 SVG 생성 함수
             function createPlaceholderSVG(index) {
@@ -8676,6 +9083,12 @@
             // portfolioData 배열을 순회하며 카드 생성
             let renderedCount = 0;
             portfolioData.forEach((item, index) => {
+                // 비공개(visible === false) 항목은 공개 페이지에 노출하지 않음
+                // (어드민 탭에서는 전체 목록을 캐시에 불러오므로 이 필터가 공개 그리드를 안전하게 지켜줌)
+                if (item.visible === false) {
+                    return;
+                }
+
                 // ===== 다중 선택 필터링 로직 (선택된 키워드 중 하나라도 일치하면 OR 매칭으로 노출) =====
                 // activeFilters가 비어있으면(= '전체') 모든 카드 표시
                 // 하나 이상 선택된 경우: item.category 또는 item.tags 중 선택된 키워드와 하나라도 겹치면 노출
@@ -8952,145 +9365,64 @@
         // ========================================
         const HERO_SHOWREEL_SRC = 'assets/showreel-hero.mp4';       // 실제 쇼릴 영상 파일 경로로 교체
         const HERO_SHOWREEL_SRC_WEBM = 'assets/showreel-hero.webm'; // (선택) WebM 대체 소스
-        const SHOWREEL_CONFIG_KEY = 'heroShowreelConfig';
 
-        // ===== URL에서 유튜브/비메오 영상 ID 추출 =====
-        function extractYoutubeId(url) {
-            if (!url) return null;
-            const patterns = [
-                /(?:youtube\.com\/watch\?v=|youtu\.be\/|youtube\.com\/embed\/|youtube\.com\/shorts\/)([a-zA-Z0-9_-]{11})/
-            ];
-            for (const pattern of patterns) {
-                const match = url.match(pattern);
-                if (match) return match[1];
+        // ========================================
+        // 📐 쇼릴 위치 & 크기 커스텀 설정 (Supabase 'site_settings' 테이블, id=1)
+        // ========================================
+        const SHOWREEL_LAYOUT_DEFAULT = { xOffset: 4, yAlign: 'flex-end', width: 400 };
+
+        // site_settings 행은 페이지 로드 시 loadSiteSettings()가 한 번 불러와 이 캐시에 담아둡니다.
+        let siteSettings = null;
+
+        async function loadSiteSettings() {
+            if (!sbClient) {
+                console.error('❌ [loadSiteSettings] sbClient가 초기화되지 않았습니다.');
+                siteSettings = null;
+                return null;
             }
-            return null;
-        }
-
-        function extractVimeoId(url) {
-            if (!url) return null;
-            const match = url.match(/vimeo\.com\/(?:video\/)?(\d+)/);
-            return match ? match[1] : null;
-        }
-
-        function detectUrlSourceKind(url) {
-            if (!url) return null;
-            if (/youtube\.com|youtu\.be/.test(url)) return 'youtube';
-            if (/vimeo\.com/.test(url)) return 'vimeo';
-            return 'mp4';
-        }
-
-        // ===== 쇼릴 설정 불러오기/저장 =====
-        function loadShowreelConfig() {
             try {
-                const raw = localStorage.getItem(SHOWREEL_CONFIG_KEY);
-                return raw ? JSON.parse(raw) : null;
-            } catch (e) {
-                console.error('❌ [loadShowreelConfig] 로드 오류:', e);
+                const { data, error } = await sbClient.from('site_settings').select('*').eq('id', 1).single();
+                if (error) {
+                    console.error('❌ [loadSiteSettings] Supabase 조회 오류:', error);
+                    siteSettings = null;
+                    return null;
+                }
+                siteSettings = data;
+                return data;
+            } catch (err) {
+                console.error('❌ [loadSiteSettings] 예외 발생:', err);
+                siteSettings = null;
                 return null;
             }
         }
 
-        function saveShowreelConfigToStorage(config) {
+        // site_settings(id=1) 행에 부분 업데이트를 반영하고 캐시도 함께 갱신
+        async function saveSiteSettingsToDB(partial) {
+            if (!sbClient) return false;
             try {
-                localStorage.setItem(SHOWREEL_CONFIG_KEY, JSON.stringify(config));
-            } catch (e) {
-                console.error('❌ [saveShowreelConfigToStorage] 저장 오류:', e);
+                const payload = Object.assign({ updated_at: new Date().toISOString() }, partial);
+                const { error } = await sbClient.from('site_settings').update(payload).eq('id', 1);
+                if (error) {
+                    console.error('❌ [saveSiteSettingsToDB] Supabase 오류:', error);
+                    return false;
+                }
+                siteSettings = Object.assign({}, siteSettings, payload);
+                return true;
+            } catch (err) {
+                console.error('❌ [saveSiteSettingsToDB] 예외 발생:', err);
+                return false;
             }
         }
-
-        // ===== 실제 미디어(video/iframe) 적용 =====
-        function applyShowreelConfig(config) {
-            const media = document.getElementById('heroShowreelMedia');
-            const muteBtn = document.getElementById('heroShowreelMuteBtn');
-            if (!media) return;
-
-            media.innerHTML = '';
-
-            let kind = 'mp4';
-            let mp4Src = HERO_SHOWREEL_SRC;
-            let webmSrc = HERO_SHOWREEL_SRC_WEBM;
-            let embedId = null;
-
-            if (config && config.sourceType === 'portfolio' && config.youtubeId) {
-                kind = 'youtube';
-                embedId = config.youtubeId;
-            } else if (config && config.sourceType === 'url' && config.url) {
-                const urlKind = detectUrlSourceKind(config.url);
-                if (urlKind === 'youtube') {
-                    kind = 'youtube';
-                    embedId = extractYoutubeId(config.url);
-                } else if (urlKind === 'vimeo') {
-                    kind = 'vimeo';
-                    embedId = extractVimeoId(config.url);
-                } else {
-                    kind = 'mp4';
-                    mp4Src = config.url;
-                    webmSrc = '';
-                }
-            }
-
-            if (kind === 'youtube' && embedId) {
-                window.__heroShowreelClickthrough = false;
-                media.innerHTML = `<iframe src="https://www.youtube.com/embed/${embedId}?autoplay=1&mute=1&loop=1&playlist=${embedId}&controls=0&showinfo=0&rel=0&modestbranding=1&playsinline=1" allow="autoplay; encrypted-media" frameborder="0"></iframe>`;
-                if (muteBtn) muteBtn.style.display = 'none';
-            } else if (kind === 'vimeo' && embedId) {
-                window.__heroShowreelClickthrough = false;
-                media.innerHTML = `<iframe src="https://player.vimeo.com/video/${embedId}?autoplay=1&muted=1&loop=1&background=1&controls=0" allow="autoplay" frameborder="0"></iframe>`;
-                if (muteBtn) muteBtn.style.display = 'none';
-            } else {
-                window.__heroShowreelClickthrough = true;
-                const video = document.createElement('video');
-                video.className = 'hero-showreel-video';
-                video.id = 'heroShowreelVideo';
-                video.autoplay = true;
-                video.muted = true;
-                video.loop = true;
-                video.playsInline = true;
-                video.poster = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 360 640'%3E%3Crect width='360' height='640' fill='%230A0A0A'/%3E%3C/svg%3E";
-
-                const sourceMp4 = document.createElement('source');
-                sourceMp4.src = mp4Src;
-                sourceMp4.type = 'video/mp4';
-                video.appendChild(sourceMp4);
-
-                if (webmSrc) {
-                    const sourceWebm = document.createElement('source');
-                    sourceWebm.src = webmSrc;
-                    sourceWebm.type = 'video/webm';
-                    video.appendChild(sourceWebm);
-                }
-
-                media.appendChild(video);
-                video.load();
-
-                const playPromise = video.play();
-                if (playPromise !== undefined) {
-                    playPromise.catch(() => {
-                        console.warn('⚠️ [히어로 쇼릴] 자동 재생이 차단되어 음소거 상태로 재시도합니다.');
-                        video.muted = true;
-                        video.play().catch(() => {});
-                    });
-                }
-
-                if (muteBtn) muteBtn.style.display = 'flex';
-            }
-        }
-
-        // ========================================
-        // 📐 쇼릴 위치 & 크기 커스텀 설정
-        // ========================================
-        const SHOWREEL_LAYOUT_KEY = 'heroShowreelLayout';
-        const SHOWREEL_LAYOUT_DEFAULT = { xOffset: 4, yAlign: 'flex-end', width: 400 };
 
         function loadShowreelLayout() {
-            try {
-                const raw = localStorage.getItem(SHOWREEL_LAYOUT_KEY);
-                return raw ? Object.assign({}, SHOWREEL_LAYOUT_DEFAULT, JSON.parse(raw)) : Object.assign({}, SHOWREEL_LAYOUT_DEFAULT);
-            } catch (e) {
-                console.error('❌ [loadShowreelLayout] 로드 오류:', e);
-                return Object.assign({}, SHOWREEL_LAYOUT_DEFAULT);
+            if (siteSettings) {
+                return {
+                    xOffset: (siteSettings.showreel_x_offset !== null && siteSettings.showreel_x_offset !== undefined) ? siteSettings.showreel_x_offset : SHOWREEL_LAYOUT_DEFAULT.xOffset,
+                    yAlign: siteSettings.showreel_y_align || SHOWREEL_LAYOUT_DEFAULT.yAlign,
+                    width: siteSettings.showreel_width || SHOWREEL_LAYOUT_DEFAULT.width
+                };
             }
+            return Object.assign({}, SHOWREEL_LAYOUT_DEFAULT);
         }
 
         function applyShowreelLayout(layout) {
@@ -9105,7 +9437,7 @@
             card.style.width = safeLayout.width + 'px';
         }
 
-        // 슬라이더/셀렉트 조작 시 저장 전 실시간 미리보기 (아직 localStorage에는 저장되지 않음)
+        // 슬라이더/셀렉트 조작 시 저장 전 실시간 미리보기 (아직 DB에는 저장되지 않음)
         window.previewShowreelLayout = function() {
             const xOffset = parseInt(document.getElementById('showreelXOffset').value, 10);
             const yAlign = document.getElementById('showreelYAlign').value;
@@ -9118,31 +9450,36 @@
         };
 
         // ===== 위치/크기 저장 =====
-        window.saveShowreelLayout = function() {
+        window.saveShowreelLayout = async function() {
             const layout = {
                 xOffset: parseInt(document.getElementById('showreelXOffset').value, 10),
                 yAlign: document.getElementById('showreelYAlign').value,
                 width: parseInt(document.getElementById('showreelWidth').value, 10)
             };
 
-            try {
-                localStorage.setItem(SHOWREEL_LAYOUT_KEY, JSON.stringify(layout));
-            } catch (e) {
-                console.error('❌ [saveShowreelLayout] 저장 오류:', e);
-            }
+            const hint = document.getElementById('showreelLayoutSavedHint');
+
+            const ok = await saveSiteSettingsToDB({
+                showreel_x_offset: layout.xOffset,
+                showreel_y_align: layout.yAlign,
+                showreel_width: layout.width
+            });
 
             applyShowreelLayout(layout);
 
-            const hint = document.getElementById('showreelLayoutSavedHint');
             if (hint) {
-                hint.textContent = '저장 완료 · 메인 화면에 반영되었습니다.';
+                hint.textContent = ok ? '저장 완료 · 메인 화면에 반영되었습니다.' : '저장에 실패했습니다. 잠시 후 다시 시도해주세요.';
                 hint.classList.add('show');
             }
         };
 
         // ===== 위치/크기 기본값 초기화 =====
-        window.resetShowreelLayout = function() {
-            localStorage.removeItem(SHOWREEL_LAYOUT_KEY);
+        window.resetShowreelLayout = async function() {
+            await saveSiteSettingsToDB({
+                showreel_x_offset: SHOWREEL_LAYOUT_DEFAULT.xOffset,
+                showreel_y_align: SHOWREEL_LAYOUT_DEFAULT.yAlign,
+                showreel_width: SHOWREEL_LAYOUT_DEFAULT.width
+            });
             applyShowreelLayout(SHOWREEL_LAYOUT_DEFAULT);
 
             document.getElementById('showreelXOffset').value = SHOWREEL_LAYOUT_DEFAULT.xOffset;
@@ -9160,9 +9497,8 @@
 
 
         // ========================================
-        // 🎞️ 쇼릴 재생목록 (Playlist) — 영상/이미지 롤링 재생 + 어드민 관리
+        // 🎞️ 쇼릴 재생목록 (Playlist) — 영상/이미지 롤링 재생 + 어드민 관리 (Supabase 'site_settings')
         // ========================================
-        const SHOWREEL_PLAYLIST_KEY = 'heroShowreelPlaylist';
         const SHOWREEL_FADE_MS = 400; // .hero-showreel-media의 opacity transition 시간과 일치시킴
 
         function getDefaultShowreelPlaylist() {
@@ -9172,24 +9508,14 @@
         }
 
         function loadShowreelPlaylist() {
-            try {
-                const raw = localStorage.getItem(SHOWREEL_PLAYLIST_KEY);
-                if (raw) {
-                    const parsed = JSON.parse(raw);
-                    if (Array.isArray(parsed) && parsed.length > 0) return parsed;
-                }
-            } catch (e) {
-                console.error('❌ [loadShowreelPlaylist] 로드 오류:', e);
+            if (siteSettings && Array.isArray(siteSettings.showreel_playlist) && siteSettings.showreel_playlist.length > 0) {
+                return siteSettings.showreel_playlist;
             }
             return getDefaultShowreelPlaylist();
         }
 
-        function saveShowreelPlaylistToStorage(playlist) {
-            try {
-                localStorage.setItem(SHOWREEL_PLAYLIST_KEY, JSON.stringify(playlist));
-            } catch (e) {
-                console.error('❌ [saveShowreelPlaylistToStorage] 저장 오류:', e);
-            }
+        async function saveShowreelPlaylistToStorage(playlist) {
+            await saveSiteSettingsToDB({ showreel_playlist: playlist });
         }
 
         let showreelPlaylist = [];
@@ -9263,7 +9589,6 @@
                     window.__heroShowreelClickthrough = false;
                     media.innerHTML = `<iframe src="https://www.youtube.com/embed/${resolved.youtubeId}?autoplay=1&mute=1&controls=0&showinfo=0&rel=0&modestbranding=1&playsinline=1" allow="autoplay; encrypted-media" frameborder="0"></iframe>`;
                     if (muteBtn) muteBtn.style.display = 'none';
-                    // 유튜브 iframe은 'ended' 이벤트를 직접 받기 어려우므로, 지정 시간(또는 기본 12초) 후 전환
                     const seconds = resolved.videoMode === 'timed' ? (resolved.videoSeconds || 8) : 12;
                     showreelAdvanceTimer = setTimeout(advanceShowreel, seconds * 1000);
                 } else if (resolved.type === 'image') {
@@ -9357,7 +9682,7 @@
                     row.classList.remove('drag-over');
                 });
 
-                row.addEventListener('drop', (e) => {
+                row.addEventListener('drop', async (e) => {
                     e.preventDefault();
                     row.classList.remove('drag-over');
 
@@ -9369,7 +9694,7 @@
                             const current = loadShowreelPlaylist();
                             const [moved] = current.splice(fromIndex, 1);
                             current.splice(toIndex, 0, moved);
-                            saveShowreelPlaylistToStorage(current);
+                            await saveShowreelPlaylistToStorage(current);
                             renderShowreelPlaylistUI();
                             initHeroShowreelPlaylist();
                         }
@@ -9404,7 +9729,7 @@
         };
 
         // ===== 재생목록에 새 미디어 추가 =====
-        window.addShowreelPlaylistItem = function() {
+        window.addShowreelPlaylistItem = async function() {
             const type = document.getElementById('newMediaType').value;
             const playlist = loadShowreelPlaylist();
 
@@ -9456,7 +9781,7 @@
             if (!newItem) return;
 
             playlist.push(newItem);
-            saveShowreelPlaylistToStorage(playlist);
+            await saveShowreelPlaylistToStorage(playlist);
             renderShowreelPlaylistUI();
             initHeroShowreelPlaylist();
 
@@ -9466,15 +9791,15 @@
         };
 
         // ===== 재생목록 항목 삭제 =====
-        window.removeShowreelPlaylistItem = function(index) {
+        window.removeShowreelPlaylistItem = async function(index) {
             const playlist = loadShowreelPlaylist();
             playlist.splice(index, 1);
-            saveShowreelPlaylistToStorage(playlist);
+            await saveShowreelPlaylistToStorage(playlist);
             renderShowreelPlaylistUI();
             initHeroShowreelPlaylist();
         };
 
-        // 쇼릴 탭의 "포트폴리오 연동" select를 채우는 공용 함수 (id를 인자로 받아 재사용)
+        // 쇼릴 탭의 "포트폴리오 연동" select를 채우는 공용 함수
         function populateShowreelPortfolioSelect(selectId) {
             const select = document.getElementById(selectId || 'showreelPortfolioSelect');
             if (!select || !Array.isArray(portfolioData)) return;
@@ -9484,55 +9809,9 @@
             ).join('');
         }
 
-        function initHeroShowreel() {
-            const config = loadShowreelConfig();
-            applyShowreelConfig(config);
-            applyShowreelLayout(loadShowreelLayout());
-        }
-
-        // 쇼릴 카드 우측 하단 음소거 토글 버튼 (MP4 재생 모드에서만 동작)
-        window.toggleHeroShowreelMute = function() {
-            const video = document.getElementById('heroShowreelVideo');
-            const btn = document.getElementById('heroShowreelMuteBtn');
-            if (!video || !btn) return;
-
-            video.muted = !video.muted;
-
-            btn.innerHTML = video.muted
-                ? '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><line x1="23" y1="9" x2="17" y2="15"></line><line x1="17" y1="9" x2="23" y2="15"></line></svg>'
-                : '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><path d="M15.54 8.46a5 5 0 0 1 0 7.07"></path><path d="M19.07 4.93a10 10 0 0 1 0 14.14"></path></svg>';
-        };
-
-        // ===== [운영] 쇼릴 설정 탭 UI =====
-        window.switchShowreelSourceType = function(type) {
-            document.querySelectorAll('.showreel-source-btn').forEach(btn => {
-                btn.classList.toggle('active', btn.getAttribute('data-source-type') === type);
-            });
-            document.querySelectorAll('.showreel-source-panel').forEach(panel => {
-                panel.classList.toggle('active', panel.id === 'showreelSourcePanel-' + type);
-            });
-        };
-
-        function renderShowreelCurrentValue() {
-            const el = document.getElementById('showreelCurrentValue');
-            if (!el) return;
-
-            const config = loadShowreelConfig();
-            if (!config) {
-                el.textContent = '기본 쇼릴 영상 (HERO_SHOWREEL_SRC) 재생 중';
-                return;
-            }
-            if (config.sourceType === 'portfolio') {
-                el.textContent = `포트폴리오 영상: ${config.title || config.youtubeId}`;
-            } else if (config.sourceType === 'url') {
-                el.textContent = `외부 URL: ${config.url}`;
-            } else {
-                el.textContent = '기본 쇼릴 영상 (HERO_SHOWREEL_SRC) 재생 중';
-            }
-        }
-
         // 쇼릴 탭이 열릴 때 초기화 (드롭다운 채우기 + 현재 설정 UI 반영)
-        function initShowreelTab() {
+        async function initShowreelTab() {
+            await loadSiteSettings(); // 최신 설정으로 갱신 후 UI 렌더링
             renderShowreelPlaylistUI();
             populateShowreelPortfolioSelect('newMediaPortfolioSelect');
             window.onNewMediaTypeChange();
@@ -9554,71 +9833,31 @@
             }
         }
 
-        // ===== 저장 및 메인 화면에 즉시 반영 =====
-        window.saveShowreelConfig = function() {
-            const activeBtn = document.querySelector('.showreel-source-btn.active');
-            const sourceType = activeBtn ? activeBtn.getAttribute('data-source-type') : 'portfolio';
 
-            let config = null;
+        // 쇼릴 카드 우측 하단 음소거 토글 버튼 (MP4 재생 모드에서만 동작)
+        window.toggleHeroShowreelMute = function() {
+            const video = document.getElementById('heroShowreelVideo');
+            const btn = document.getElementById('heroShowreelMuteBtn');
+            if (!video || !btn) return;
 
-            if (sourceType === 'portfolio') {
-                const select = document.getElementById('showreelPortfolioSelect');
-                const idx = select ? parseInt(select.value, 10) : NaN;
-                const item = !isNaN(idx) ? portfolioData[idx] : null;
+            video.muted = !video.muted;
 
-                if (!item || !item.youtubeId) {
-                    alert('선택한 포트폴리오 영상에 유튜브 ID가 없습니다. 다른 영상을 선택해주세요.');
-                    return;
-                }
-
-                config = {
-                    sourceType: 'portfolio',
-                    portfolioIndex: idx,
-                    youtubeId: item.youtubeId,
-                    title: item.title || ''
-                };
-            } else {
-                const input = document.getElementById('showreelUrlInput');
-                const url = input ? input.value.trim() : '';
-
-                if (!url) {
-                    alert('영상 URL을 입력해주세요.');
-                    return;
-                }
-
-                config = { sourceType: 'url', url: url };
-            }
-
-            saveShowreelConfigToStorage(config);
-            applyShowreelConfig(config);
-            renderShowreelCurrentValue();
-
-            const hint = document.getElementById('showreelSavedHint');
-            if (hint) {
-                hint.textContent = '저장 완료 · 메인 화면에 반영되었습니다.';
-                hint.classList.add('show');
-            }
+            btn.innerHTML = video.muted
+                ? '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><line x1="23" y1="9" x2="17" y2="15"></line><line x1="17" y1="9" x2="23" y2="15"></line></svg>'
+                : '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><path d="M15.54 8.46a5 5 0 0 1 0 7.07"></path><path d="M19.07 4.93a10 10 0 0 1 0 14.14"></path></svg>';
         };
 
-        // ===== 기본값으로 초기화 =====
-        window.resetShowreelConfig = function() {
-            localStorage.removeItem(SHOWREEL_CONFIG_KEY);
-            applyShowreelConfig(null);
-            renderShowreelCurrentValue();
 
-            const hint = document.getElementById('showreelSavedHint');
-            if (hint) {
-                hint.textContent = '기본 쇼릴 영상으로 초기화되었습니다.';
-                hint.classList.add('show');
-            }
-        };
-
-        window.addEventListener('load', function() {
+        window.addEventListener('load', async function() {
             console.log('🚀 [페이지 로드 시작]');
             
-            // 1. portfolioData 로드
+            // 1. portfolioData 로드 (Supabase 'works' 테이블, 공개 페이지이므로 is_visible=true만)
             console.log('📦 portfolioData 로드 중...');
-            loadPortfolioData();
+            const masonryGridEl = document.getElementById('masonryGrid');
+            if (masonryGridEl) {
+                masonryGridEl.innerHTML = '<p style="grid-column: 1/-1; text-align:center; color: var(--text-muted); padding: 60px 0;">포트폴리오를 불러오는 중...</p>';
+            }
+            await loadPortfolioData(true);
             console.log('✅ portfolioData 로드 완료:', portfolioData.length, '개');
             
             // 1-1. 상시 노출 Workflow 패널 초기 렌더링 (기본: AI 영상 트랙)
@@ -9627,11 +9866,16 @@
             // 1-2. 히어로 대표 프로젝트 리스트 렌더링
             renderHeroProjectList();
 
-            // 1-3. 히어로 쇼릴 재생목록(Playlist) 초기화
+            // 1-3. site_settings 로드 (쇼릴 재생목록/위치/크기) 후 히어로 쇼릴 초기화
+            await loadSiteSettings();
             initHeroShowreelPlaylist();
 
-            // 1-4. 보유 장비(Gear) 데이터 로드 및 클라이언트 페이지 렌더링
-            loadGearData();
+            // 1-4. 보유 장비(Gear) 데이터 로드 및 클라이언트 페이지 렌더링 (공개 페이지이므로 is_visible=true만)
+            const gearGridEl = document.getElementById('gearGrid');
+            if (gearGridEl) {
+                gearGridEl.innerHTML = '<p style="color: var(--text-muted); font-size: 13px;">장비 목록을 불러오는 중...</p>';
+            }
+            await loadGearData(true);
             renderGearGrid();
             
             // 2. activeFilters 초기값 설정 (빈 Set = 전체 노출) — '전체' 필터를 명시적 기본값으로 확정
@@ -9644,8 +9888,8 @@
             const masonryGrid = document.getElementById('masonryGrid');
             if (masonryGrid) {
                 console.log('✅ masonryGrid 요소 발견');
-                renderPortfolioGrid();
-                console.log('✅ renderPortfolioGrid 완료');
+                renderPortfolioGridFromCache();
+                console.log('✅ renderPortfolioGridFromCache 완료');
             } else {
                 console.error('❌ masonryGrid 요소를 찾을 수 없습니다!');
             }
