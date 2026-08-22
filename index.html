@@ -6436,70 +6436,77 @@
 
         // ===== 상태 즉시 변경 (드롭다운) =====
         // ===== 견적 문의 → 칸반 프로젝트(projects 테이블) 전환 =====
-        // 카테고리는 프로젝트 유형 문구에 'AI'가 포함되어 있으면 AI 영상 트랙, 그 외에는 유튜브 영상 트랙으로 매핑합니다.
-        function inferCategoryFromProjectType(projectType) {
-            return /ai/i.test(projectType || '') ? 'AI 영상' : '유튜브 영상';
-        }
-
-        async function convertInquiryToProject(id, options) {
-            options = options || {};
-            const inquiry = estimateInquiries.find(inq => String(inq.id) === String(id));
-            if (!inquiry) return false;
-
-            if (convertedInquiryIds.has(String(id))) {
-                if (!options.silent) alert('이미 칸반 프로젝트로 등록된 견적 문의입니다.');
-                return false;
-            }
-
+        // 실제 INSERT 로직은 이 헬퍼 하나로 일원화하고, 버튼 핸들러(window.convertInquiryToProject)와
+        // 상태 자동 전환(updateInquiryStatus) 양쪽에서 재사용합니다.
+        // (이전 버전은 이 로직을 담은 함수와 window.convertInquiryToProject 두 개가 같은 이름을
+        //  사용해 전역에서 서로를 덮어써 버튼을 누르면 무한 재귀/자기 자신 호출이 발생했습니다.)
+        async function insertProjectFromInquiry(inquiry) {
             if (!sbClient) {
-                if (!options.silent) alert('데이터베이스에 연결할 수 없어 칸반 프로젝트를 생성하지 못했습니다.');
-                return false;
+                return { success: false, error: { message: 'Supabase 연결이 필요합니다.' } };
             }
 
-            const category = inferCategoryFromProjectType(inquiry.projectType);
-            const projectTitle = inquiry.company
-                ? `${inquiry.company} - ${inquiry.projectType || '견적 문의'}`
-                : `${inquiry.clientName} - ${inquiry.projectType || '견적 문의'}`;
+            // 카테고리 판별 (AI 영상 키워드가 포함되면 'AI 영상', 그 외에는 '유튜브 영상')
+            const isAI = (inquiry.projectType || '').includes('AI');
+            const category = isAI ? 'AI 영상' : '유튜브 영상';
 
             const payload = {
-                client_name: inquiry.clientName,
-                phone: inquiry.phone,
-                project_title: projectTitle,
+                client_name: inquiry.clientName || '이름 미입력',
+                phone: inquiry.phone || '',
+                project_title: inquiry.projectType ? `${inquiry.projectType} 제작` : '신규 프로젝트',
                 category: category,
-                plan_type: inquiry.projectType || '',
+                plan_type: inquiry.projectType || '단순 컷편집',
+                status_step: 1, // 1단계부터 시작
+                deadline_info: inquiry.deadline || '협의 중',
                 revision_count: 0,
-                deadline_info: inquiry.deadline || '',
-                status_step: 1,
                 updated_at: new Date().toISOString()
             };
 
             try {
-                const { error } = await sbClient.from('projects').insert([payload]);
+                const { data, error } = await sbClient.from('projects').insert([payload]).select();
                 if (error) {
-                    console.error('❌ [convertInquiryToProject] Supabase 오류:', error);
-                    if (!options.silent) alert('칸반 프로젝트 등록에 실패했습니다: ' + error.message);
-                    return false;
+                    console.error('❌ [칸반 등록 실패]:', error);
+                    return { success: false, error };
                 }
-
-                convertedInquiryIds.add(String(id));
-                if (!options.silent) {
-                    alert('칸반 보드에 새 프로젝트로 등록되었습니다. (' + category + ' 트랙 · 01단계)');
-                }
-                if (String(currentOpenInquiryId) === String(id)) {
-                    renderInquiryDetail(id);
-                }
-                return true;
+                convertedInquiryIds.add(String(inquiry.id));
+                return { success: true, data, category };
             } catch (err) {
-                console.error('❌ [convertInquiryToProject] 예외 발생:', err);
-                if (!options.silent) alert('칸반 프로젝트 등록 중 오류가 발생했습니다: ' + (err && err.message ? err.message : err));
-                return false;
+                console.error('❌ [insertProjectFromInquiry 예외]:', err);
+                return { success: false, error: err };
             }
         }
 
         // 상세 패널의 "[칸반 프로젝트로 등록]" 버튼용 핸들러
-        window.convertInquiryToProject = function(id) {
+        window.convertInquiryToProject = async function(inquiryId) {
+            const inquiry = estimateInquiries.find(inq => String(inq.id) === String(inquiryId));
+            if (!inquiry) {
+                alert('견적 정보를 찾을 수 없습니다.');
+                return;
+            }
+            if (convertedInquiryIds.has(String(inquiryId))) {
+                alert('이미 칸반 프로젝트로 등록된 견적 문의입니다.');
+                return;
+            }
             if (!confirm('이 견적 문의를 칸반 보드에 새 프로젝트로 등록하시겠습니까?')) return;
-            convertInquiryToProject(id);
+            if (!sbClient) {
+                alert('Supabase 연결이 필요합니다.');
+                return;
+            }
+
+            const result = await insertProjectFromInquiry(inquiry);
+            if (!result.success) {
+                alert('칸반 프로젝트 등록에 실패했습니다: ' + (result.error && result.error.message ? result.error.message : result.error));
+                return;
+            }
+
+            // 견적 상태도 '수주'로 자동 업데이트 (이미 convertedInquiryIds에 등록했으므로
+            // updateInquiryStatus 내부의 자동 전환 로직은 중복 실행 없이 건너뜁니다)
+            await window.updateInquiryStatus(inquiryId, '수주');
+
+            alert('✅ 칸반 보드에 새 프로젝트로 성공적으로 등록되었습니다!');
+            window.closeInquiryDetail();
+
+            // 칸반 탭으로 이동 및 최신 데이터 로드
+            window.switchOpsTab('kanban');
         };
 
         window.updateInquiryStatus = async function(id, newStatus) {
@@ -6527,12 +6534,15 @@
                     renderInquiryTable();
                 } else if (newStatus === '수주' && !convertedInquiryIds.has(String(id))) {
                     // 상태가 '수주'로 바뀌면 자동으로 칸반 프로젝트를 생성 (이미 등록된 건 건너뜀)
-                    const created = await convertInquiryToProject(id, { silent: true });
-                    if (created) {
+                    // 확인창/alert 없이 조용히 처리 — 드롭다운 변경만으로 팝업이 뜨는 것을 방지합니다.
+                    const conversionResult = await insertProjectFromInquiry(inquiry);
+                    if (conversionResult.success) {
                         console.log('✅ [updateInquiryStatus] 상태 변경과 함께 칸반 프로젝트 자동 등록됨:', inquiry.clientName);
                         if (String(currentOpenInquiryId) === String(id)) {
                             renderInquiryDetail(id);
                         }
+                    } else {
+                        console.error('❌ [updateInquiryStatus] 자동 칸반 등록 실패:', conversionResult.error);
                     }
                 }
             } catch (err) {
