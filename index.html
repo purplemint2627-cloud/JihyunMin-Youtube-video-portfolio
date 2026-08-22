@@ -70,7 +70,7 @@
             --text-muted: #A0A0A5;       /* 보조 메타데이터 텍스트 */
             --text-faint: #D1D1D6;       /* 설명 텍스트 */
             --line: rgba(255, 255, 255, 0.08);  /* 헤어라인 구분선 */
-            --accent: #D4FF00;           /* 브랜드 포인트 컬러 (애시드 라임) */
+            --accent: #FCFB76;           /* 브랜드 포인트 컬러 (부드러운 레몬/버터 옐로우) */
             --accent-text: #0A0A0A;      /* 라임 배경 위에 올라가는 텍스트(항상 블랙) */
         }
  
@@ -210,11 +210,175 @@
         /* ===== A24 에디토리얼 히어로: 대표 프로젝트 리스트 + 호버 프리뷰 ===== */
         /* ===== A24 에디토리얼 히어로: 대표 프로젝트 리스트 (좌측 하단 정렬, 보더 라인 없음) ===== */
         .hero-editorial {
-            align-items: flex-start !important;
-            justify-content: flex-end !important;
+            display: flex !important;
+            flex-direction: row !important;
+            align-items: flex-end !important;
+            justify-content: space-between !important;
             text-align: left !important;
-            max-width: 760px;
+            max-width: 1180px;
             width: 100%;
+            gap: 48px;
+        }
+
+        .hero-text-col {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .hero-video-col {
+            flex-shrink: 0;
+        }
+
+        /* ===== 쇼릴(Showreel) 무한 루프 비디오 카드 ===== */
+        .hero-showreel-card {
+            position: relative;
+            width: 320px;
+            max-width: 88vw;
+            aspect-ratio: 9 / 16;
+            max-height: 74vh;
+            border-radius: 32px;
+            overflow: hidden;
+            border: 1px solid rgba(0, 0, 0, 0.1);
+            box-shadow: 0 24px 50px -18px rgba(0, 0, 0, 0.22), 0 0 0 1px rgba(0, 0, 0, 0.05);
+            background: #0A0A0A;
+            cursor: pointer;
+            transition: transform 0.35s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.35s ease;
+        }
+
+        @media (min-width: 860px) {
+            .hero-showreel-card {
+                width: 380px;
+            }
+        }
+
+        @media (min-width: 1024px) {
+            .hero-showreel-card {
+                width: 460px;
+            }
+        }
+
+        @media (min-width: 1280px) {
+            .hero-showreel-card {
+                width: 500px;
+            }
+        }
+
+        .hero-showreel-card::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            border-radius: inherit;
+            box-shadow: inset 0 0 0 1px rgba(252, 251, 118, 0.25);
+            pointer-events: none;
+        }
+
+        .hero-showreel-card:hover {
+            transform: scale(1.015);
+            box-shadow: 0 30px 60px -18px rgba(0, 0, 0, 0.28), 0 0 0 1px rgba(0, 0, 0, 0.06);
+        }
+
+        .hero-showreel-media {
+            position: absolute;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+        }
+
+        .hero-showreel-video {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+
+        .hero-showreel-media iframe {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 100%;
+            height: 100%;
+            min-width: 178%;
+            min-height: 178%;
+            transform: translate(-50%, -50%);
+            border: none;
+            pointer-events: none;
+        }
+
+        .hero-showreel-badge {
+            position: absolute;
+            top: 14px;
+            left: 14px;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 6px 11px;
+            background: rgba(10, 10, 10, 0.65);
+            backdrop-filter: blur(4px);
+            border-radius: 20px;
+            color: #FFFFFF;
+            font-size: 10px;
+            font-weight: 800;
+            letter-spacing: 0.06em;
+            text-transform: uppercase;
+            z-index: 2;
+        }
+
+        .hero-showreel-badge-dot {
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: #FF4D4D;
+            flex-shrink: 0;
+            animation: pulseDot 1.6s ease-in-out infinite;
+        }
+
+        @keyframes pulseDot {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.35; }
+        }
+
+        .hero-showreel-mute-btn {
+            position: absolute;
+            bottom: 14px;
+            right: 14px;
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: rgba(10, 10, 10, 0.65);
+            backdrop-filter: blur(4px);
+            border: none;
+            color: #FFFFFF;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            z-index: 2;
+            transition: background 0.2s ease;
+        }
+
+        .hero-showreel-mute-btn:hover {
+            background: rgba(10, 10, 10, 0.85);
+        }
+
+        @media (max-width: 860px) {
+            .hero-editorial {
+                flex-direction: column !important;
+                align-items: flex-start !important;
+            }
+
+            .hero-video-col {
+                order: 2;
+                align-self: center;
+                margin-top: 32px;
+            }
+
+            .hero-showreel-card {
+                width: 280px;
+                max-height: 62vh;
+            }
         }
 
         .hero-eyebrow {
@@ -232,6 +396,7 @@
             justify-content: flex-end;
             gap: 12px;
             width: 100%;
+            margin-top: 28px;
         }
 
         .hero-project-item {
@@ -256,15 +421,15 @@
         .hero-project-title {
             display: inline-block;
             font-family: 'Inter', 'Helvetica Neue', 'Pretendard', sans-serif;
-            font-size: clamp(32px, 5vw, 64px);
-            font-weight: 800;
-            line-height: 1.1;
-            letter-spacing: -0.02em;
+            font-size: clamp(72px, 14vw, 220px);
+            font-weight: 900;
+            line-height: 0.92;
+            letter-spacing: -0.03em;
             color: #FFFFFF;
         }
 
         .hero-project-title sup {
-            font-size: 0.28em;
+            font-size: 0.22em;
             font-weight: 700;
             color: var(--accent);
             margin-left: 6px;
@@ -404,13 +569,37 @@
         .landing-contact-link:hover {
             opacity: 0.55;
         }
+        /* ===== 메인 히어로 전용 옐로우 테마 (다른 섹션에는 영향 없음) ===== */
+        #landing {
+            --dark: #FCFB76;
+            --text: #000000;
+            --text-muted: #1A1A1A;
+            --text-faint: #1A1A1A;
+            --line: rgba(0, 0, 0, 0.18);
+            --accent: #000000;
+            --accent-text: #FCFB76;
+        }
+
+        #landing .hero-project-title {
+            color: #000000;
+        }
+
  
         @media (max-width: 640px) {
             .landing-footer-row {
                 flex-direction: column;
                 align-items: flex-start;
             }
+
+            .hero-project-title {
+                font-size: clamp(48px, 15vw, 96px);
+            }
+
+            .hero-editorial {
+                max-width: 100%;
+            }
         }
+
  
         .cta-button {
             padding: 16px 48px;
@@ -539,11 +728,11 @@
         .nav-container {
             max-width: 1400px;
             margin: 0 auto;
-            padding: 20px 40px;
+            padding: 18px 40px;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            gap: 16px;
+            gap: 24px;
         }
 
         .nav-brand {
@@ -554,16 +743,43 @@
             text-transform: uppercase;
             color: var(--text);
             text-align: left;
+            flex-shrink: 0;
+        }
+
+        /* 데스크톱 가로 GNB 메뉴 */
+        .nav-links-inline {
+            display: flex;
+            align-items: center;
+            gap: 30px;
+            flex: 1;
+            justify-content: center;
+        }
+
+        .nav-links-inline a {
+            font-family: 'Pretendard', 'Inter', sans-serif;
+            font-size: 13.5px;
+            font-weight: 700;
+            color: var(--text-muted);
+            cursor: pointer;
+            white-space: nowrap;
+            transition: color 0.2s ease;
+        }
+
+        .nav-links-inline a:hover,
+        .nav-links-inline a.active {
+            color: var(--text);
         }
 
         .nav-right-group {
             display: flex;
             align-items: center;
             gap: 20px;
+            flex-shrink: 0;
         }
 
+        /* 모바일 전용 햄버거 버튼 — 데스크톱에서는 숨김 */
         .nav-menu-btn {
-            display: inline-flex;
+            display: none;
             align-items: center;
             gap: 8px;
             background: transparent;
@@ -581,6 +797,16 @@
             opacity: 0.6;
         }
 
+        @media (max-width: 900px) {
+            .nav-links-inline {
+                display: none;
+            }
+
+            .nav-menu-btn {
+                display: inline-flex;
+            }
+        }
+
         .nav-quick-estimate-btn {
             background: var(--accent);
             color: var(--accent-text);
@@ -596,7 +822,7 @@
 
         .nav-quick-estimate-btn:hover {
             transform: translateY(-1px);
-            box-shadow: 0 6px 18px rgba(212, 255, 0, 0.25);
+            box-shadow: 0 6px 18px rgba(252, 251, 118, 0.25);
         }
 
         /* ===== 좌측 슬라이드 드로어 ===== */
@@ -881,7 +1107,7 @@
 
         .drawer-contact-chip:hover {
             border-color: var(--accent);
-            background: rgba(212, 255, 0, 0.12);
+            background: rgba(252, 251, 118, 0.12);
         }
 
         .drawer-admin-trigger {
@@ -906,6 +1132,28 @@
             border-color: #A1A1AA;
             background: #E4E4E7;
             color: #18181B;
+        }
+
+        /* 푸터 하단 미니멀 어드민 진입 링크 (전체 화면/드로어 닫힘 상태에서도 접근 가능) */
+        .footer-admin-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            background: transparent;
+            border: none;
+            color: #71717A;
+            font-size: 10.5px;
+            font-weight: 600;
+            letter-spacing: 0.03em;
+            cursor: pointer;
+            padding: 4px 8px;
+            border-radius: 20px;
+            transition: color 0.2s ease, background 0.2s ease;
+        }
+
+        .footer-admin-link:hover {
+            color: var(--text);
+            background: rgba(255, 255, 255, 0.06);
         }
 
 
@@ -1877,7 +2125,8 @@
         .about-title {
             display: inline-block;
             font-family: 'Pretendard', 'Inter', sans-serif;
-            border: 2px solid var(--text);
+            border: 2px solid var(--accent);
+            color: var(--accent);
             padding: 16px 24px;
             margin-bottom: 60px;
             font-size: 24px;
@@ -1895,17 +2144,17 @@
             font-size: 15px;
             font-weight: 400;
             line-height: 1.95;
-            color: #FFFFFF;
+            color: #D4D4D8;
             margin-bottom: 22px;
         }
  
         .about-content strong {
             font-weight: 700;
-            color: #1A1A1A;
+            color: #FFFFFF;
         }
 
         .about-content strong.highlight {
-            color: #FFFFFF;
+            color: var(--accent);
             font-weight: 800;
         }
 
@@ -1913,9 +2162,9 @@
             display: block;
             font-family: 'Pretendard', 'Inter', sans-serif;
             font-size: 19px;
-            font-weight: 700;
+            font-weight: 800;
             letter-spacing: -0.2px;
-            color: #FFFFFF;
+            color: var(--accent);
             margin-top: 44px;
             margin-bottom: 18px;
         }
@@ -1981,7 +2230,7 @@
 
         .pricing-card.featured {
             border-color: var(--accent);
-            background: linear-gradient(180deg, rgba(212, 255, 0, 0.07) 0%, var(--dark-secondary) 100%);
+            background: linear-gradient(180deg, rgba(252, 251, 118, 0.07) 0%, var(--dark-secondary) 100%);
         }
 
         .pricing-badge {
@@ -3080,6 +3329,20 @@
             border-radius: 6px;
             padding: 12px 14px;
             box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+            cursor: grab;
+            transition: opacity 0.15s ease, transform 0.15s ease, box-shadow 0.15s ease;
+        }
+
+        .kanban-card.dragging {
+            opacity: 0.4;
+            transform: scale(0.97);
+        }
+
+        .kanban-cards.drag-over {
+            background: rgba(252, 251, 118, 0.06);
+            outline: 2px dashed rgba(252, 251, 118, 0.4);
+            outline-offset: -4px;
+            border-radius: 6px;
         }
 
         .kanban-card-title {
@@ -3088,6 +3351,32 @@
             color: #FFFFFF;
             margin-bottom: 4px;
             letter-spacing: -0.02em;
+            cursor: pointer;
+        }
+
+        .kanban-card-title:hover {
+            color: var(--accent);
+        }
+
+        .kanban-card-dday {
+            display: inline-block;
+            font-size: 10px;
+            font-weight: 800;
+            padding: 2px 7px;
+            border-radius: 10px;
+            margin-bottom: 8px;
+            background: rgba(255, 255, 255, 0.08);
+            color: #D1D1D6;
+        }
+
+        .kanban-card-dday.urgent {
+            background: rgba(255, 107, 107, 0.15);
+            color: #FF6B6B;
+        }
+
+        .kanban-card-dday.today {
+            background: rgba(252, 251, 118, 0.15);
+            color: var(--accent);
         }
 
         .kanban-card-meta {
@@ -3223,6 +3512,309 @@
             background: transparent;
             border: 1px solid var(--line) !important;
             color: #FFFFFF;
+        }
+
+        /* ===== 칸반 카드 상세 모달 ===== */
+        .card-detail-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.6);
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+            z-index: 4400;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .card-detail-overlay.active {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .card-detail-modal {
+            background: #141416;
+            border: 1px solid var(--line);
+            border-radius: 12px;
+            width: 100%;
+            max-width: 480px;
+            max-height: 88vh;
+            overflow-y: auto;
+        }
+
+        .card-detail-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            padding: 22px 24px;
+            border-bottom: 1px solid var(--line);
+            position: sticky;
+            top: 0;
+            background: #141416;
+            z-index: 1;
+        }
+
+        .card-detail-title {
+            font-size: 17px;
+            font-weight: 800;
+            color: #FFFFFF;
+            margin-bottom: 4px;
+        }
+
+        .card-detail-subtitle {
+            font-size: 11.5px;
+            color: #A0A0A5;
+        }
+
+        .card-detail-body {
+            padding: 22px 24px 26px 24px;
+            display: flex;
+            flex-direction: column;
+            gap: 26px;
+        }
+
+        .card-detail-section-title {
+            font-size: 11px;
+            font-weight: 800;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            color: #A0A0A5;
+            margin-bottom: 12px;
+        }
+
+        .card-detail-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+        }
+
+        .card-detail-field label {
+            display: block;
+            font-size: 11px;
+            color: #A0A0A5;
+            margin-bottom: 6px;
+        }
+
+        .card-detail-field input,
+        .card-detail-field select {
+            width: 100%;
+            padding: 9px 10px;
+            background: #1C1C1F;
+            border: 1px solid var(--line);
+            border-radius: 6px;
+            color: #FFFFFF;
+            font-size: 13px;
+            font-family: 'Pretendard', 'Inter', sans-serif;
+            box-sizing: border-box;
+        }
+
+        .card-detail-dday-row {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-top: 10px;
+        }
+
+        .card-detail-dday-badge {
+            font-size: 12px;
+            font-weight: 800;
+            padding: 5px 12px;
+            border-radius: 20px;
+            background: rgba(255, 255, 255, 0.08);
+            color: #D1D1D6;
+        }
+
+        .card-detail-dday-badge.urgent {
+            background: rgba(255, 107, 107, 0.15);
+            color: #FF6B6B;
+        }
+
+        .card-detail-dday-badge.today {
+            background: rgba(252, 251, 118, 0.15);
+            color: var(--accent);
+        }
+
+        .version-tabs {
+            display: flex;
+            gap: 6px;
+            margin-bottom: 14px;
+        }
+
+        .version-tab-btn {
+            flex: 1;
+            padding: 8px 6px;
+            border: 1px solid var(--line);
+            background: transparent;
+            border-radius: 6px;
+            font-size: 12px;
+            font-weight: 700;
+            color: #A0A0A5;
+            cursor: pointer;
+            transition: all 0.15s ease;
+        }
+
+        .version-tab-btn.active {
+            background: #FFFFFF;
+            border-color: #FFFFFF;
+            color: #0A0A0A;
+        }
+
+        .checklist-items {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            margin-bottom: 12px;
+        }
+
+        .checklist-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 9px 10px;
+            background: #1C1C1F;
+            border: 1px solid var(--line);
+            border-radius: 6px;
+        }
+
+        .checklist-item input[type="checkbox"] {
+            width: 16px;
+            height: 16px;
+            accent-color: var(--accent);
+            cursor: pointer;
+            flex-shrink: 0;
+        }
+
+        .checklist-item-text {
+            flex: 1;
+            font-size: 13px;
+            color: #FFFFFF;
+        }
+
+        .checklist-item.done .checklist-item-text {
+            color: #71717A;
+            text-decoration: line-through;
+        }
+
+        .checklist-item button {
+            background: none;
+            border: none;
+            color: #A0A0A5;
+            cursor: pointer;
+            flex-shrink: 0;
+            display: flex;
+        }
+
+        .checklist-item button:hover {
+            color: #FF6B6B;
+        }
+
+        .checklist-empty {
+            font-size: 12px;
+            color: #A0A0A5;
+            margin-bottom: 12px;
+        }
+
+        .checklist-add-row {
+            display: flex;
+            gap: 8px;
+        }
+
+        .checklist-add-row input {
+            flex: 1;
+            padding: 9px 10px;
+            background: #1C1C1F;
+            border: 1px solid var(--line);
+            border-radius: 6px;
+            color: #FFFFFF;
+            font-size: 12px;
+            box-sizing: border-box;
+        }
+
+        .checklist-add-btn {
+            padding: 9px 14px;
+            background: var(--accent);
+            color: var(--accent-text);
+            border: none;
+            border-radius: 6px;
+            font-size: 12px;
+            font-weight: 700;
+            cursor: pointer;
+            white-space: nowrap;
+        }
+
+        /* ===== 쇼릴 / 대표 영상 설정 (Ops 탭) ===== */
+        .showreel-settings-card {
+            max-width: 640px;
+            background: #141416;
+            border: 1px solid var(--line);
+            border-radius: 12px;
+            padding: 28px;
+        }
+
+        .showreel-settings-desc {
+            font-size: 13px;
+            color: #A0A0A5;
+            line-height: 1.7;
+            margin-bottom: 22px;
+        }
+
+        .showreel-source-toggle {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 20px;
+        }
+
+        .showreel-source-btn {
+            flex: 1;
+            padding: 10px 12px;
+            border: 1px solid var(--line);
+            background: transparent;
+            border-radius: 8px;
+            font-size: 12.5px;
+            font-weight: 700;
+            color: #A0A0A5;
+            cursor: pointer;
+            transition: all 0.15s ease;
+        }
+
+        .showreel-source-btn.active {
+            background: #FFFFFF;
+            border-color: #FFFFFF;
+            color: #0A0A0A;
+        }
+
+        .showreel-source-panel {
+            display: none;
+        }
+
+        .showreel-source-panel.active {
+            display: block;
+        }
+
+        .showreel-settings-actions {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-top: 22px;
+            flex-wrap: wrap;
+        }
+
+        .showreel-current-preview {
+            margin-top: 26px;
+            padding-top: 22px;
+            border-top: 1px solid var(--line);
+        }
+
+        .showreel-current-value {
+            font-size: 13px;
+            color: #FFFFFF;
+            word-break: break-all;
+            background: #1C1C1F;
+            border: 1px solid var(--line);
+            border-radius: 6px;
+            padding: 10px 12px;
         }
 
         /* ===== [운영] 페이지 (Operation Hub) ===== */
@@ -3467,6 +4059,371 @@
             background: #1C1C1F;
         }
 
+        /* ===== 견적 문의 내역 관리 ===== */
+        .inquiry-status-filter {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        .inquiry-filter-btn {
+            padding: 7px 14px;
+            border: 1px solid var(--line);
+            background: transparent;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+            color: #A0A0A5;
+            cursor: pointer;
+            transition: all 0.15s ease;
+        }
+
+        .inquiry-filter-btn:hover {
+            border-color: #FFFFFF;
+            color: #FFFFFF;
+        }
+
+        .inquiry-filter-btn.active {
+            background: #FFFFFF;
+            border-color: #FFFFFF;
+            color: #0A0A0A;
+        }
+
+        .inquiry-table-wrap {
+            overflow-x: auto;
+            border: 1px solid var(--line);
+            border-radius: 10px;
+        }
+
+        .inquiry-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 13px;
+            min-width: 760px;
+        }
+
+        .inquiry-table thead {
+            background: #141416;
+        }
+
+        .inquiry-table th {
+            text-align: left;
+            padding: 12px 16px;
+            font-size: 10.5px;
+            font-weight: 800;
+            letter-spacing: 0.06em;
+            text-transform: uppercase;
+            color: #A0A0A5;
+            border-bottom: 1px solid var(--line);
+            white-space: nowrap;
+        }
+
+        .inquiry-table td {
+            padding: 14px 16px;
+            border-bottom: 1px solid var(--line);
+            color: #FFFFFF;
+            vertical-align: middle;
+        }
+
+        .inquiry-table tbody tr {
+            cursor: pointer;
+            transition: background 0.15s ease;
+        }
+
+        .inquiry-table tbody tr:hover {
+            background: rgba(255, 255, 255, 0.03);
+        }
+
+        .inquiry-table tbody tr:last-child td {
+            border-bottom: none;
+        }
+
+        .inquiry-cell-sub {
+            display: block;
+            font-size: 11px;
+            color: #A0A0A5;
+            margin-top: 2px;
+        }
+
+        .inquiry-status-select {
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-size: 11.5px;
+            font-weight: 700;
+            border: 1px solid;
+            cursor: pointer;
+            background-color: transparent;
+        }
+
+        .inquiry-status-select.status-접수 {
+            color: #D1D1D6;
+            border-color: rgba(255, 255, 255, 0.25);
+            background: rgba(255, 255, 255, 0.06);
+        }
+
+        .inquiry-status-select.status-상담중 {
+            color: #FFC94A;
+            border-color: rgba(255, 201, 74, 0.4);
+            background: rgba(255, 201, 74, 0.1);
+        }
+
+        .inquiry-status-select.status-수주 {
+            color: var(--accent);
+            border-color: rgba(252, 251, 118, 0.4);
+            background: rgba(252, 251, 118, 0.1);
+        }
+
+        .inquiry-status-select.status-취소 {
+            color: #FF6B6B;
+            border-color: rgba(255, 107, 107, 0.4);
+            background: rgba(255, 107, 107, 0.1);
+        }
+
+        .inquiry-detail-link-btn {
+            padding: 7px 14px;
+            border: 1px solid var(--line);
+            background: transparent;
+            color: #FFFFFF;
+            font-size: 11.5px;
+            font-weight: 700;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.15s ease;
+        }
+
+        .inquiry-detail-link-btn:hover {
+            border-color: #FFFFFF;
+            background: rgba(255, 255, 255, 0.06);
+        }
+
+        /* 상세 슬라이드 오버 패널 */
+        .inquiry-detail-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.6);
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+            z-index: 4200;
+        }
+
+        .inquiry-detail-overlay.active {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .inquiry-detail-panel {
+            position: fixed;
+            top: 0;
+            right: -460px;
+            width: 440px;
+            max-width: 92vw;
+            height: 100vh;
+            overflow-y: auto;
+            background: #141416;
+            border-left: 1px solid var(--line);
+            box-shadow: -8px 0 32px rgba(0, 0, 0, 0.5);
+            z-index: 4250;
+            transition: right 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+        }
+
+        .inquiry-detail-panel.open {
+            right: 0;
+        }
+
+        .inquiry-detail-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            padding: 24px;
+            border-bottom: 1px solid var(--line);
+            position: sticky;
+            top: 0;
+            background: #141416;
+            z-index: 1;
+        }
+
+        .inquiry-detail-eyebrow {
+            font-size: 10px;
+            font-weight: 800;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            color: var(--accent);
+            margin-bottom: 6px;
+        }
+
+        .inquiry-detail-title {
+            font-size: 18px;
+            font-weight: 800;
+            color: #FFFFFF;
+        }
+
+        .inquiry-detail-body {
+            padding: 24px;
+            display: flex;
+            flex-direction: column;
+            gap: 30px;
+        }
+
+        .inquiry-detail-section-title {
+            font-size: 11px;
+            font-weight: 800;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            color: #A0A0A5;
+            margin-bottom: 14px;
+        }
+
+        .inquiry-detail-field {
+            margin-bottom: 14px;
+        }
+
+        .inquiry-detail-field:last-child {
+            margin-bottom: 0;
+        }
+
+        .inquiry-detail-field-label {
+            font-size: 11px;
+            color: #A0A0A5;
+            margin-bottom: 4px;
+        }
+
+        .inquiry-detail-field-value {
+            font-size: 14px;
+            color: #FFFFFF;
+            line-height: 1.65;
+            white-space: pre-wrap;
+        }
+
+        .work-link-chip-list {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            margin-bottom: 14px;
+        }
+
+        .work-link-chip {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 8px;
+            padding: 10px 12px;
+            background: #1C1C1F;
+            border: 1px solid var(--line);
+            border-radius: 8px;
+        }
+
+        .work-link-chip a {
+            color: #FFFFFF;
+            font-size: 13px;
+            font-weight: 600;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            flex: 1;
+        }
+
+        .work-link-chip a:hover {
+            color: var(--accent);
+        }
+
+        .work-link-chip button {
+            background: none;
+            border: none;
+            color: #A0A0A5;
+            cursor: pointer;
+            flex-shrink: 0;
+            display: flex;
+            align-items: center;
+            transition: color 0.15s ease;
+        }
+
+        .work-link-chip button:hover {
+            color: #FF6B6B;
+        }
+
+        .work-link-empty {
+            font-size: 12px;
+            color: #A0A0A5;
+            margin-bottom: 14px;
+        }
+
+        .work-link-add-row {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .work-link-add-row input {
+            width: 100%;
+            padding: 9px 10px;
+            background: #1C1C1F;
+            border: 1px solid var(--line);
+            border-radius: 6px;
+            color: #FFFFFF;
+            font-size: 12px;
+            box-sizing: border-box;
+        }
+
+        .work-link-add-btn {
+            padding: 9px 14px;
+            background: var(--accent);
+            color: var(--accent-text);
+            border: none;
+            border-radius: 6px;
+            font-size: 12px;
+            font-weight: 700;
+            cursor: pointer;
+            white-space: nowrap;
+        }
+
+        .inquiry-notes-textarea {
+            width: 100%;
+            min-height: 120px;
+            padding: 12px;
+            background: #1C1C1F;
+            border: 1px solid var(--line);
+            border-radius: 8px;
+            color: #FFFFFF;
+            font-size: 13px;
+            font-family: 'Pretendard', 'Inter', sans-serif;
+            resize: vertical;
+            margin-bottom: 10px;
+            box-sizing: border-box;
+        }
+
+        .inquiry-notes-actions {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .inquiry-notes-save-btn {
+            padding: 9px 16px;
+            background: #FFFFFF;
+            color: #0A0A0A;
+            border: none;
+            border-radius: 6px;
+            font-size: 12px;
+            font-weight: 700;
+            cursor: pointer;
+        }
+
+        .inquiry-notes-saved-hint {
+            font-size: 11px;
+            color: #A0A0A5;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .inquiry-notes-saved-hint.show {
+            opacity: 1;
+        }
+
         @media (max-width: 768px) {
             .ops-summary-grid {
                 grid-template-columns: repeat(2, 1fr);
@@ -3496,15 +4453,37 @@
 <body>
     <!-- 랜딩 페이지 -->
     <section class="landing-page" id="landing">
-        <div class="landing-content">
-            <div class="hero-eyebrow">영상제작 스튜디오</div>
-            <div class="hero-project-list">
-                <div class="hero-project-item" style="cursor: default;">
-                    <span class="hero-project-title">EGG STUDIO<sup>2026</sup></span>
+        <div class="landing-content hero-editorial">
+            <div class="hero-text-col">
+                <div class="hero-eyebrow">영상제작 스튜디오</div>
+                <p class="landing-subtitle"><strong class="landing-subtitle-lead">1인 영상 제작사 Egg Studio를 운영하고 있는 민지현입니다.</strong><br>유튜브 콘텐츠부터 브랜디드 필름, AI 영상 연출까지. 몰입감 있는 서사로 브랜드의 가치를 높이는 영상 프로젝트를 만듭니다.</p>
+                <div class="hero-project-list">
+                    <div class="hero-project-item" style="cursor: default;">
+                        <span class="hero-project-title">EGG STUDIO<sup>2026</sup></span>
+                    </div>
+                </div>
+                <div class="hero-scroll-cue" onclick="showPage('work')">↓ Explore Works</div>
+            </div>
+
+            <div class="hero-video-col">
+                <div class="hero-showreel-card" id="heroShowreelCard" onclick="if(window.__heroShowreelClickthrough !== false) showPage('work')">
+                    <span class="hero-showreel-badge"><span class="hero-showreel-badge-dot"></span>SHOWREEL 2026</span>
+                    <div class="hero-showreel-media" id="heroShowreelMedia">
+                        <video
+                            class="hero-showreel-video"
+                            id="heroShowreelVideo"
+                            autoplay
+                            muted
+                            loop
+                            playsinline
+                            poster="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 360 640'%3E%3Crect width='360' height='640' fill='%230A0A0A'/%3E%3C/svg%3E"
+                        ></video>
+                    </div>
+                    <button type="button" class="hero-showreel-mute-btn" onclick="event.stopPropagation(); window.toggleHeroShowreelMute();" id="heroShowreelMuteBtn" aria-label="음소거 전환" title="음소거 전환">
+                        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><line x1="23" y1="9" x2="17" y2="15"></line><line x1="17" y1="9" x2="23" y2="15"></line></svg>
+                    </button>
                 </div>
             </div>
-            <p class="landing-subtitle"><strong class="landing-subtitle-lead">1인 영상 제작사 Egg Studio를 운영하고 있는 민지현입니다.</strong><br>유튜브 콘텐츠부터 브랜디드 필름, AI 영상 연출까지. 몰입감 있는 서사로 브랜드의 가치를 높이는 영상 프로젝트를 만듭니다.</p>
-            <div class="hero-scroll-cue" onclick="showPage('work')">↓ Explore Works</div>
         </div>
         <div class="landing-footer-row">
             <span class="landing-year">©2026</span>
@@ -3516,6 +4495,14 @@
     <nav>
         <div class="nav-container container">
             <div class="nav-brand" onclick="scrollToLanding()" style="cursor: pointer;">EGG STUDIO</div>
+            <div class="nav-links-inline">
+                <a data-page="work" onclick="showPage('work')">Work</a>
+                <a data-page="about" onclick="showPage('about')">About</a>
+                <a data-page="pricing" onclick="showPage('pricing')">Pricing</a>
+                <a data-page="estimate" onclick="showPage('estimate')">Estimate</a>
+                <a data-page="clienthub" onclick="showPage('clienthub')">Client Hub</a>
+                <a data-page="contact" onclick="showPage('contact')">Contact</a>
+            </div>
             <div class="nav-right-group">
                 <button class="nav-quick-estimate-btn" onclick="showPage('estimate')">빠른 견적 문의</button>
                 <button class="nav-menu-btn" onclick="window.openDrawer()" aria-label="메뉴 열기">
@@ -3671,7 +4658,9 @@
                 </div>
                 <div class="ops-tab-switcher">
                     <button class="ops-tab-switch-btn active" data-ops-tab="kanban" onclick="window.switchOpsTab('kanban')">클라이언트 진행 현황 (Kanban)</button>
+                    <button class="ops-tab-switch-btn" data-ops-tab="inquiries" onclick="window.switchOpsTab('inquiries')">견적 문의 내역</button>
                     <button class="ops-tab-switch-btn" data-ops-tab="portfolio" onclick="window.switchOpsTab('portfolio')">포트폴리오 관리</button>
+                    <button class="ops-tab-switch-btn" data-ops-tab="showreel" onclick="window.switchOpsTab('showreel')">쇼릴 / 대표 영상 설정</button>
                     <button class="ops-tab-switch-btn ops-logout-btn" onclick="window.logoutOpsMode()">로그아웃</button>
                 </div>
             </div>
@@ -3706,7 +4695,76 @@
                 </div>
             </div>
 
-            <!-- 탭 2: 포트폴리오 관리 (Admin CMS) -->
+            <!-- 탭 2: 견적 문의 내역 관리 -->
+            <div class="ops-tab-content" id="opsTab-inquiries">
+                <div class="ops-portfolio-toolbar">
+                    <div class="inquiry-status-filter" id="inquiryStatusFilter">
+                        <button type="button" class="inquiry-filter-btn active" data-status="전체" onclick="window.filterInquiriesByStatus('전체')">전체</button>
+                        <button type="button" class="inquiry-filter-btn" data-status="접수" onclick="window.filterInquiriesByStatus('접수')">접수</button>
+                        <button type="button" class="inquiry-filter-btn" data-status="상담중" onclick="window.filterInquiriesByStatus('상담중')">상담중</button>
+                        <button type="button" class="inquiry-filter-btn" data-status="수주" onclick="window.filterInquiriesByStatus('수주')">수주</button>
+                        <button type="button" class="inquiry-filter-btn" data-status="취소" onclick="window.filterInquiriesByStatus('취소')">취소</button>
+                    </div>
+                    <span class="ops-portfolio-hint">행을 클릭하면 상세 내용을 확인할 수 있습니다.</span>
+                </div>
+
+                <div class="inquiry-table-wrap">
+                    <table class="inquiry-table">
+                        <thead>
+                            <tr>
+                                <th>신청일시</th>
+                                <th>클라이언트</th>
+                                <th>연락처 / 이메일</th>
+                                <th>프로젝트 유형</th>
+                                <th>예산</th>
+                                <th>상태</th>
+                                <th>액션</th>
+                            </tr>
+                        </thead>
+                        <tbody id="inquiryTableBody">
+                            <!-- JS가 견적 문의 내역을 렌더링합니다 -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- 견적 문의 상세 슬라이드 오버 패널 -->
+            <div class="inquiry-detail-overlay" id="inquiryDetailOverlay" onclick="window.closeInquiryDetail()"></div>
+            <aside class="inquiry-detail-panel" id="inquiryDetailPanel">
+                <div class="inquiry-detail-header">
+                    <div>
+                        <div class="inquiry-detail-eyebrow">견적 문의 상세</div>
+                        <div class="inquiry-detail-title" id="inquiryDetailTitle">-</div>
+                    </div>
+                    <button class="side-drawer-close" onclick="window.closeInquiryDetail()" aria-label="닫기">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+                    </button>
+                </div>
+
+                <div class="inquiry-detail-body" id="inquiryDetailBody">
+                    <!-- JS가 상세 정보 + 작업 링크 + 메모 UI를 렌더링합니다 -->
+                </div>
+            </aside>
+
+            <!-- 칸반 카드 상세 모달 (클라이언트 정보 / D-day / 버전·체크리스트) -->
+            <div class="card-detail-overlay" id="cardDetailOverlay" onclick="if(event.target===this) window.closeKanbanCardDetail();">
+                <div class="card-detail-modal">
+                    <div class="card-detail-header">
+                        <div>
+                            <div class="card-detail-title" id="cardDetailTitle">-</div>
+                            <div class="card-detail-subtitle" id="cardDetailSubtitle">-</div>
+                        </div>
+                        <button class="side-drawer-close" onclick="window.closeKanbanCardDetail()" aria-label="닫기">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+                        </button>
+                    </div>
+                    <div class="card-detail-body" id="cardDetailBody">
+                        <!-- JS가 클라이언트 정보 / 일정 / 버전·체크리스트를 렌더링합니다 -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- 탭 3: 포트폴리오 관리 (Admin CMS) -->
             <div class="ops-tab-content" id="opsTab-portfolio">
                 <div class="ops-portfolio-toolbar">
                     <button class="ops-add-btn" onclick="window.showAddPortfolioForm()">+ 새 영상 추가</button>
@@ -3714,6 +4772,44 @@
                 </div>
                 <div class="ops-portfolio-list" id="opsPortfolioList">
                     <!-- JS가 portfolioData를 렌더링합니다 -->
+                </div>
+            </div>
+
+            <!-- 탭 4: 쇼릴 / 대표 영상 설정 -->
+            <div class="ops-tab-content" id="opsTab-showreel">
+                <div class="showreel-settings-card">
+                    <div class="card-detail-section-title">메인 히어로 쇼릴 소스</div>
+                    <p class="showreel-settings-desc">메인 화면 우측 쇼릴 카드에 재생될 영상을 설정합니다. 포트폴리오에 등록된 영상 중 선택하거나, 유튜브/비메오/MP4 URL을 직접 입력할 수 있습니다.</p>
+
+                    <div class="showreel-source-toggle">
+                        <button type="button" class="showreel-source-btn active" data-source-type="portfolio" onclick="window.switchShowreelSourceType('portfolio')">포트폴리오 영상 선택</button>
+                        <button type="button" class="showreel-source-btn" data-source-type="url" onclick="window.switchShowreelSourceType('url')">외부 URL 직접 입력</button>
+                    </div>
+
+                    <div class="showreel-source-panel active" id="showreelSourcePanel-portfolio">
+                        <div class="card-detail-field">
+                            <label for="showreelPortfolioSelect">포트폴리오 영상</label>
+                            <select id="showreelPortfolioSelect"></select>
+                        </div>
+                    </div>
+
+                    <div class="showreel-source-panel" id="showreelSourcePanel-url">
+                        <div class="card-detail-field">
+                            <label for="showreelUrlInput">영상 URL (YouTube / Vimeo / 직접 MP4 링크)</label>
+                            <input type="url" id="showreelUrlInput" placeholder="https://www.youtube.com/watch?v=... 또는 https://.../video.mp4">
+                        </div>
+                    </div>
+
+                    <div class="showreel-settings-actions">
+                        <button type="button" class="ops-add-btn" onclick="window.saveShowreelConfig()">저장 및 메인 화면에 반영</button>
+                        <button type="button" class="inquiry-detail-link-btn" onclick="window.resetShowreelConfig()">기본값으로 초기화</button>
+                        <span class="inquiry-notes-saved-hint" id="showreelSavedHint"></span>
+                    </div>
+
+                    <div class="showreel-current-preview">
+                        <div class="card-detail-section-title">현재 설정</div>
+                        <div class="showreel-current-value" id="showreelCurrentValue">-</div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -4090,7 +5186,11 @@
     <!-- Footer -->
     <footer style="background: var(--dark); border-top: 1px solid var(--line); padding: 20px 0; text-align: center; position: relative;">
         <div style="color: #A0A0A5; font-size: 12px; padding: 20px;">
-            <p style="margin: 0;">© 2026 EGG Studio. All rights reserved.</p>
+            <p style="margin: 0 0 10px 0;">© 2026 EGG Studio. All rights reserved.</p>
+            <button type="button" class="footer-admin-link" onclick="window.enterOpsMode()">
+                <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="11" width="14" height="10" rx="2"></rect><path d="M8 11V7a4 4 0 0 1 8 0v4"></path></svg>
+                Internal Admin
+            </button>
         </div>
     </footer>
  
@@ -4375,8 +5475,17 @@
 
             if (tab === 'kanban') {
                 initKanbanTab();
+            } else if (tab === 'inquiries') {
+                loadEstimateInquiries();
+                currentInquiryStatusFilter = '전체';
+                document.querySelectorAll('#inquiryStatusFilter .inquiry-filter-btn').forEach(btn => {
+                    btn.classList.toggle('active', btn.getAttribute('data-status') === '전체');
+                });
+                renderInquiryTable();
             } else if (tab === 'portfolio') {
                 renderOpsPortfolioList();
+            } else if (tab === 'showreel') {
+                initShowreelTab();
             }
         };
 
@@ -4407,6 +5516,344 @@
             if (aiEl) aiEl.textContent = aiCount;
             if (ytEl) ytEl.textContent = youtubeCount;
         }
+
+        // ========================================
+        // 📋 견적 문의 내역 관리 (LocalStorage 기반)
+        // ========================================
+        const INQUIRY_STORAGE_KEY = 'adminEstimateInquiries';
+        let estimateInquiries = [];
+        let currentInquiryStatusFilter = '전체';
+        let currentOpenInquiryId = null;
+
+        // 최초 진입 시 사용할 Mock 견적 데이터 (localStorage가 비어있을 때만 시딩됨)
+        function getMockInquiries() {
+            const now = Date.now();
+            const day = 24 * 60 * 60 * 1000;
+            return [
+                {
+                    id: 'inq_mock_1',
+                    submittedAt: new Date(now - 1 * day).toISOString(),
+                    clientName: '김서준',
+                    company: '(주)브랜드플로우',
+                    email: 'seojun.kim@brandflow.co.kr',
+                    phone: '010-2211-3344',
+                    projectType: '유튜브 롱폼',
+                    budget: '400,000원',
+                    status: '상담중',
+                    deadline: '2026-09-05',
+                    description: '브랜드 소개 유튜브 롱폼 영상 제작 문의드립니다. 러닝타임 8~10분, 인터뷰 + 제품 촬영 컷 혼합 구성을 원합니다.',
+                    referenceLink: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ',
+                    workLinks: [
+                        { label: 'Notion 기획안', url: 'https://notion.so/example-brandflow-plan' }
+                    ],
+                    notes: '1차 통화 완료. 예산 협의 중이며 9월 초 촬영 희망.',
+                    notesUpdatedAt: new Date(now - 1 * day + 3600000).toISOString()
+                },
+                {
+                    id: 'inq_mock_2',
+                    submittedAt: new Date(now - 3 * day).toISOString(),
+                    clientName: '이하늘',
+                    company: '개인 크리에이터',
+                    email: 'haneul.lee@gmail.com',
+                    phone: '010-5566-7788',
+                    projectType: 'AI 영상',
+                    budget: '300,000원~',
+                    status: '접수',
+                    deadline: '2026-08-30',
+                    description: 'AI 생성 소스를 활용한 뮤직비디오 스타일의 짧은 영상 제작을 원합니다. 레퍼런스는 별도로 전달드리겠습니다.',
+                    referenceLink: '',
+                    workLinks: [],
+                    notes: '',
+                    notesUpdatedAt: null
+                },
+                {
+                    id: 'inq_mock_3',
+                    submittedAt: new Date(now - 6 * day).toISOString(),
+                    clientName: '박지민',
+                    company: '스튜디오나인',
+                    email: 'jimin.park@studio9.com',
+                    phone: '010-9988-1122',
+                    projectType: '숏폼',
+                    budget: '50,000원',
+                    status: '수주',
+                    deadline: '2026-08-25',
+                    description: '인스타 릴스용 숏폼 3건 편집 요청. 기본 색보정과 트렌디한 자막 스타일 부탁드립니다.',
+                    referenceLink: 'https://www.instagram.com/reel/example',
+                    workLinks: [
+                        { label: 'Google Drive 원본', url: 'https://drive.google.com/drive/folders/example' },
+                        { label: '피드백 시트', url: 'https://docs.google.com/spreadsheets/d/example' }
+                    ],
+                    notes: '계약금 입금 확인 완료. 8/25 마감 목표로 진행 중.',
+                    notesUpdatedAt: new Date(now - 2 * day).toISOString()
+                },
+                {
+                    id: 'inq_mock_4',
+                    submittedAt: new Date(now - 9 * day).toISOString(),
+                    clientName: '최우진',
+                    company: '(주)그린테크',
+                    email: 'wjchoi@greentech.io',
+                    phone: '010-3344-5566',
+                    projectType: '단편 영화',
+                    budget: '협의 필요',
+                    status: '취소',
+                    deadline: '2026-10-15',
+                    description: '사내 캠페인용 단편 영화 제작 문의였으나 내부 예산 사정으로 보류하게 되었습니다.',
+                    referenceLink: '',
+                    workLinks: [],
+                    notes: '클라이언트 측 예산 보류로 취소. 추후 재문의 가능성 있음.',
+                    notesUpdatedAt: new Date(now - 8 * day).toISOString()
+                }
+            ];
+        }
+
+        // localStorage에서 견적 문의 내역 로드 (없으면 Mock 데이터로 시딩)
+        function loadEstimateInquiries() {
+            try {
+                const raw = localStorage.getItem(INQUIRY_STORAGE_KEY);
+                if (raw) {
+                    estimateInquiries = JSON.parse(raw);
+                } else {
+                    estimateInquiries = getMockInquiries();
+                    saveEstimateInquiries();
+                }
+            } catch (e) {
+                console.error('❌ [loadEstimateInquiries] 로드 오류:', e);
+                estimateInquiries = getMockInquiries();
+            }
+        }
+
+        function saveEstimateInquiries() {
+            try {
+                localStorage.setItem(INQUIRY_STORAGE_KEY, JSON.stringify(estimateInquiries));
+            } catch (e) {
+                console.error('❌ [saveEstimateInquiries] 저장 오류:', e);
+            }
+        }
+
+        // 실제 Formspree 견적 제출 성공 시 관리자 목록에도 새 문의로 추가 (같은 브라우저 내 테스트용)
+        function addInquiryFromSubmission(formData) {
+            loadEstimateInquiries();
+            estimateInquiries.unshift({
+                id: 'inq_' + Date.now(),
+                submittedAt: new Date().toISOString(),
+                clientName: formData.name || '(이름 미입력)',
+                company: '',
+                email: formData.email || '',
+                phone: formData.phone || '',
+                projectType: formData.package || '미지정',
+                budget: '협의 필요',
+                status: '접수',
+                deadline: formData.deadline || '',
+                description: formData.description || '',
+                referenceLink: formData.reference || '',
+                workLinks: [],
+                notes: '',
+                notesUpdatedAt: null
+            });
+            saveEstimateInquiries();
+        }
+
+        const INQUIRY_STATUS_LIST = ['접수', '상담중', '수주', '취소'];
+
+        function formatInquiryDate(iso) {
+            if (!iso) return '-';
+            try {
+                return new Date(iso).toLocaleString('ko-KR', { year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit' });
+            } catch (e) {
+                return iso;
+            }
+        }
+
+        // ===== 견적 문의 테이블 렌더링 =====
+        function renderInquiryTable() {
+            const tbody = document.getElementById('inquiryTableBody');
+            if (!tbody) return;
+
+            const filtered = currentInquiryStatusFilter === '전체'
+                ? estimateInquiries
+                : estimateInquiries.filter(inq => inq.status === currentInquiryStatusFilter);
+
+            if (filtered.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="7" style="text-align:center; color:#A0A0A5; padding: 32px 16px;">해당 상태의 견적 문의가 없습니다.</td></tr>';
+                return;
+            }
+
+            tbody.innerHTML = filtered.map(inq => {
+                const statusOptionsHTML = INQUIRY_STATUS_LIST.map(s => `<option value="${s}" ${s === inq.status ? 'selected' : ''}>${s}</option>`).join('');
+                return `
+                    <tr onclick="window.openInquiryDetail('${inq.id}')">
+                        <td>${formatInquiryDate(inq.submittedAt)}</td>
+                        <td>${escapeHTML(inq.clientName)}${inq.company ? `<span class="inquiry-cell-sub">${escapeHTML(inq.company)}</span>` : ''}</td>
+                        <td>${escapeHTML(inq.phone || '-')}<span class="inquiry-cell-sub">${escapeHTML(inq.email || '-')}</span></td>
+                        <td>${escapeHTML(inq.projectType || '-')}</td>
+                        <td>${escapeHTML(inq.budget || '-')}</td>
+                        <td onclick="event.stopPropagation();">
+                            <select class="inquiry-status-select status-${inq.status}" onchange="window.updateInquiryStatus('${inq.id}', this.value)">
+                                ${statusOptionsHTML}
+                            </select>
+                        </td>
+                        <td onclick="event.stopPropagation();">
+                            <button type="button" class="inquiry-detail-link-btn" onclick="window.openInquiryDetail('${inq.id}')">상세보기</button>
+                        </td>
+                    </tr>
+                `;
+            }).join('');
+        }
+
+        // ===== 상태 필터 =====
+        window.filterInquiriesByStatus = function(status) {
+            currentInquiryStatusFilter = status;
+            document.querySelectorAll('#inquiryStatusFilter .inquiry-filter-btn').forEach(btn => {
+                btn.classList.toggle('active', btn.getAttribute('data-status') === status);
+            });
+            renderInquiryTable();
+        };
+
+        // ===== 상태 즉시 변경 (드롭다운) =====
+        window.updateInquiryStatus = function(id, newStatus) {
+            const inquiry = estimateInquiries.find(inq => inq.id === id);
+            if (!inquiry) return;
+            inquiry.status = newStatus;
+            saveEstimateInquiries();
+            renderInquiryTable();
+            if (currentOpenInquiryId === id) {
+                renderInquiryDetail(id);
+            }
+        };
+
+        // ===== 상세 패널 열기/닫기 =====
+        window.openInquiryDetail = function(id) {
+            currentOpenInquiryId = id;
+            renderInquiryDetail(id);
+            const overlay = document.getElementById('inquiryDetailOverlay');
+            const panel = document.getElementById('inquiryDetailPanel');
+            if (overlay) overlay.classList.add('active');
+            if (panel) panel.classList.add('open');
+        };
+
+        window.closeInquiryDetail = function() {
+            const overlay = document.getElementById('inquiryDetailOverlay');
+            const panel = document.getElementById('inquiryDetailPanel');
+            if (overlay) overlay.classList.remove('active');
+            if (panel) panel.classList.remove('open');
+            currentOpenInquiryId = null;
+        };
+
+        // ===== 상세 패널 콘텐츠 렌더링 (기본정보 + 작업 링크 + 메모) =====
+        function renderInquiryDetail(id) {
+            const inquiry = estimateInquiries.find(inq => inq.id === id);
+            const titleEl = document.getElementById('inquiryDetailTitle');
+            const bodyEl = document.getElementById('inquiryDetailBody');
+            if (!inquiry || !titleEl || !bodyEl) return;
+
+            titleEl.textContent = inquiry.clientName + (inquiry.company ? ' · ' + inquiry.company : '');
+
+            const workLinksHTML = (inquiry.workLinks && inquiry.workLinks.length > 0)
+                ? `<div class="work-link-chip-list">${inquiry.workLinks.map((link, idx) => `
+                    <div class="work-link-chip">
+                        <a href="${escapeHTML(link.url)}" target="_blank" rel="noopener noreferrer">
+                            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0;"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg>
+                            ${escapeHTML(link.label || link.url)}
+                        </a>
+                        <button type="button" onclick="window.removeWorkLink('${inquiry.id}', ${idx})" title="삭제" aria-label="링크 삭제">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+                        </button>
+                    </div>
+                `).join('')}</div>`
+                : `<p class="work-link-empty">아직 첨부된 작업 링크가 없습니다.</p>`;
+
+            bodyEl.innerHTML = `
+                <div>
+                    <div class="inquiry-detail-section-title">기본 정보</div>
+                    <div class="inquiry-detail-field">
+                        <div class="inquiry-detail-field-label">연락처</div>
+                        <div class="inquiry-detail-field-value">${escapeHTML(inquiry.phone || '-')} · ${escapeHTML(inquiry.email || '-')}</div>
+                    </div>
+                    <div class="inquiry-detail-field">
+                        <div class="inquiry-detail-field-label">프로젝트 유형 / 예산</div>
+                        <div class="inquiry-detail-field-value">${escapeHTML(inquiry.projectType || '-')} · ${escapeHTML(inquiry.budget || '-')}</div>
+                    </div>
+                    <div class="inquiry-detail-field">
+                        <div class="inquiry-detail-field-label">마감 희망일</div>
+                        <div class="inquiry-detail-field-value">${escapeHTML(inquiry.deadline || '협의 필요')}</div>
+                    </div>
+                    ${inquiry.referenceLink ? `
+                    <div class="inquiry-detail-field">
+                        <div class="inquiry-detail-field-label">참고 링크</div>
+                        <div class="inquiry-detail-field-value"><a href="${escapeHTML(inquiry.referenceLink)}" target="_blank" rel="noopener noreferrer" style="color: var(--accent);">${escapeHTML(inquiry.referenceLink)}</a></div>
+                    </div>` : ''}
+                    <div class="inquiry-detail-field">
+                        <div class="inquiry-detail-field-label">요구사항 상세</div>
+                        <div class="inquiry-detail-field-value">${escapeHTML(inquiry.description || '작성된 내용이 없습니다.')}</div>
+                    </div>
+                </div>
+
+                <div>
+                    <div class="inquiry-detail-section-title">작업 링크 (Notion / Drive 등)</div>
+                    ${workLinksHTML}
+                    <div class="work-link-add-row">
+                        <input type="text" id="workLinkLabelInput" placeholder="링크 이름 (예: Notion 기획안)">
+                        <input type="url" id="workLinkUrlInput" placeholder="https://...">
+                        <button type="button" class="work-link-add-btn" onclick="window.addWorkLink('${inquiry.id}')">+ 링크 추가</button>
+                    </div>
+                </div>
+
+                <div>
+                    <div class="inquiry-detail-section-title">내부 메모</div>
+                    <textarea class="inquiry-notes-textarea" id="inquiryNotesTextarea" placeholder="유선 상담 내용, 특이사항, 견적 조율 히스토리 등을 기록하세요.">${escapeHTML(inquiry.notes || '')}</textarea>
+                    <div class="inquiry-notes-actions">
+                        <button type="button" class="inquiry-notes-save-btn" onclick="window.saveInquiryNotes('${inquiry.id}')">메모 저장</button>
+                        <span class="inquiry-notes-saved-hint" id="inquiryNotesSavedHint">${inquiry.notesUpdatedAt ? '마지막 저장: ' + formatInquiryDate(inquiry.notesUpdatedAt) : ''}</span>
+                    </div>
+                </div>
+            `;
+        }
+
+        // ===== 작업 링크 추가/삭제 =====
+        window.addWorkLink = function(id) {
+            const inquiry = estimateInquiries.find(inq => inq.id === id);
+            if (!inquiry) return;
+
+            const labelInput = document.getElementById('workLinkLabelInput');
+            const urlInput = document.getElementById('workLinkUrlInput');
+            const label = labelInput ? labelInput.value.trim() : '';
+            const url = urlInput ? urlInput.value.trim() : '';
+
+            if (!url) {
+                alert('링크 URL을 입력해주세요.');
+                return;
+            }
+
+            if (!Array.isArray(inquiry.workLinks)) inquiry.workLinks = [];
+            inquiry.workLinks.push({ label: label || url, url: url });
+            saveEstimateInquiries();
+            renderInquiryDetail(id);
+        };
+
+        window.removeWorkLink = function(id, linkIndex) {
+            const inquiry = estimateInquiries.find(inq => inq.id === id);
+            if (!inquiry || !Array.isArray(inquiry.workLinks)) return;
+            inquiry.workLinks.splice(linkIndex, 1);
+            saveEstimateInquiries();
+            renderInquiryDetail(id);
+        };
+
+        // ===== 내부 메모 저장 =====
+        window.saveInquiryNotes = function(id) {
+            const inquiry = estimateInquiries.find(inq => inq.id === id);
+            const textarea = document.getElementById('inquiryNotesTextarea');
+            if (!inquiry || !textarea) return;
+
+            inquiry.notes = textarea.value;
+            inquiry.notesUpdatedAt = new Date().toISOString();
+            saveEstimateInquiries();
+
+            const hint = document.getElementById('inquiryNotesSavedHint');
+            if (hint) {
+                hint.textContent = '저장됨 · ' + formatInquiryDate(inquiry.notesUpdatedAt);
+                hint.classList.add('show');
+            }
+        };
 
         // ===== [운영] 포트폴리오 관리 (Admin CMS) 리스트 렌더링 + 드래그 정렬 =====
         function renderOpsPortfolioList() {
@@ -4738,7 +6185,7 @@
             '03. AI 영상 소스 생성',
             '04. 종합 편집 & 믹싱',
             '05. 1차 피드백 & 수정',
-            '06. 2차 피드백 & 최종 납품'
+            '06. 최종 납품 및 완료'
         ];
 
         const WORKFLOW_STEPS_YOUTUBE = [
@@ -4988,10 +6435,20 @@
                         }
                     }
 
+                    // 확장 상세 정보(D-day, 계약금액, 체크리스트 등)는 localStorage에서 조회
+                    const cardDetails = getCardDetails(p.id);
+                    const ddayInfo = computeDday(cardDetails.deadlineDate);
+                    const ddayBadgeHTML = ddayInfo
+                        ? `<span class="kanban-card-dday ${ddayInfo.className}">${ddayInfo.label}</span>`
+                        : '';
+
                     cardsHTML += `
-                        <div class="kanban-card">
+                        <div class="kanban-card" draggable="true" data-card-id="${p.id}"
+                             ondragstart="window.handleCardDragStart(event, '${p.id}')"
+                             ondragend="window.handleCardDragEnd(event)">
                             <span class="kanban-card-plan-chip">${escapeHTML(planLabel)}</span>
-                            <div class="kanban-card-title">${escapeHTML(p.project_title || '(제목 없음)')}</div>
+                            ${ddayBadgeHTML}
+                            <div class="kanban-card-title" onclick="window.openKanbanCardDetail('${p.id}')">${escapeHTML(p.project_title || '(제목 없음)')}</div>
                             <div class="kanban-card-meta">
                                 ${escapeHTML(p.client_name || '')} · ${escapeHTML(p.phone || '')}<br>
                                 마감: ${escapeHTML(p.deadline_info || '-')}
@@ -5014,7 +6471,7 @@
                             <span>${stepLabel}</span>
                             <span class="kanban-column-count">${columnProjects.length}</span>
                         </div>
-                        <div class="kanban-cards">${cardsHTML}</div>
+                        <div class="kanban-cards" ondragover="window.handleColumnDragOver(event)" ondragleave="window.handleColumnDragLeave(event)" ondrop="window.handleColumnDrop(event, ${step})">${cardsHTML}</div>
                         <button class="kanban-add-card-btn" onclick="window.showAddCardForm(${step}, '${categoryLabel}')">+ 새 클라이언트 추가</button>
                     </div>
                 `;
@@ -5270,6 +6727,268 @@
             } catch (err) {
                 console.error('❌ [updateCardStatus] 예외 발생:', err);
             }
+        };
+
+        // ========================================
+        // 🖱️ 칸반 카드 드래그 앤 드롭 (Native HTML5 DnD)
+        // ========================================
+        let draggedKanbanCardId = null;
+
+        window.handleCardDragStart = function(event, cardId) {
+            draggedKanbanCardId = cardId;
+            event.currentTarget.classList.add('dragging');
+            event.dataTransfer.effectAllowed = 'move';
+            try {
+                event.dataTransfer.setData('text/plain', cardId);
+            } catch (e) { /* 일부 브라우저 호환 처리 */ }
+        };
+
+        window.handleCardDragEnd = function(event) {
+            event.currentTarget.classList.remove('dragging');
+            document.querySelectorAll('.kanban-cards.drag-over').forEach(el => el.classList.remove('drag-over'));
+            draggedKanbanCardId = null;
+        };
+
+        window.handleColumnDragOver = function(event) {
+            event.preventDefault();
+            event.dataTransfer.dropEffect = 'move';
+            event.currentTarget.classList.add('drag-over');
+        };
+
+        window.handleColumnDragLeave = function(event) {
+            event.currentTarget.classList.remove('drag-over');
+        };
+
+        window.handleColumnDrop = function(event, targetStep) {
+            event.preventDefault();
+            event.currentTarget.classList.remove('drag-over');
+
+            const cardId = draggedKanbanCardId || event.dataTransfer.getData('text/plain');
+            if (!cardId) return;
+
+            const card = allKanbanProjects.find(p => p.id === cardId);
+            if (card && parseInt(card.status_step, 10) === targetStep) {
+                // 같은 칼럼으로 드롭한 경우는 무시
+                return;
+            }
+
+            window.updateCardStatus(cardId, targetStep);
+        };
+
+        // ========================================
+        // 📅 D-day 계산 (마감일 기준)
+        // ========================================
+        function computeDday(deadlineDateStr) {
+            if (!deadlineDateStr) return null;
+
+            const deadline = new Date(deadlineDateStr + 'T00:00:00');
+            if (isNaN(deadline.getTime())) return null;
+
+            const today = new Date();
+            today.setHours(0, 0, 0, 0);
+
+            const diffDays = Math.round((deadline - today) / (1000 * 60 * 60 * 24));
+
+            if (diffDays === 0) {
+                return { label: 'D-Day', className: 'today' };
+            } else if (diffDays < 0) {
+                return { label: '마감 초과 D+' + Math.abs(diffDays), className: 'urgent' };
+            } else if (diffDays <= 3) {
+                return { label: 'D-' + diffDays, className: 'urgent' };
+            } else {
+                return { label: 'D-' + diffDays, className: '' };
+            }
+        }
+
+        // ========================================
+        // 💾 칸반 카드 확장 상세 정보 (LocalStorage: 계약금액/마감일/버전/체크리스트)
+        // ========================================
+        const KANBAN_CARD_DETAILS_KEY = 'kanbanCardDetails';
+
+        function getAllCardDetails() {
+            try {
+                const raw = localStorage.getItem(KANBAN_CARD_DETAILS_KEY);
+                return raw ? JSON.parse(raw) : {};
+            } catch (e) {
+                console.error('❌ [getAllCardDetails] 로드 오류:', e);
+                return {};
+            }
+        }
+
+        function getCardDetails(cardId) {
+            const all = getAllCardDetails();
+            return all[cardId] || {
+                contractAmount: '',
+                deadlineDate: '',
+                activeVersion: 'V1',
+                versions: ['V1', 'V2', 'Final'],
+                checklists: { V1: [], V2: [], Final: [] }
+            };
+        }
+
+        function saveCardDetails(cardId, details) {
+            const all = getAllCardDetails();
+            all[cardId] = details;
+            try {
+                localStorage.setItem(KANBAN_CARD_DETAILS_KEY, JSON.stringify(all));
+            } catch (e) {
+                console.error('❌ [saveCardDetails] 저장 오류:', e);
+            }
+        }
+
+        let currentDetailCardId = null;
+
+        // ===== 카드 상세 모달 열기/닫기 =====
+        window.openKanbanCardDetail = function(cardId) {
+            currentDetailCardId = cardId;
+            renderKanbanCardDetail(cardId);
+            const overlay = document.getElementById('cardDetailOverlay');
+            if (overlay) overlay.classList.add('active');
+        };
+
+        window.closeKanbanCardDetail = function() {
+            const overlay = document.getElementById('cardDetailOverlay');
+            if (overlay) overlay.classList.remove('active');
+            currentDetailCardId = null;
+        };
+
+        // ===== 카드 상세 모달 렌더링 =====
+        function renderKanbanCardDetail(cardId) {
+            const project = allKanbanProjects.find(p => p.id === cardId);
+            const titleEl = document.getElementById('cardDetailTitle');
+            const subtitleEl = document.getElementById('cardDetailSubtitle');
+            const bodyEl = document.getElementById('cardDetailBody');
+            if (!project || !titleEl || !subtitleEl || !bodyEl) return;
+
+            const details = getCardDetails(cardId);
+            const ddayInfo = computeDday(details.deadlineDate);
+            const ddayBadgeHTML = ddayInfo
+                ? `<span class="card-detail-dday-badge ${ddayInfo.className}">${ddayInfo.label}</span>`
+                : `<span class="card-detail-dday-badge">마감일 미설정</span>`;
+
+            titleEl.textContent = project.project_title || '(제목 없음)';
+            subtitleEl.textContent = (project.category || 'AI 영상') + ' · ' + (project.plan_type || '');
+
+            const versions = Array.isArray(details.versions) && details.versions.length > 0
+                ? details.versions
+                : ['V1', 'V2', 'Final'];
+            const activeVersion = details.activeVersion && versions.includes(details.activeVersion)
+                ? details.activeVersion
+                : versions[0];
+
+            const versionTabsHTML = versions.map(v => `
+                <button type="button" class="version-tab-btn ${v === activeVersion ? 'active' : ''}" onclick="window.switchCardVersion('${cardId}', '${v}')">${escapeHTML(v)}</button>
+            `).join('');
+
+            const checklist = (details.checklists && details.checklists[activeVersion]) || [];
+            const checklistHTML = checklist.length > 0
+                ? `<div class="checklist-items">${checklist.map((item, idx) => `
+                    <div class="checklist-item ${item.done ? 'done' : ''}">
+                        <input type="checkbox" ${item.done ? 'checked' : ''} onchange="window.toggleChecklistItem('${cardId}', '${activeVersion}', ${idx})">
+                        <span class="checklist-item-text">${escapeHTML(item.text)}</span>
+                        <button type="button" onclick="window.deleteChecklistItem('${cardId}', '${activeVersion}', ${idx})" title="삭제" aria-label="삭제">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+                        </button>
+                    </div>
+                `).join('')}</div>`
+                : `<p class="checklist-empty">${escapeHTML(activeVersion)} 버전에 등록된 수정 요청 사항이 없습니다.</p>`;
+
+            bodyEl.innerHTML = `
+                <div>
+                    <div class="card-detail-section-title">클라이언트 정보</div>
+                    <div class="card-detail-grid">
+                        <div class="card-detail-field">
+                            <label>담당자명</label>
+                            <input type="text" value="${escapeHTML(project.client_name || '')}" disabled>
+                        </div>
+                        <div class="card-detail-field">
+                            <label>연락처</label>
+                            <input type="text" value="${escapeHTML(project.phone || '')}" disabled>
+                        </div>
+                    </div>
+                    <div class="card-detail-field" style="margin-top: 12px;">
+                        <label>계약 금액 (원)</label>
+                        <input type="text" id="cardContractAmountInput" placeholder="예: 400,000" value="${escapeHTML(details.contractAmount || '')}" onchange="window.saveCardContractAmount('${cardId}', this.value)">
+                    </div>
+                </div>
+
+                <div>
+                    <div class="card-detail-section-title">일정 관리</div>
+                    <div class="card-detail-field">
+                        <label>마감일</label>
+                        <input type="date" id="cardDeadlineInput" value="${escapeHTML(details.deadlineDate || '')}" onchange="window.saveCardDeadline('${cardId}', this.value)">
+                    </div>
+                    <div class="card-detail-dday-row">
+                        ${ddayBadgeHTML}
+                    </div>
+                </div>
+
+                <div>
+                    <div class="card-detail-section-title">피드백 버전 & 체크리스트</div>
+                    <div class="version-tabs">${versionTabsHTML}</div>
+                    ${checklistHTML}
+                    <div class="checklist-add-row">
+                        <input type="text" id="checklistNewItemInput" placeholder="클라이언트 수정 요청 사항 입력">
+                        <button type="button" class="checklist-add-btn" onclick="window.addChecklistItem('${cardId}')">+ 추가</button>
+                    </div>
+                </div>
+            `;
+        }
+
+        // ===== 계약 금액 저장 =====
+        window.saveCardContractAmount = function(cardId, value) {
+            const details = getCardDetails(cardId);
+            details.contractAmount = value.trim();
+            saveCardDetails(cardId, details);
+        };
+
+        // ===== 마감일 저장 (+ D-day 뱃지 즉시 갱신) =====
+        window.saveCardDeadline = function(cardId, value) {
+            const details = getCardDetails(cardId);
+            details.deadlineDate = value;
+            saveCardDetails(cardId, details);
+            renderKanbanCardDetail(cardId);
+            renderKanbanBoardForTrack(currentKanbanTrack); // 카드 목록의 D-day 뱃지도 함께 갱신
+        };
+
+        // ===== 버전 탭 전환 =====
+        window.switchCardVersion = function(cardId, version) {
+            const details = getCardDetails(cardId);
+            details.activeVersion = version;
+            saveCardDetails(cardId, details);
+            renderKanbanCardDetail(cardId);
+        };
+
+        // ===== 체크리스트 추가/토글/삭제 =====
+        window.addChecklistItem = function(cardId) {
+            const input = document.getElementById('checklistNewItemInput');
+            const text = input ? input.value.trim() : '';
+            if (!text) return;
+
+            const details = getCardDetails(cardId);
+            const version = details.activeVersion || 'V1';
+            if (!details.checklists) details.checklists = { V1: [], V2: [], Final: [] };
+            if (!details.checklists[version]) details.checklists[version] = [];
+
+            details.checklists[version].push({ text: text, done: false });
+            saveCardDetails(cardId, details);
+            renderKanbanCardDetail(cardId);
+        };
+
+        window.toggleChecklistItem = function(cardId, version, index) {
+            const details = getCardDetails(cardId);
+            if (!details.checklists || !details.checklists[version] || !details.checklists[version][index]) return;
+            details.checklists[version][index].done = !details.checklists[version][index].done;
+            saveCardDetails(cardId, details);
+            renderKanbanCardDetail(cardId);
+        };
+
+        window.deleteChecklistItem = function(cardId, version, index) {
+            const details = getCardDetails(cardId);
+            if (!details.checklists || !details.checklists[version]) return;
+            details.checklists[version].splice(index, 1);
+            saveCardDetails(cardId, details);
+            renderKanbanCardDetail(cardId);
         };
 
         // ===== 카드 삭제 =====
@@ -5754,13 +7473,12 @@
                 targetPage.classList.add('active');
             }
  
-            document.querySelectorAll('.drawer-nav-link').forEach(link => {
+            document.querySelectorAll('.drawer-nav-link, .nav-links-inline a').forEach(link => {
                 link.classList.remove('active');
             });
-            const navLink = document.querySelector(`[data-page="${pageName}"]`);
-            if (navLink) {
+            document.querySelectorAll(`[data-page="${pageName}"]`).forEach(navLink => {
                 navLink.classList.add('active');
-            }
+            });
         }
 
         function showPage(pageName) {
@@ -5774,10 +7492,12 @@
             targetPage.classList.add('active');
  
             // 네비게이션 활성 상태 업데이트
-            document.querySelectorAll('.drawer-nav-link').forEach(link => {
+            document.querySelectorAll('.drawer-nav-link, .nav-links-inline a').forEach(link => {
                 link.classList.remove('active');
             });
-            document.querySelector(`[data-page="${pageName}"]`).classList.add('active');
+            document.querySelectorAll(`[data-page="${pageName}"]`).forEach(navLink => {
+                navLink.classList.add('active');
+            });
  
             // 해당 페이지로 부드럽게 스크롤 (사용자가 메뉴를 직접 클릭했을 때만 호출됨)
             setTimeout(() => {
@@ -6132,6 +7852,270 @@
             }, 100);
         }
  
+        // ========================================
+        // 🎬 히어로 쇼릴(Showreel) 비디오 관리
+        // — 기본 소스 경로는 이 상수만 바꾸면 됩니다. (어드민에서 설정을 저장하면 이 기본값 대신 그 설정이 사용됩니다)
+        // ========================================
+        const HERO_SHOWREEL_SRC = 'assets/showreel-hero.mp4';       // 실제 쇼릴 영상 파일 경로로 교체
+        const HERO_SHOWREEL_SRC_WEBM = 'assets/showreel-hero.webm'; // (선택) WebM 대체 소스
+        const SHOWREEL_CONFIG_KEY = 'heroShowreelConfig';
+
+        // ===== URL에서 유튜브/비메오 영상 ID 추출 =====
+        function extractYoutubeId(url) {
+            if (!url) return null;
+            const patterns = [
+                /(?:youtube\.com\/watch\?v=|youtu\.be\/|youtube\.com\/embed\/|youtube\.com\/shorts\/)([a-zA-Z0-9_-]{11})/
+            ];
+            for (const pattern of patterns) {
+                const match = url.match(pattern);
+                if (match) return match[1];
+            }
+            return null;
+        }
+
+        function extractVimeoId(url) {
+            if (!url) return null;
+            const match = url.match(/vimeo\.com\/(?:video\/)?(\d+)/);
+            return match ? match[1] : null;
+        }
+
+        function detectUrlSourceKind(url) {
+            if (!url) return null;
+            if (/youtube\.com|youtu\.be/.test(url)) return 'youtube';
+            if (/vimeo\.com/.test(url)) return 'vimeo';
+            return 'mp4';
+        }
+
+        // ===== 쇼릴 설정 불러오기/저장 =====
+        function loadShowreelConfig() {
+            try {
+                const raw = localStorage.getItem(SHOWREEL_CONFIG_KEY);
+                return raw ? JSON.parse(raw) : null;
+            } catch (e) {
+                console.error('❌ [loadShowreelConfig] 로드 오류:', e);
+                return null;
+            }
+        }
+
+        function saveShowreelConfigToStorage(config) {
+            try {
+                localStorage.setItem(SHOWREEL_CONFIG_KEY, JSON.stringify(config));
+            } catch (e) {
+                console.error('❌ [saveShowreelConfigToStorage] 저장 오류:', e);
+            }
+        }
+
+        // ===== 실제 미디어(video/iframe) 적용 =====
+        function applyShowreelConfig(config) {
+            const media = document.getElementById('heroShowreelMedia');
+            const muteBtn = document.getElementById('heroShowreelMuteBtn');
+            if (!media) return;
+
+            media.innerHTML = '';
+
+            let kind = 'mp4';
+            let mp4Src = HERO_SHOWREEL_SRC;
+            let webmSrc = HERO_SHOWREEL_SRC_WEBM;
+            let embedId = null;
+
+            if (config && config.sourceType === 'portfolio' && config.youtubeId) {
+                kind = 'youtube';
+                embedId = config.youtubeId;
+            } else if (config && config.sourceType === 'url' && config.url) {
+                const urlKind = detectUrlSourceKind(config.url);
+                if (urlKind === 'youtube') {
+                    kind = 'youtube';
+                    embedId = extractYoutubeId(config.url);
+                } else if (urlKind === 'vimeo') {
+                    kind = 'vimeo';
+                    embedId = extractVimeoId(config.url);
+                } else {
+                    kind = 'mp4';
+                    mp4Src = config.url;
+                    webmSrc = '';
+                }
+            }
+
+            if (kind === 'youtube' && embedId) {
+                window.__heroShowreelClickthrough = false;
+                media.innerHTML = `<iframe src="https://www.youtube.com/embed/${embedId}?autoplay=1&mute=1&loop=1&playlist=${embedId}&controls=0&showinfo=0&rel=0&modestbranding=1&playsinline=1" allow="autoplay; encrypted-media" frameborder="0"></iframe>`;
+                if (muteBtn) muteBtn.style.display = 'none';
+            } else if (kind === 'vimeo' && embedId) {
+                window.__heroShowreelClickthrough = false;
+                media.innerHTML = `<iframe src="https://player.vimeo.com/video/${embedId}?autoplay=1&muted=1&loop=1&background=1&controls=0" allow="autoplay" frameborder="0"></iframe>`;
+                if (muteBtn) muteBtn.style.display = 'none';
+            } else {
+                window.__heroShowreelClickthrough = true;
+                const video = document.createElement('video');
+                video.className = 'hero-showreel-video';
+                video.id = 'heroShowreelVideo';
+                video.autoplay = true;
+                video.muted = true;
+                video.loop = true;
+                video.playsInline = true;
+                video.poster = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 360 640'%3E%3Crect width='360' height='640' fill='%230A0A0A'/%3E%3C/svg%3E";
+
+                const sourceMp4 = document.createElement('source');
+                sourceMp4.src = mp4Src;
+                sourceMp4.type = 'video/mp4';
+                video.appendChild(sourceMp4);
+
+                if (webmSrc) {
+                    const sourceWebm = document.createElement('source');
+                    sourceWebm.src = webmSrc;
+                    sourceWebm.type = 'video/webm';
+                    video.appendChild(sourceWebm);
+                }
+
+                media.appendChild(video);
+                video.load();
+
+                const playPromise = video.play();
+                if (playPromise !== undefined) {
+                    playPromise.catch(() => {
+                        console.warn('⚠️ [히어로 쇼릴] 자동 재생이 차단되어 음소거 상태로 재시도합니다.');
+                        video.muted = true;
+                        video.play().catch(() => {});
+                    });
+                }
+
+                if (muteBtn) muteBtn.style.display = 'flex';
+            }
+        }
+
+        function initHeroShowreel() {
+            const config = loadShowreelConfig();
+            applyShowreelConfig(config);
+        }
+
+        // 쇼릴 카드 우측 하단 음소거 토글 버튼 (MP4 재생 모드에서만 동작)
+        window.toggleHeroShowreelMute = function() {
+            const video = document.getElementById('heroShowreelVideo');
+            const btn = document.getElementById('heroShowreelMuteBtn');
+            if (!video || !btn) return;
+
+            video.muted = !video.muted;
+
+            btn.innerHTML = video.muted
+                ? '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><line x1="23" y1="9" x2="17" y2="15"></line><line x1="17" y1="9" x2="23" y2="15"></line></svg>'
+                : '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><path d="M15.54 8.46a5 5 0 0 1 0 7.07"></path><path d="M19.07 4.93a10 10 0 0 1 0 14.14"></path></svg>';
+        };
+
+        // ===== [운영] 쇼릴 설정 탭 UI =====
+        window.switchShowreelSourceType = function(type) {
+            document.querySelectorAll('.showreel-source-btn').forEach(btn => {
+                btn.classList.toggle('active', btn.getAttribute('data-source-type') === type);
+            });
+            document.querySelectorAll('.showreel-source-panel').forEach(panel => {
+                panel.classList.toggle('active', panel.id === 'showreelSourcePanel-' + type);
+            });
+        };
+
+        function populateShowreelPortfolioSelect() {
+            const select = document.getElementById('showreelPortfolioSelect');
+            if (!select || !Array.isArray(portfolioData)) return;
+
+            select.innerHTML = portfolioData.map((item, idx) =>
+                `<option value="${idx}">${escapeHTML(item.title || '(제목 없음)')}</option>`
+            ).join('');
+        }
+
+        function renderShowreelCurrentValue() {
+            const el = document.getElementById('showreelCurrentValue');
+            if (!el) return;
+
+            const config = loadShowreelConfig();
+            if (!config) {
+                el.textContent = '기본 쇼릴 영상 (HERO_SHOWREEL_SRC) 재생 중';
+                return;
+            }
+            if (config.sourceType === 'portfolio') {
+                el.textContent = `포트폴리오 영상: ${config.title || config.youtubeId}`;
+            } else if (config.sourceType === 'url') {
+                el.textContent = `외부 URL: ${config.url}`;
+            } else {
+                el.textContent = '기본 쇼릴 영상 (HERO_SHOWREEL_SRC) 재생 중';
+            }
+        }
+
+        // 쇼릴 탭이 열릴 때 초기화 (드롭다운 채우기 + 현재 설정 UI 반영)
+        function initShowreelTab() {
+            populateShowreelPortfolioSelect();
+            renderShowreelCurrentValue();
+
+            const config = loadShowreelConfig();
+            const sourceType = (config && config.sourceType) || 'portfolio';
+            window.switchShowreelSourceType(sourceType);
+
+            if (config && config.sourceType === 'portfolio' && config.portfolioIndex !== undefined) {
+                const select = document.getElementById('showreelPortfolioSelect');
+                if (select) select.value = String(config.portfolioIndex);
+            }
+            if (config && config.sourceType === 'url' && config.url) {
+                const input = document.getElementById('showreelUrlInput');
+                if (input) input.value = config.url;
+            }
+        }
+
+        // ===== 저장 및 메인 화면에 즉시 반영 =====
+        window.saveShowreelConfig = function() {
+            const activeBtn = document.querySelector('.showreel-source-btn.active');
+            const sourceType = activeBtn ? activeBtn.getAttribute('data-source-type') : 'portfolio';
+
+            let config = null;
+
+            if (sourceType === 'portfolio') {
+                const select = document.getElementById('showreelPortfolioSelect');
+                const idx = select ? parseInt(select.value, 10) : NaN;
+                const item = !isNaN(idx) ? portfolioData[idx] : null;
+
+                if (!item || !item.youtubeId) {
+                    alert('선택한 포트폴리오 영상에 유튜브 ID가 없습니다. 다른 영상을 선택해주세요.');
+                    return;
+                }
+
+                config = {
+                    sourceType: 'portfolio',
+                    portfolioIndex: idx,
+                    youtubeId: item.youtubeId,
+                    title: item.title || ''
+                };
+            } else {
+                const input = document.getElementById('showreelUrlInput');
+                const url = input ? input.value.trim() : '';
+
+                if (!url) {
+                    alert('영상 URL을 입력해주세요.');
+                    return;
+                }
+
+                config = { sourceType: 'url', url: url };
+            }
+
+            saveShowreelConfigToStorage(config);
+            applyShowreelConfig(config);
+            renderShowreelCurrentValue();
+
+            const hint = document.getElementById('showreelSavedHint');
+            if (hint) {
+                hint.textContent = '저장 완료 · 메인 화면에 반영되었습니다.';
+                hint.classList.add('show');
+            }
+        };
+
+        // ===== 기본값으로 초기화 =====
+        window.resetShowreelConfig = function() {
+            localStorage.removeItem(SHOWREEL_CONFIG_KEY);
+            applyShowreelConfig(null);
+            renderShowreelCurrentValue();
+
+            const hint = document.getElementById('showreelSavedHint');
+            if (hint) {
+                hint.textContent = '기본 쇼릴 영상으로 초기화되었습니다.';
+                hint.classList.add('show');
+            }
+        };
+
         window.addEventListener('load', function() {
             console.log('🚀 [페이지 로드 시작]');
             
@@ -6145,6 +8129,9 @@
             
             // 1-2. 히어로 대표 프로젝트 리스트 렌더링
             renderHeroProjectList();
+
+            // 1-3. 히어로 쇼릴 비디오 초기화
+            initHeroShowreel();
             
             // 2. activeFilters 초기값 설정 (빈 Set = 전체 노출)
             activeFilters = new Set();
@@ -6379,6 +8366,17 @@
                         reference: formData.reference,
                         description: formData.description,
                         addon: formData.addon
+                    });
+
+                    // [운영] 페이지 "견적 문의 내역"에도 새 문의로 함께 반영 (같은 브라우저 기준)
+                    addInquiryFromSubmission({
+                        name: formData.name,
+                        email: formData.email,
+                        phone: formData.phone,
+                        package: formData.package,
+                        deadline: formData.deadline,
+                        reference: formData.reference,
+                        description: formData.description
                     });
  
                     // 폼 초기화
