@@ -6316,25 +6316,33 @@
                     throw new Error('Formspree 응답 오류: ' + response.status);
                 }
 
-                // ===== 2단계: Supabase 'estimates' 테이블에도 INSERT (어드민 대시보드 실시간 반영용) =====
-                // 이메일 전송은 이미 성공했으므로, DB 저장이 실패해도 사용자에게는 접수 완료로 안내하되
-                // 콘솔에는 명확히 에러를 남겨 어드민이 나중에 확인할 수 있게 합니다.
+                // ===== 2단계: Supabase 'estimates' 테이블에 직접 INSERT (어드민 대시보드 실시간 반영용) =====
+                // 래퍼 함수를 거치지 않고 여기서 바로 INSERT를 실행해 실패 시 즉시 alert로 원인을 보여줍니다.
                 try {
-                    const dbSaved = await addInquiryFromSubmission({
+                    const { error: insertError } = await sbClient.from('estimates').insert({
                         name: name,
+                        client_name: name,
                         email: email,
                         phone: phone,
-                        package: projectType,
-                        budget: budget,
-                        deadline: deadline,
-                        reference: '',
-                        description: message
+                        project_type: projectType || '미지정',
+                        budget: budget || '협의 필요',
+                        deadline: deadline || '',
+                        description: message || '',
+                        reference_link: '',
+                        status: '접수',
+                        memo: '',
+                        links: []
                     });
-                    if (!dbSaved) {
-                        console.warn('⚠️ [빠른 견적 문의] 이메일은 전송되었지만 어드민 DB 저장에는 실패했습니다. 위 로그의 Supabase 오류를 확인해주세요.');
+
+                    if (insertError) {
+                        console.error('❌ [빠른 견적 문의] estimates 테이블 INSERT 실패:', insertError);
+                        alert('견적 문의 DB 저장에 실패했습니다: ' + insertError.message);
+                    } else {
+                        console.log('✅ [빠른 견적 문의] estimates 테이블 저장 완료:', name);
                     }
                 } catch (dbErr) {
-                    console.error('❌ [빠른 견적 문의] Supabase 저장 실패 (이메일 전송은 정상 완료됨):', dbErr);
+                    console.error('❌ [빠른 견적 문의] Supabase 저장 중 예외 발생 (이메일 전송은 정상 완료됨):', dbErr);
+                    alert('견적 문의 DB 저장 중 오류가 발생했습니다: ' + (dbErr && dbErr.message ? dbErr.message : dbErr));
                 }
 
                 showToast('견적 문의가 정상 접수되었습니다.');
@@ -9575,7 +9583,9 @@
                 showreel_width: layout.width
             });
 
-            applyShowreelLayout(layout);
+            if (ok) {
+                applyShowreelLayout(layout);
+            }
 
             if (hint) {
                 hint.textContent = ok
@@ -9811,9 +9821,9 @@
                             const current = loadShowreelPlaylist();
                             const [moved] = current.splice(fromIndex, 1);
                             current.splice(toIndex, 0, moved);
-                            await saveShowreelPlaylistToStorage(current);
+                            const ok = await saveShowreelPlaylistToStorage(current);
                             renderShowreelPlaylistUI();
-                            initHeroShowreelPlaylist();
+                            if (ok) initHeroShowreelPlaylist();
                         }
                     }
                 });
@@ -9898,9 +9908,9 @@
             if (!newItem) return;
 
             playlist.push(newItem);
-            await saveShowreelPlaylistToStorage(playlist);
+            const ok = await saveShowreelPlaylistToStorage(playlist);
             renderShowreelPlaylistUI();
-            initHeroShowreelPlaylist();
+            if (ok) initHeroShowreelPlaylist();
 
             // 입력 필드 초기화
             const urlInput = document.getElementById('newMediaUrl');
@@ -9911,9 +9921,9 @@
         window.removeShowreelPlaylistItem = async function(index) {
             const playlist = loadShowreelPlaylist();
             playlist.splice(index, 1);
-            await saveShowreelPlaylistToStorage(playlist);
+            const ok = await saveShowreelPlaylistToStorage(playlist);
             renderShowreelPlaylistUI();
-            initHeroShowreelPlaylist();
+            if (ok) initHeroShowreelPlaylist();
         };
 
         // 쇼릴 탭의 "포트폴리오 연동" select를 채우는 공용 함수
@@ -10238,24 +10248,33 @@
                         addon: formData.addon
                     });
 
-                    // [운영] 페이지 "견적 문의 내역"(Supabase estimates 테이블)에도 안정적으로 반영
-                    // 이메일 전송은 이미 성공했으므로, DB 저장이 실패해도 사용자 흐름은 막지 않되
-                    // 콘솔에는 명확히 남겨 어드민이 나중에 확인할 수 있게 합니다.
+                    // [운영] 페이지 "견적 문의 내역"(Supabase estimates 테이블)에 직접 INSERT
+                    // 래퍼 함수를 거치지 않고 여기서 바로 실행해 실패 시 즉시 alert로 원인을 보여줍니다.
                     try {
-                        const dbSaved = await addInquiryFromSubmission({
+                        const { error: insertError } = await sbClient.from('estimates').insert({
                             name: formData.name,
+                            client_name: formData.name,
                             email: formData.email,
                             phone: formData.phone,
-                            package: formData.package,
-                            deadline: formData.deadline,
-                            reference: formData.reference,
-                            description: formData.description
+                            project_type: formData.package || '미지정',
+                            budget: formData.budget || '협의 필요',
+                            deadline: formData.deadline || '',
+                            description: formData.description || '',
+                            reference_link: formData.reference || '',
+                            status: '접수',
+                            memo: '',
+                            links: []
                         });
-                        if (!dbSaved) {
-                            console.warn('⚠️ [견적 신청] 이메일은 전송되었지만 어드민 DB 저장에는 실패했습니다. 위 로그의 Supabase 오류를 확인해주세요.');
+
+                        if (insertError) {
+                            console.error('❌ [견적 신청] estimates 테이블 INSERT 실패:', insertError);
+                            alert('견적 문의 DB 저장에 실패했습니다: ' + insertError.message);
+                        } else {
+                            console.log('✅ [견적 신청] estimates 테이블 저장 완료:', formData.name);
                         }
                     } catch (dbErr) {
-                        console.error('❌ [견적 신청] Supabase 저장 실패 (이메일 전송은 정상 완료됨):', dbErr);
+                        console.error('❌ [견적 신청] Supabase 저장 중 예외 발생 (이메일 전송은 정상 완료됨):', dbErr);
+                        alert('견적 문의 DB 저장 중 오류가 발생했습니다: ' + (dbErr && dbErr.message ? dbErr.message : dbErr));
                     }
  
                     // 폼 초기화
